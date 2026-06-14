@@ -52,7 +52,7 @@ class LegacyFrontend
             $path .= $suffixValue;
         }
 
-        return ($fullDomain ? rtrim(config('app.url'), '/') . '/' : url('/')) . '/' . $path;
+        return ($fullDomain ? rtrim(config('app.url'), '/') : rtrim(url('/'), '/')) . '/' . $path;
     }
 
     public static function system(array $system, string $key, string $default = ''): string
@@ -85,7 +85,7 @@ class LegacyFrontend
             'menus' => function ($query) use ($language) {
                 $query->where('publish', 2)
                     ->with(['languages' => fn ($q) => $q->where('language_id', $language)])
-                    ->orderBy('order', 'asc')
+                    ->orderBy('order', 'desc')
                     ->orderBy('id', 'asc');
             },
         ])

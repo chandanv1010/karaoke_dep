@@ -40,14 +40,10 @@
                     </a>
                 </div>
                 
-                @if(count($mainNav))
-                    <div class="uk-flex uk-flex-middle">
+                @if(isset($menu['main']))
+                    <div class="uk-flex uk-flex-middle navigation">
                         <ul class="main-nav">
-                            @foreach($mainNav as $item)
-                                <li class="{{ (url()->current() == url($item['href'])) ? 'active' : '' }}">
-                                    <a href="{{ $item['href'] }}" title="{{ $item['title'] }}">{{ $item['title'] }}</a>
-                                </li>
-                            @endforeach
+                            {!! $menu['main'] !!}
                         </ul>
                         <a href="#search-modal" data-uk-modal class="search-btn"><i class="fa fa-search"></i></a>
                     </div>
