@@ -72,5 +72,34 @@
             <div class="cart-content"></div>
         </div>
     </div>
+
+    <!-- Global CSS Overrides for Mobile -->
+    <style>
+        @media (max-width: 959px) {
+            .about-hero {
+                height: auto !important;
+                min-height: 180px !important;
+                padding: 30px 0 !important;
+                display: flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+            }
+            .about-hero .hero-title {
+                font-size: 22px !important;
+                line-height: 1.5 !important;
+                padding: 0 15px !important;
+                flex-wrap: wrap !important;
+                display: flex !important;
+                justify-content: center !important;
+                text-align: center !important;
+            }
+            .about-hero .hero-title .decor-line {
+                display: none !important;
+            }
+            .about-hero .hero-breadcrumb {
+                margin-top: 10px !important;
+            }
+        }
+    </style>
 </body>
 </html>

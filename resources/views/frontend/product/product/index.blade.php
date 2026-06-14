@@ -56,7 +56,7 @@
         <div class="hero-breadcrumb">
             <ul class="uk-breadcrumb">
                 <li><a href="{{ url('/') }}" title="Trang chủ">Trang chủ</a></li>
-                @foreach(($breadcrumb ?? $Breadcrumb ?? []) as $item)
+                @foreach(($Breadcrumb ?? []) as $item)
                     <li><a href="{{ rewrite_url($item['canonical'] ?? '') }}" title="{{ $item['title'] ?? '' }}">{{ $item['title'] ?? '' }}</a></li>
                 @endforeach
             </ul>
@@ -709,6 +709,11 @@
     }
     
     @media (max-width: 959px) {
+        .product-detail {
+            padding-left: 15px !important;
+            padding-right: 15px !important;
+            box-sizing: border-box;
+        }
         .productDetail-intro {
             padding-left: 0;
             margin-top: 30px;

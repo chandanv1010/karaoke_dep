@@ -1,8 +1,8 @@
 @php
-    $mainNav = navigations_array('main', $config['language'] ?? 1);
-    $sitelinkNav = navigations_array('sitelink', $config['language'] ?? 1);
+    $sitelinkNav = $menu['sitelink'] ?? [];
     $filteredSitelink = array_filter($sitelinkNav, function($item) {
-        return strpos(strtolower($item['title']), 'dmca') === false && strpos(strtolower($item['title']), 'img') === false;
+        $name = $item['item']->languages->first()->pivot->name ?? '';
+        return strpos(strtolower($name), 'dmca') === false && strpos(strtolower($name), 'img') === false;
     });
 @endphp
 <header class="header-new {{ (isset($postCatalogue) && in_array($postCatalogue->canonical, ['gioi-thieu', 've-chung-toi'])) ? 'header-transparent' : '' }}" id="header">
@@ -12,8 +12,12 @@
                 @if(count($filteredSitelink))
                     <ul class="sitelink-list">
                         @foreach($filteredSitelink as $item)
+                            @php
+                                $name = $item['item']->languages->first()->pivot->name ?? '';
+                                $canonical = write_url($item['item']->languages->first()->pivot->canonical ?? '', true, true);
+                            @endphp
                             <li>
-                                <a href="{{ $item['href'] }}" title="{{ strip_tags($item['title']) }}">{!! strip_tags($item['title']) !!}</a>
+                                <a href="{{ $canonical }}" title="{{ strip_tags($name) }}">{!! strip_tags($name) !!}</a>
                             </li>
                             @if(!$loop->last)
                                 <span class="divider">|</span>
