@@ -2,6 +2,9 @@
 <html>
 <head>
     <base href="{{ url('/') }}/">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,100..900;1,100..900&family=Manrope:wght@200..800&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Unbounded:wght@200..900&family=Yeseva+One&family=Roboto+Condensed:ital,wght@0,300..700;1,300..700&display=swap" rel="stylesheet">
     <meta charset="utf-8">
     <meta http-equiv="content-language" content="vi">
     <meta name="robots" content="index,follow">
