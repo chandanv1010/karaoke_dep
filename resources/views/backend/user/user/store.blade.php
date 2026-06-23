@@ -55,25 +55,19 @@
                                 </div>
                             </div>
                         </div>
-                        @php
-                            $userCatalogue = [
-                                '[Chọn nhóm thành viên]',
-                                'Quản trị viên',
-                                'Cộng tác viên'
-                            ];       
-                                   
-
-                        @endphp
                         <div class="row mb15">
                             <div class="col-lg-6">
                                 <div class="form-row">
                                     <label for="" class="control-label text-left">Nhóm Thành viên <span class="text-danger">(*)</span></label>
                                     <select name="user_catalogue_id" class="form-control setupSelect2">
-                                        @foreach($userCatalogue as $key => $item)
-                                        <option {{ 
-                                            $key == old('user_catalogue_id', (isset($user->user_catalogue_id)) ? $user->user_catalogue_id : '') ? 'selected' : '' 
-                                            }}  value="{{ $key }}">{{ $item }}</option>
-                                        @endforeach
+                                        <option value="0">[Chọn Nhóm Thành Viên]</option>
+                                        @if(isset($userCatalogues))
+                                            @foreach($userCatalogues as $item)
+                                            <option {{ 
+                                                $item->id == old('user_catalogue_id', (isset($user->user_catalogue_id)) ? $user->user_catalogue_id : '') ? 'selected' : '' 
+                                                }}  value="{{ $item->id }}">{{ $item->name }}</option>
+                                            @endforeach
+                                        @endif
                                     </select>
                                 </div>
                             </div>

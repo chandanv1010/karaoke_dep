@@ -25,7 +25,11 @@
                     </select>
                     <select name="user_catalogue_id" class="form-control mr10 setupSelect2">
                         <option value="0" selected="selected">Chọn Nhóm Thành Viên</option>
-                        <option value="1">Quản trị viên</option>
+                        @if(isset($userCatalogues))
+                            @foreach($userCatalogues as $item)
+                            <option {{ (request('user_catalogue_id') == $item->id) ? 'selected' : '' }} value="{{ $item->id }}">{{ $item->name }}</option>
+                            @endforeach
+                        @endif
                     </select>
                     <div class="uk-search uk-flex uk-flex-middle mr10">
                         <div class="input-group">

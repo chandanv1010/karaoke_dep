@@ -13106,7 +13106,8 @@ div#tocDiv {
     align-items: stretch;
   }
   .karaoke-hero__stats {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr);
+    row-gap: 20px;
   }
   .karaoke-intro__media {
     min-height: 430px;

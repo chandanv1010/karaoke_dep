@@ -12,7 +12,7 @@
                         <a href="{{ $href }}" title="{{ $post['title'] ?? '' }}" class="fc-thumb"><img src="{{ getthumb($post['images'] ?? null) }}" alt="{{ $post['title'] ?? '' }}"></a>
                         <div class="fc-info">
                             <h3 class="title uk-margin-remove"><a href="{{ $href }}" title="{{ $post['title'] ?? '' }}" class="uk-text-bold">{{ $post['title'] ?? '' }}</a></h3>
-                            <span class="uk-text-muted fc-article-meta">{{ $post['created'] ?? '' }}</span>
+                            {{-- <span class="uk-text-muted fc-article-meta">{{ $post['created'] ?? '' }}</span> --}}
                             <div class="fc-article-desc">{{ cutnchar(strip_tags($post['description'] ?? ''), 180) }}</div>
                         </div>
                     </div>

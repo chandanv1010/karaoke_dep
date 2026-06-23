@@ -236,7 +236,7 @@
                                         <div class="uk-width-small-2-3">
                                             <div class="info">
                                                 <h2 class="title"><a href="{{ $href }}" title="{{ $title }}">{{ $title }}</a></h2>
-                                                <div class="meta-date"><i class="fa fa-calendar"></i> {{ $created }}</div>
+                                                {{-- <div class="meta-date"><i class="fa fa-calendar"></i> {{ $created }}</div> --}}
                                                 <div class="description">{{ $description }}</div>
                                             </div>
                                         </div>
