@@ -24,10 +24,11 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
         Gate::define('modules', function ($user, $permisionName) {
-            return true;
             if ($user->publish == 0) return false;
-            $permission = $user->user_catalogues->permissions;
-            if ($permission->contains('canonical', $permisionName)) {
+            $userCatalogue = $user->user_catalogues;
+            if (!$userCatalogue) return false;
+            $permissions = $userCatalogue->permissions;
+            if ($permissions && $permissions->contains('canonical', $permisionName)) {
                 return true;
             }
             return false;

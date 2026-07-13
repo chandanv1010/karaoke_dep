@@ -114,7 +114,6 @@ class ContactService extends BaseService
             'product_id',
             'post_id',
             'gender',
-            'publish',
             'created_at',
             'type',
             'message'
