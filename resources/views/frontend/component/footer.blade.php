@@ -96,4 +96,8 @@
             class="fa fa-commenting-o"></i></a>
     <a href="{{ $system['seo_facebook'] ?? '#' }}" class="messenger" target="_blank" title="Messenger"><i
             class="fa fa-facebook"></i></a>
+    @if(!empty($system['contact_whatsapp'] ?? ''))
+    <a href="https://wa.me/{{ $system['contact_whatsapp'] }}" class="whatsapp" target="_blank" title="WhatsApp"><i
+            class="fa fa-whatsapp"></i></a>
+    @endif
 </div>

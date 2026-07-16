@@ -13010,6 +13010,9 @@ div#tocDiv {
 .social-icons-float .phone {
   background-color: #4caf50;
 }
+.social-icons-float .whatsapp {
+  background-color: #25d366;
+}
 
 @media (max-width: 1024px) {
   .karaoke-hero__bg {

@@ -53,6 +53,7 @@ class System{
                 'address_3' => ['type' => 'text', 'label' => 'Văn phòng giao dịch (Hồ Chí Minh / Miền Nam) & Xưởng (ngăn cách bởi dấu -)'],
                 'hotline' => ['type' => 'text', 'label' => 'Hotline'],
                 'Zalo' => ['type' => 'text', 'label' => 'Zalo liên hệ (Dưới Footer / Chat box)'],
+                'whatsapp' => ['type' => 'text', 'label' => 'WhatsApp liên hệ (Dưới Footer)'],
                 'address_mt' => ['type' => 'text', 'label' => 'Địa chỉ Miền trung'],
                 'hotline_mt' => ['type' => 'text', 'label' => 'Hotline Miền Trung'],
                 'address_mn' => ['type' => 'text', 'label' => 'Địa chỉ Miền Nam'],
