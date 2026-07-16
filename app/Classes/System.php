@@ -10,6 +10,7 @@ class System{
             'value' => [
                 'company' => ['type' => 'text', 'label' => 'Tên công ty'],
                 'brand' => ['type' => 'text', 'label' => 'Tên thương hiệu'],
+                'brandname' => ['type' => 'text', 'label' => 'Tên thương hiệu (Dưới Footer)'],
                 'slogan' => ['type' => 'text', 'label' => 'Slogan'],
                 'logo' => ['type' => 'images', 'label' => 'Logo Website', 'title' => 'Click vào ô phía dưới để tải logo'],
                 'logo_mobile' => ['type' => 'images', 'label' => 'Logo Mobile', 'title' => 'Click vào ô phía dưới để tải logo'],
@@ -47,8 +48,11 @@ class System{
                         'target' => '_blank'
                     ]
                 ],
-                'address' => ['type' => 'text', 'label' => 'Văn phòng giao dịch'],
+                'address' => ['type' => 'text', 'label' => 'Văn phòng giao dịch (Hà Nội / Miền Bắc)'],
+                'address_2' => ['type' => 'text', 'label' => 'Văn phòng giao dịch (Đà Nẵng / Miền Trung)'],
+                'address_3' => ['type' => 'text', 'label' => 'Văn phòng giao dịch (Hồ Chí Minh / Miền Nam) & Xưởng (ngăn cách bởi dấu -)'],
                 'hotline' => ['type' => 'text', 'label' => 'Hotline'],
+                'Zalo' => ['type' => 'text', 'label' => 'Zalo liên hệ (Dưới Footer / Chat box)'],
                 'address_mt' => ['type' => 'text', 'label' => 'Địa chỉ Miền trung'],
                 'hotline_mt' => ['type' => 'text', 'label' => 'Hotline Miền Trung'],
                 'address_mn' => ['type' => 'text', 'label' => 'Địa chỉ Miền Nam'],
@@ -81,6 +85,7 @@ class System{
                 'meta_keyword' => ['type' => 'text', 'label' => 'Từ khóa SEO'],
                 'meta_description' => ['type' => 'textarea', 'label' => 'Mô tả SEO'],
                 'meta_images' => ['type' => 'images', 'label' => 'Ảnh SEO'],
+                'facebook' => ['type' => 'text', 'label' => 'Facebook Fanpage (Dưới Footer / Chat box)'],
             ]
         ];
 
@@ -113,7 +118,14 @@ class System{
             ]
         ];
 
-       
+        $data['common'] = [
+            'label' => 'Cấu hình Footer',
+            'description' => 'Cấu hình nội dung cột giới thiệu và địa chỉ dưới chân trang (Footer)',
+            'value' => [
+                'intro' => ['type' => 'editor', 'label' => 'Giới thiệu & Địa chỉ Footer'],
+            ]
+        ];
+
         return $data;
     }
 	
