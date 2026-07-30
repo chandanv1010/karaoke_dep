@@ -752,7 +752,7 @@ class WidgetService extends BaseService
             AND o.{$publishColumn} = 2 
             AND o.deleted_at IS NULL
             GROUP BY o.id
-            ORDER BY o.order DESC
+            ORDER BY o.order DESC, o.id DESC
         ";
 
         return collect(DB::select($sql, [$language, $language]))->map(function ($item) use ($model, $language) {
