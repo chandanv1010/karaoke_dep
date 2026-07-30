@@ -35,6 +35,9 @@ class DashboardController extends Controller
         $namespace = $post['namespace'] ??  Str::words(Str::headline($post['model']), 1, '');
         $version = $post['version'] ?? 'V1';
         $serviceInterfaceNamespace = '\App\Services\\' . $version . '\\' . $namespace . '\\'  . ucfirst($post['model']) . 'Service';
+        if (!class_exists($serviceInterfaceNamespace)) {
+            $serviceInterfaceNamespace = '\App\Services\\' . $version . '\\Core\\'  . ucfirst($post['model']) . 'Service';
+        }
         if (class_exists($serviceInterfaceNamespace)) {
             $serviceInstance = app($serviceInterfaceNamespace);
             $flag = $serviceInstance->updateStatus($post);
@@ -46,12 +49,16 @@ class DashboardController extends Controller
     public function changeStatusAll(Request $request){
         $post = $request->input();
         $version = $post['version'] ?? 'V1';
-        $namespace = Str::words(Str::headline($post['model']), 1, '');
-        $serviceInterfaceNamespace = '\App\Services\\' . $namespace . '\\' . $version . '\\' . ucfirst($post['model']) . 'Service';
+        $namespace = $post['namespace'] ?? Str::words(Str::headline($post['model']), 1, '');
+        $serviceInterfaceNamespace = '\App\Services\\' . $version . '\\' . $namespace . '\\'  . ucfirst($post['model']) . 'Service';
+        if (!class_exists($serviceInterfaceNamespace)) {
+            $serviceInterfaceNamespace = '\App\Services\\' . $version . '\\Core\\'  . ucfirst($post['model']) . 'Service';
+        }
+        $flag = false;
         if (class_exists($serviceInterfaceNamespace)) {
             $serviceInstance = app($serviceInterfaceNamespace);
+            $flag = $serviceInstance->updateStatusAll($post);
         }
-        $flag = $serviceInstance->updateStatusAll($post);
         return response()->json(['flag' => $flag]); 
 
     }
@@ -62,10 +69,12 @@ class DashboardController extends Controller
         $keyword = ($request->string('keyword')) ?? null;
         $object = null;
         $serviceInstance = null;
-        $namespace = $post['namespace'] ??  Str::words(Str::headline($model), 1, '');
+        $namespace = $request->input('namespace') ??  Str::words(Str::headline($model), 1, '');
         $version = 'V1';
         $serviceInterfaceNamespace = '\App\Repositories\\' . $namespace . '\\'  . ucfirst($model) . 'Repository';
-
+        if (!class_exists($serviceInterfaceNamespace)) {
+            $serviceInterfaceNamespace = '\App\Repositories\\Core\\'  . ucfirst($model) . 'Repository';
+        }
 
         if (class_exists($serviceInterfaceNamespace)) {
             $serviceInstance = app($serviceInterfaceNamespace);

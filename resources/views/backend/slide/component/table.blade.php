@@ -46,7 +46,7 @@
                 </td>
                 
                 <td class="text-center js-switch-{{ $slide->id }}"> 
-                    <input type="checkbox" value="{{ $slide->publish }}" class="js-switch status " data-field="publish" data-model="{{ $config['model'] }}" {{ ($slide->publish == 2) ? 'checked' : '' }} data-modelId="{{ $slide->id }}" />
+                    <input type="checkbox" value="{{ $slide->publish }}" class="js-switch status " data-namespace="Core" data-field="publish" data-model="{{ $config['model'] }}" {{ ($slide->publish == 2) ? 'checked' : '' }} data-modelId="{{ $slide->id }}" />
                 </td>
                 <td class="text-center"> 
                     <a href="{{ route('slide.edit', $slide->id) }}" class="btn btn-success"><i class="fa fa-edit"></i></a>
