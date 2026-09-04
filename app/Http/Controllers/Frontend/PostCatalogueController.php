@@ -18,6 +18,8 @@ use App\Support\LegacyFrontend;
 
 class PostCatalogueController extends FrontendController
 {
+    use \App\Traits\RendersSchema;
+
     protected $language;
     protected $system;
     protected $postCatalogueRepository;
@@ -113,84 +115,58 @@ class PostCatalogueController extends FrontendController
 
     private function schema($postCatalogue, $posts, $breadcrumb)
     {
-
         $cat_name = $postCatalogue->languages->first()->pivot->name;
-
         $cat_canonical = write_url($postCatalogue->languages->first()->pivot->canonical);
+        $cat_description = $this->schemaText($postCatalogue->languages->first()->pivot->description, 5000);
 
-        $cat_description = strip_tags($postCatalogue->languages->first()->pivot->description);
-
-        $itemListElements = '';
-
-        $position = 1;
-
+        // "blogPost" phai la mang cac BlogPosting, truoc day bi boc trong { } nen vo JSON.
+        $blogPosts = [];
         foreach ($posts as $post) {
-            $name = $post->languages->first()->pivot->name;
-            $canonical = write_url($post->canonical ?? '');
-            $itemListElements .= "
-                {
-                    \"@type\": \"BlogPosting\",
-                    \"headline\": \" " . $name . " \",
-                    \"url\": \" " . $canonical . " \",
-                    \"datePublished\": \" " . convertDateTime($post->created_at, 'd-m-Y') . " \",
-                    \"author\": {
-                        \"@type\": \" Person  \",
-                        \"name\": \" An Hưng \",
-                    }
-                },";
-            $position++;
-        }
-
-        $itemListElements = rtrim($itemListElements, ',');
-
-        $itemBreadcrumbElements = '';
-
-        $positionBreadcrumb = 2;
-
-        foreach ($breadcrumb as $key => $item) {
-            $name = $item->languages->first()->pivot->name;
-            $canonical = write_url($item->languages->first()->pivot->canonical);
-            $itemBreadcrumbElements .= "
-                {
-                    \"@type\": \"ListItem\",
-                    \"position\": $positionBreadcrumb,
-                    \"name\": \"" . $name . "\",
-                    \"item\": \"" . $canonical . "\",
-                },";
-            $positionBreadcrumb++;
-        }
-
-        $itemBreadcrumbElements = rtrim($itemBreadcrumbElements, ',');
-
-        $schema = "<script type='application/ld+json'>
-            {
-                \"@type\": \"BreadcrumbList\",
-                \"itemListElement\": [
-                    {
-                        \"@type\": \"ListItem\",
-                        \"position\": 1,
-                        \"name\": \" Trang chủ  \",
-                        \"item\": \" " . config('app.url') . " \"
-                    },
-                    $itemBreadcrumbElements
-                ]
-            },
-            {
-                \"@context\": \"https://schema.org\",
-                \"@type\": \"Blog\",
-                \"name\": \"" . $cat_name . "\",
-                \"description\": \" " . $cat_description . " \",
-                \"url\": \"" . $cat_canonical . "\",
-                \"publisher\": [
-                    \"@type\": \"Organization\",
-                    \"name\": \" An Hưng \",
+            $blogPosts[] = [
+                '@type' => 'BlogPosting',
+                'headline' => (string) $post->languages->first()->pivot->name,
+                'url' => write_url($post->canonical ?? ''),
+                'datePublished' => (string) convertDateTime($post->created_at, 'd-m-Y'),
+                'author' => [
+                    '@type' => 'Organization',
+                    'name' => 'An Hưng',
                 ],
-                \"blogPost\": {
-                    $itemListElements
-                }
-            }
-            </script>";
-        return $schema;
+            ];
+        }
+
+        $breadcrumbItems = [[
+            '@type' => 'ListItem',
+            'position' => 1,
+            'name' => 'Trang chủ',
+            'item' => config('app.url'),
+        ]];
+        $positionBreadcrumb = 2;
+        foreach ($breadcrumb as $item) {
+            $breadcrumbItems[] = [
+                '@type' => 'ListItem',
+                'position' => $positionBreadcrumb++,
+                'name' => (string) $item->languages->first()->pivot->name,
+                'item' => write_url($item->languages->first()->pivot->canonical),
+            ];
+        }
+
+        return $this->renderSchema([
+            [
+                '@type' => 'BreadcrumbList',
+                'itemListElement' => $breadcrumbItems,
+            ],
+            [
+                '@type' => 'Blog',
+                'name' => trim($cat_name),
+                'description' => trim($cat_description),
+                'url' => trim($cat_canonical),
+                'publisher' => [
+                    '@type' => 'Organization',
+                    'name' => 'An Hưng',
+                ],
+                'blogPost' => $blogPosts,
+            ],
+        ]);
     }
 
    

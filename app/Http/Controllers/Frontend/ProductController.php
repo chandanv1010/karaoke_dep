@@ -24,8 +24,12 @@ use Illuminate\Support\Facades\DB;
 use App\Support\LegacyFrontend;
 use Jenssegers\Agent\Facades\Agent;
 
+use App\Traits\RendersSchema;
+
 class ProductController extends FrontendController
 {
+    use RendersSchema;
+
     protected $language;
     protected $system;
     protected $productCatalogueRepository;
@@ -179,112 +183,85 @@ class ProductController extends FrontendController
         $name = $product->languages->first()->pivot->name;
         $totalReviews = $product->reviews()->where('status', 1)->count();
         $totalRate = number_format($product->reviews()->where('status', 1)->avg('score'), 1);
-        $description = strip_tags($product->languages->first()->pivot->description);
+        $description = $this->schemaText($product->languages->first()->pivot->description, 5000);
         $cat_name = $productCatalogue->languages->first()->pivot->name;
         $cat_canonical = write_url($productCatalogue->languages->first()->pivot->canonical);
-        $reviewListElements = '';
+
+        $reviews = [];
         foreach ($product->reviews as $review) {
-            $rating = generateStar($review->score);
-            $created_at = convertDateTime($review->created_at);
-            $reviewListElements .= "
-                {
-                    \"@type\": \"Review\",
-                    \"reviewRating\": {
-                        \"@type\": \"Rating\",
-                        \"ratingValue\": \"" . $rating . "\",
-                        \"bestRating\": \"5\"
-                    },
-                    \"author\": {
-                        \"@type\": \"Person\",
-                        \"name\": \"" . $review->fullname . "\"
-                    },
-                    \"reviewBody\": \"" . $review->description . "\",
-                    \"datePublished\": \"" . $created_at . "\"
-                },";
+            $reviews[] = [
+                '@type' => 'Review',
+                'reviewRating' => [
+                    '@type' => 'Rating',
+                    'ratingValue' => (string) generateStar($review->score),
+                    'bestRating' => '5',
+                ],
+                'author' => [
+                    '@type' => 'Person',
+                    'name' => (string) $review->fullname,
+                ],
+                'reviewBody' => $this->schemaText($review->description, 1000),
+                'datePublished' => (string) convertDateTime($review->created_at),
+            ];
         }
 
-        $reviewListElements = rtrim($reviewListElements, ',');
-
-        $itemBreadcrumbElements = '';
-
-        $positionBreadcrumb = 2;
-
-        foreach ($breadcrumb as $key => $item) {
-            $name = $item->languages->first()->pivot->name;
-            $canonical = write_url($item->languages->first()->pivot->canonical);
-            $itemBreadcrumbElements .= "
-                {
-                    \"@type\": \"ListItem\",
-                    \"position\": $positionBreadcrumb,
-                    \"name\": \"" . $name . "\",
-                    \"item\": \"" . $canonical . "\",
-                },";
-            $positionBreadcrumb++;
+        $breadcrumbItems = [[
+            '@type' => 'ListItem',
+            'position' => 1,
+            'name' => 'Trang chủ',
+            'item' => config('app.url'),
+        ]];
+        $position = 2;
+        foreach ($breadcrumb as $item) {
+            $breadcrumbItems[] = [
+                '@type' => 'ListItem',
+                'position' => $position++,
+                'name' => (string) $item->languages->first()->pivot->name,
+                'item' => write_url($item->languages->first()->pivot->canonical),
+            ];
         }
 
-        $itemBreadcrumbElements = rtrim($itemBreadcrumbElements, ',');
+        $productNode = [
+            '@type' => 'Product',
+            'name' => trim($name),
+            'description' => trim($description),
+            'image' => trim($image),
+            'brand' => ['@type' => 'Brand', 'name' => 'An Hưng'],
+            'manufacturer' => [
+                '@type' => 'Organization',
+                'name' => 'An Hưng',
+                'url' => config('app.url'),
+            ],
+            'material' => trim($cat_name),
+            'category' => trim($cat_canonical),
+            'offers' => [
+                '@type' => 'Offer',
+                'seller' => ['@type' => 'Organization', 'name' => 'An Hưng'],
+                'itemCondition' => 'https://schema.org/NewCondition',
+            ],
+        ];
 
-        $schema = "
-            <script type=\"application/ld+json\">
-                {
-                    \"@type\": \"BreadcrumbList\",
-                    \"itemListElement\": [
-                        {
-                            \"@type\": \"ListItem\",
-                            \"position\": 1,
-                            \"name\": \" Trang chủ  \",
-                            \"item\": \" " . config('app.url') . " \"
-                        },
-                        $itemBreadcrumbElements
-                    ]
-                },
-                {
-                    \"@context\": \"https://schema.org\",
-                    \"@type\": \"Product\",
-                    \"name\": \" " . $name . " \",
-                    \"description\": \"  " . $description . "  \",
-                    \"image\": \"  " . $image . "  \",
-                    \"brand\": {
-                        \"@type\": \"Brand\",
-                        \"name\": \"An Hưng\"
-                    },
-                    \"manufacturer\": {
-                        \"@type\": \"Organization\",
-                        \"name\": \"An Hưng\",
-                        \"url\": \" " . config('app.url') . "\"
-                    },
-                    \"material\": \" " . $cat_name . " \",
-                    \"category\": \" " . $cat_canonical . " \",
-                    \"sku\": \"\",
-                    \"mpn\": \"\",
-                    \"offers\": {
-                        \"@type\": \"Offer\",
-                        \"price\": \"\",
-                        \"priceCurrency\": \"\",
-                        \"availability\": \"\",
-                        \"seller\": {
-                            \"@type\": \"Organization\",
-                            \"name\": \"An Hưng\"
-                        },
-                        \"priceValidUntil\": \"\",
-                        \"itemCondition\": \"https://schema.org/NewCondition\"
-                    },
-                    \"aggregateRating\": {
-                        \"@type\": \"AggregateRating\",
-                        \"ratingValue\": \" " . $totalRate . "  \",
-                        \"reviewCount\": \" " . $totalReviews . "\"
-                    },
-                    \"review\": [
-                        $reviewListElements
-                    ]
-                }
-            </script>
-        ";
+        // Google bao loi neu aggregateRating/review rong hoac ratingValue = 0,
+        // nen chi gan khi thuc su co danh gia.
+        if ($totalReviews > 0) {
+            $productNode['aggregateRating'] = [
+                '@type' => 'AggregateRating',
+                'ratingValue' => (string) $totalRate,
+                'reviewCount' => (string) $totalReviews,
+            ];
+        }
+        if (!empty($reviews)) {
+            $productNode['review'] = $reviews;
+        }
 
-        return $schema;
-
+        return $this->renderSchema([
+            [
+                '@type' => 'BreadcrumbList',
+                'itemListElement' => $breadcrumbItems,
+            ],
+            $productNode,
+        ]);
     }
-
     private function config()
     {
         return [

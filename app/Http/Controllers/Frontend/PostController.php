@@ -14,9 +14,12 @@ use Jenssegers\Agent\Facades\Agent;
 use App\Models\Post;
 use App\View\Components\TableOfContents;
 use App\Support\LegacyFrontend;
+use App\Traits\RendersSchema;
 
 class postController extends FrontendController
 {
+    use RendersSchema;
+
     protected $language;
     protected $system;
     protected $postCatalogueRepository;
@@ -118,97 +121,70 @@ class postController extends FrontendController
         ) + $legacy);
     }
 
-    private function schema($post, $postCatalogue, $breadcrumb){
-
+    private function schema($post, $postCatalogue, $breadcrumb)
+    {
         $image = $post->image;
+        $postName = $post->languages->first()->pivot->name;
+        $description = $this->schemaText($post->languages->first()->pivot->description, 5000);
+        $postCanonical = write_url($post->canonical ?? '');
 
-        $name = $post->languages->first()->pivot->name;
-
-        $description = strip_tags($post->languages->first()->pivot->description);
-
-        $canonical = write_url($post->canonical ?? '');
-
-        $itemBreadcrumbElements = '';
-
-        $positionBreadcrumb = 2;
-
-        foreach ($breadcrumb as $key => $item) {
-
-            $name = $item->languages->first()->pivot->name;
-
-            $canonical = write_url($item->languages->first()->pivot->canonical);
-
-            $itemBreadcrumbElements .= "
-                {
-                    \"@type\": \"ListItem\",
-                    \"position\": $positionBreadcrumb,
-                    \"name\": \"" . $name . "\",
-                    \"item\": \"" . $canonical . "\",
-                },";
-            $positionBreadcrumb++;
+        // Truoc day vong lap breadcrumb ghi de $name/$canonical nen headline va url
+        // cua BlogPosting lay nham ten breadcrumb cuoi cung thay vi cua bai viet.
+        $breadcrumbItems = [[
+            '@type' => 'ListItem',
+            'position' => 1,
+            'name' => 'Trang chủ',
+            'item' => config('app.url'),
+        ]];
+        $position = 2;
+        foreach ($breadcrumb as $item) {
+            $breadcrumbItems[] = [
+                '@type' => 'ListItem',
+                'position' => $position++,
+                'name' => (string) $item->languages->first()->pivot->name,
+                'item' => write_url($item->languages->first()->pivot->canonical),
+            ];
         }
 
-        $itemBreadcrumbElements = rtrim($itemBreadcrumbElements, ',');
+        $published = convertDateTime($post->created_at, 'd-m-y');
+        $modified = convertDateTime($post->updated_at ?? $post->created_at, 'd-m-y');
 
-        $schema = "
-            <script type=\"application/ld+json\">
-                {
-                    \"@type\": \"BreadcrumbList\",
-                    \"itemListElement\": [
-                        {
-                            \"@type\": \"ListItem\",
-                            \"position\": 1,
-                            \"name\": \" Trang chủ  \",
-                            \"item\": \" ". config('app.url') . " \"
-                        },
-                        $itemBreadcrumbElements
-                    ]
-                },
-                {
-                    \"@context\": \"https://schema.org\",
-                    \"@type\": \"BlogPosting\",
-                    \"headline\": \" " . $name .  " \",
-                    \"description\": \"  " . $description .  "  \",
-                    \"image\": \"  " . $image .  "  \",
-                    \"url\": \"  " . $canonical .  "  \",
-                    \"datePublished\": \"  " . convertDateTime($post->created_at, 'd-m-y') .  "  \",
-                    \"dateModified\": \"  " . convertDateTime($post->created_at, 'd-m-y') .  "  \",
-                    \"author\": [
-                        \"@type\": \"Person\",
-                        \"name\": \"\",
-                        \"url\": \"\",
-                    ],
-                    \"publisher\": [
-                        \"@type\": \"Organization\",
-                        \"name\": \" An Hưng  \",
-                        \"logo\": [
-                            \"@type\": \"ImageObject\",
-                            \"url\": \"   \",
-                        ],
-                    ],
-                    \"mainEntityOfPage\": [
-                        \"@type\": \"Organization\",
-                        \"@id\": \" " . $canonical . " \",
-                    ],
-                    \"articleSection\": \"  " . $postCatalogue->languages->first()->pivot->name .  "  \",
-                    \" keywords \": \"  \",
-                    \" timeRequired \": \"  \",
-                    \"about\": [
-                        \"@type\": \"Thing\",
-                        \"name\": \" \",
-                    ],
-                    \"mentions\": [
-                        {
-                            \"@type\": \"Product\",
-                            \"name\": \" \",
-                        }
-                    ],
-                }
-            </script>
-        ";
-        return $schema;
+        $posting = [
+            '@type' => 'BlogPosting',
+            'headline' => trim($postName),
+            'description' => trim($description),
+            'image' => trim((string) $image),
+            'url' => trim($postCanonical),
+            'datePublished' => (string) $published,
+            'dateModified' => (string) $modified,
+            'author' => [
+                '@type' => 'Organization',
+                'name' => 'An Hưng',
+                'url' => config('app.url'),
+            ],
+            'publisher' => [
+                '@type' => 'Organization',
+                'name' => 'An Hưng',
+                'logo' => [
+                    '@type' => 'ImageObject',
+                    'url' => trim((string) ($this->system['homepage_logo'] ?? '')),
+                ],
+            ],
+            'mainEntityOfPage' => [
+                '@type' => 'WebPage',
+                '@id' => trim($postCanonical),
+            ],
+            'articleSection' => trim((string) $postCatalogue->languages->first()->pivot->name),
+        ];
 
-    } 
+        return $this->renderSchema([
+            [
+                '@type' => 'BreadcrumbList',
+                'itemListElement' => $breadcrumbItems,
+            ],
+            $posting,
+        ]);
+    }
 
     private function config(){
         return [

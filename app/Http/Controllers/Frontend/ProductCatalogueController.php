@@ -23,6 +23,8 @@ use App\Support\LegacyFrontend;
 
 class ProductCatalogueController extends FrontendController
 {
+    use \App\Traits\RendersSchema;
+
     protected $language;
     protected $system;
     protected $productCatalogueRepository;
@@ -255,88 +257,60 @@ class ProductCatalogueController extends FrontendController
 
     private function schema($productCatalogue, $products, $breadcrumb)
     {
-
         $cat_name = $productCatalogue->languages->first()->pivot->name;
-
         $cat_canonical = write_url($productCatalogue->languages->first()->pivot->canonical);
-
-        $cat_description = strip_tags($productCatalogue->languages->first()->pivot->description);
-
+        $cat_description = $this->schemaText($productCatalogue->languages->first()->pivot->description, 5000);
         $totalProducts = $products->total();
 
-        $itemListElements = '';
-
+        $itemListElements = [];
         $position = 1;
-
         foreach ($products as $product) {
-            $image = $product->image;
-            $name = $product->languages->first()->pivot->name;
-            $canonical = write_url($product->languages->first()->pivot->canonical);
-            $itemListElements .= "
-                {
-                    \"@type\": \"ListItem\",
-                    \"position\": $position,
-                    \"item\": {
-                        \"@type\": \"Product\",
-                        \"name\": \"" . $name . "\",
-                        \"url\": \"" . $canonical . "\",
-                        \"image\": \"" . $image . "\"
-                    }
-                },";
-            $position++;
+            $itemListElements[] = [
+                '@type' => 'ListItem',
+                'position' => $position++,
+                'item' => [
+                    '@type' => 'Product',
+                    'name' => (string) $product->languages->first()->pivot->name,
+                    'url' => write_url($product->languages->first()->pivot->canonical),
+                    'image' => (string) $product->image,
+                ],
+            ];
         }
 
-        $itemListElements = rtrim($itemListElements, ',');
-
-        $itemBreadcrumbElements = '';
-
+        $breadcrumbItems = [[
+            '@type' => 'ListItem',
+            'position' => 1,
+            'name' => 'Trang chủ',
+            'item' => config('app.url'),
+        ]];
         $positionBreadcrumb = 2;
-
-        foreach ($breadcrumb as $key => $item) {
-            $name = $item->languages->first()->pivot->name;
-            $canonical = write_url($item->languages->first()->pivot->canonical);
-            $itemBreadcrumbElements .= "
-                {
-                    \"@type\": \"ListItem\",
-                    \"position\": $positionBreadcrumb,
-                    \"name\": \"" . $name . "\",
-                    \"item\": \"" . $canonical . "\",
-                },";
-            $positionBreadcrumb++;
+        foreach ($breadcrumb as $item) {
+            $breadcrumbItems[] = [
+                '@type' => 'ListItem',
+                'position' => $positionBreadcrumb++,
+                'name' => (string) $item->languages->first()->pivot->name,
+                'item' => write_url($item->languages->first()->pivot->canonical),
+            ];
         }
 
-        $itemBreadcrumbElements = rtrim($itemBreadcrumbElements, ',');
-
-        $schema = "<script type='application/ld+json'>
-            {
-                \"@type\": \"BreadcrumbList\",
-                \"itemListElement\": [
-                    {
-                        \"@type\": \"ListItem\",
-                        \"position\": 1,
-                        \"name\": \" Trang chủ  \",
-                        \"item\": \" " . config('app.url') . " \"
-                    },
-                    $itemBreadcrumbElements
-                ]
-            },
-            {
-                \"@context\": \"https://schema.org\",
-                \"@type\": \"CollectionPage\",
-                \"name\": \"" . $cat_name . "\",
-                \"description\": \" " . $cat_description . " \",
-                \"url\": \"" . $cat_canonical . "\",
-                \"mainEntity\": {
-                    \"@type\": \"ItemList\",
-                    \"name\": \" " . $cat_name . " \",
-                    \"numberOfItems\": $totalProducts,
-                    \"itemListElement\": [
-                        $itemListElements
-                    ]
-                }
-            }
-            </script>";
-        return $schema;
+        return $this->renderSchema([
+            [
+                '@type' => 'BreadcrumbList',
+                'itemListElement' => $breadcrumbItems,
+            ],
+            [
+                '@type' => 'CollectionPage',
+                'name' => trim($cat_name),
+                'description' => trim($cat_description),
+                'url' => trim($cat_canonical),
+                'mainEntity' => [
+                    '@type' => 'ItemList',
+                    'name' => trim($cat_name),
+                    'numberOfItems' => (int) $totalProducts,
+                    'itemListElement' => $itemListElements,
+                ],
+            ],
+        ]);
     }
 
     private function config()
