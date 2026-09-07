@@ -1,6 +1,15 @@
 import Echo from 'laravel-echo';
 import io from 'socket.io-client';
 
+// Swiper phai la bien toan cuc TRUOC khi function.js / product.js duoc import,
+// vi hai file do goi new Swiper(). Truoc day swiper duoc tai bang the <script>
+// dong bo o cuoi body nen tinh co chay xong truoc module nay; khi cac script
+// chuyen sang defer thi thu tu do khong con dam bao va sinh loi
+// "Swiper is not defined". Bundle truc tiep vao day thi khong con phu thuoc
+// thu tu the <script>, va bo duoc mot request rieng.
+import Swiper from 'swiper/bundle';
+window.Swiper = Swiper;
+
 // import '../vendor/frontend/resources/library/js/jquery.js';
 
 // window.jQuery = jQuery;

@@ -80,7 +80,7 @@
             <div class="karaoke-hero__slider uk-slidenav-position"
                 data-uk-slideshow="{animation:'fade', autoplay:true, autoplayInterval:5500}">
                 <ul class="uk-slideshow">
-                    @foreach ($heroItems as $item)
+                    @foreach ($heroItems as $heroIndex => $item)
                         @php
                             $heroImage = $item['image'] ?? '';
                             $heroUrl = $item['canonical'] ?? '#';
@@ -89,8 +89,16 @@
                         <li>
                             <div class="karaoke-hero__bg">
                                 @if ($heroImage)
+                                    {{--
+                                        Anh slide dau tien la phan tu LCP cua trang chu:
+                                        tai ngay + fetchpriority=high de trinh duyet uu tien.
+                                        Cac slide sau lazy-load, truoc day tat ca deu tai
+                                        cung luc va tranh bang thong voi anh LCP.
+                                    --}}
                                     <img class="karaoke-section-bg" src="{{ $heroImage }}"
-                                        alt="{{ $item['alt'] ?? ($item['name'] ?? '') }}">
+                                        alt="{{ $item['alt'] ?? ($item['name'] ?? '') }}"
+                                        width="1920" height="800" decoding="async"
+                                        @if ($heroIndex === 0) fetchpriority="high" @else loading="lazy" @endif>
                                 @endif
                                 <div class="karaoke-hero__overlay"></div>
                                 <div class="karaoke-shell">

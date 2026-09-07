@@ -4,7 +4,20 @@
     <base href="{{ url('/') }}/">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,100..900;1,100..900&family=Manrope:wght@200..800&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Unbounded:wght@200..900&family=Yeseva+One&family=Roboto+Condensed:ital,wght@0,300..700;1,300..700&display=swap" rel="stylesheet">
+    {{--
+        Font: da bo 2 ho khong dung den (Playfair Display, Roboto Condensed -
+        grep toan bo CSS/view ra 0 lan) va bo truc italic cua Montserrat.
+        Tai kieu khong chan render: trinh duyet ve chu bang font du phong roi
+        doi sang font that khi CSS ve - dung voi display=swap dang dat san.
+    --}}
+    <link rel="preload" as="style"
+          href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,100..900;1,100..900&family=Manrope:wght@200..800&family=Montserrat:wght@100..900&family=Unbounded:wght@200..900&family=Yeseva+One&display=swap">
+    <link rel="stylesheet" media="print" onload="this.media='all';this.onload=null"
+          href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,100..900;1,100..900&family=Manrope:wght@200..800&family=Montserrat:wght@100..900&family=Unbounded:wght@200..900&family=Yeseva+One&display=swap">
+    <noscript>
+        <link rel="stylesheet"
+              href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,100..900;1,100..900&family=Manrope:wght@200..800&family=Montserrat:wght@100..900&family=Unbounded:wght@200..900&family=Yeseva+One&display=swap">
+    </noscript>
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
     <meta http-equiv="content-language" content="vi">
     <link rel="alternate" href="{{ url('/') }}" hreflang="vi-vn">
@@ -12,7 +25,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <meta name="author" content="{{ $system['homepage_brandname'] ?? $system['homepage_brand'] ?? '' }}">
     <meta name="copyright" content="{{ $system['homepage_brandname'] ?? $system['homepage_brand'] ?? '' }}">
-    <meta http-equiv="refresh" content="1800">
+    {{-- Da bo <meta http-equiv="refresh" content="1800">: the nay tu tai lai
+         trang moi 30 phut, gay mat vi tri doc / mat du lieu dang nhap form, va
+         Google tinh la trai nghiem xau. Khong lien quan gi den chuc nang. --}}
 
     <title>{{ $seo['meta_title'] ?? '' }}</title>
     <meta name="keywords" content="{{ $seo['meta_keyword'] ?? '' }}">

@@ -40,7 +40,7 @@
             <div class="container">
                 <div class="logo">
                     <a href="{{ url('/') }}" title="{{ $system['seo_meta_title'] ?? '' }}">
-                        <img src="{{ $system['homepage_logo'] ?? '' }}" alt="{{ $system['seo_meta_title'] ?? '' }}">
+                        <img src="{{ $system['homepage_logo'] ?? '' }}" alt="{{ $system['seo_meta_title'] ?? '' }}" width="396" height="162" fetchpriority="high" decoding="async">
                     </a>
                 </div>
                 
@@ -62,7 +62,7 @@
         <a href="#offcanvas" class="toggle-btn" data-uk-offcanvas="{target:'#offcanvas'}"><i class="fa fa-bars"></i></a>
         <div class="logo">
             <a href="{{ url('/') }}" title="{{ $system['seo_meta_title'] ?? '' }}">
-                <img src="{{ $system['homepage_logo'] ?? '' }}" alt="{{ $system['seo_meta_title'] ?? '' }}">
+                <img src="{{ $system['homepage_logo'] ?? '' }}" alt="{{ $system['seo_meta_title'] ?? '' }}" width="396" height="162" fetchpriority="high" decoding="async">
             </a>
         </div>
         <a href="#search-modal" data-uk-modal class="toggle-btn"><i class="fa fa-search"></i></a>

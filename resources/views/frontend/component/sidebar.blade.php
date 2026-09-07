@@ -78,7 +78,8 @@
 
 {{-- SCRIPT DROPDOWN --}}
 <script>
-	$(document).ready(function() {
+	// jQuery tai bang defer nen $ chua ton tai luc parse -> cho DOMContentLoaded.
+	document.addEventListener('DOMContentLoaded', function() {
 		$(document).on('click', '.btn_dropdown_sp', function(event) {
 			event.preventDefault();
 			$(this).toggleClass('active');

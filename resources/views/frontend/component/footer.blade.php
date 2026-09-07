@@ -68,9 +68,17 @@
             <div class="col">
                 <div class="col-title">FANPAGE</div>
                 <div class="col-content">
-                    <a href="{{ $system['seo_facebook'] ?? '#' }}" target="_blank">
-                        <img class="footer-new__fanpage-img"
-                            src="{{ asset('templates/frontend/resources/img/fanpage.png') }}" alt="Fanpage">
+                    <a href="{{ $system['seo_facebook'] ?? '#' }}" target="_blank" rel="noopener">
+                        {{-- Anh nam o footer nen lazy-load, va uu tien WebP
+                             (24KB) thay cho PNG (111KB). --}}
+                        <picture>
+                            <source type="image/webp"
+                                    srcset="{{ asset('templates/frontend/resources/img/fanpage.webp') }}">
+                            <img class="footer-new__fanpage-img"
+                                 src="{{ asset('templates/frontend/resources/img/fanpage.png') }}"
+                                 alt="Fanpage AZKTV" width="560" height="560"
+                                 loading="lazy" decoding="async">
+                        </picture>
                     </a>
                 </div>
             </div>

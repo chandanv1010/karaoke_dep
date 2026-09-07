@@ -756,7 +756,8 @@
 </style>
 
 <script>
-    $(document).ready(function() {
+    // jQuery tai bang defer nen $ chua ton tai luc parse -> cho DOMContentLoaded.
+    document.addEventListener('DOMContentLoaded', function() {
         // Contact Modal trigger
         $('.btn-lienhe-modal').on('click', function(e) {
             e.preventDefault();

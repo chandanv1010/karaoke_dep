@@ -694,7 +694,8 @@
 </style>
 
 <script>
-    $(document).ready(function(){
+    // jQuery tai bang defer nen $ chua ton tai luc parse -> cho DOMContentLoaded.
+    document.addEventListener('DOMContentLoaded', function(){
         tableOfContents("#tocListAncarat");
     });
     
