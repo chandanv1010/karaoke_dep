@@ -8,6 +8,8 @@ use App\Repositories\Core\SystemRepository;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
+use App\Http\Controllers\FrontendController;
 
 /**
  * Class SystemService
@@ -46,6 +48,17 @@ class SystemService
             
            
             DB::commit();
+
+            // Frontend cache bang systems (xem FrontendController::setSystem).
+            // Khong xoa thi admin luu xong ma trang ngoai van hien cau hinh cu.
+            // Boc try/catch: neu cache loi thi da luu DB thanh cong roi, khong
+            // duoc de viec xoa cache lam that bai ca thao tac luu.
+            try {
+                Cache::forget(FrontendController::systemCacheKey((int) $languageId));
+            } catch (\Throwable $e) {
+                report($e);
+            }
+
             return true;
         }catch(\Exception $e ){
             DB::rollBack();

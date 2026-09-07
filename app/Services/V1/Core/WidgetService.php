@@ -553,10 +553,16 @@ class WidgetService extends BaseService
                 ol.meta_title,
                 ol.meta_description,
                 ol.description as language_description,
-                ol.content,
                 GROUP_CONCAT(DISTINCT oc.id) as catalogue_ids,
                 GROUP_CONCAT(DISTINCT ocl.name) as catalogue_names
         ";
+        // Da bo `ol.content` khoi SELECT. Query nay keo ve TAT CA bai viet/san
+        // pham thuoc cac danh muc cua widget (858 dong tren trang chu) roi moi
+        // ->take(10) o duoi, nen toan van noi dung cua ca 858 dong deu bi keo
+        // qua PDO va hydrate thanh object: 11,9 MB tren tong 13,5 MB moi lan tai
+        // trang chu. Khong view nao doc content tu du lieu widget (da ra soat
+        // toan bo resources/views va app/), rieng trang chi tiet bai viet dung
+        // query khac nen khong anh huong.
 
         if ($objectModel === 'product') {
             $sql .= ",
@@ -609,7 +615,10 @@ class WidgetService extends BaseService
                 'meta_title'       => $row->meta_title,
                 'meta_description' => $row->meta_description,
                 'description'      => $row->language_description,
-                'content'          => $row->content,
+                // Giu key nhung de null: content khong con duoc SELECT nua, de
+                // null thi code nao doc ->content van nhan null thay vi loi
+                // "undefined property".
+                'content'          => null,
                 'pivot'            => (object)[
                     'name'      => $row->language_name,
                     'canonical' => $row->canonical,
@@ -720,10 +729,10 @@ class WidgetService extends BaseService
                 ol.meta_title,
                 ol.meta_description,
                 ol.description as language_description,
-                ol.content,
                 GROUP_CONCAT(DISTINCT c.id) as catalogue_ids,
                 GROUP_CONCAT(DISTINCT cl.name) as catalogue_names
         ";
+        // Bo `ol.content` cung ly do nhu query batch o tren: widget khong dung.
 
         if ($model === 'Product') {
             $sql .= ",
@@ -763,7 +772,8 @@ class WidgetService extends BaseService
                 'meta_title' => $item->meta_title,
                 'meta_description' => $item->meta_description,
                 'description' => $item->language_description,
-                'content' => $item->content,
+                // Xem ghi chu o query batch: content khong con duoc SELECT.
+                'content' => null,
                 'pivot' => (object) [
                     'name' => $item->language_name,
                     'canonical' => $item->canonical,
