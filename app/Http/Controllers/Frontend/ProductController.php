@@ -234,11 +234,6 @@ class ProductController extends FrontendController
             ],
             'material' => trim($cat_name),
             'category' => trim($cat_canonical),
-            'offers' => [
-                '@type' => 'Offer',
-                'seller' => ['@type' => 'Organization', 'name' => 'An Hưng'],
-                'itemCondition' => 'https://schema.org/NewCondition',
-            ],
         ];
 
         // Google bao loi neu aggregateRating/review rong hoac ratingValue = 0,
@@ -254,14 +249,69 @@ class ProductController extends FrontendController
             $productNode['review'] = $reviews;
         }
 
-        return $this->renderSchema([
-            [
-                '@type' => 'BreadcrumbList',
-                'itemListElement' => $breadcrumbItems,
-            ],
-            $productNode,
-        ]);
+        // Offer chi hop le khi co gia that. Truoc day khoi nay duoc phat ra ma
+        // khong co price/priceCurrency/availability, nen Search Console bao
+        // 'Phai chi dinh "price" ... (nam trong "offers")'.
+        $price = (int) ($product->price ?? 0);
+        if ($price > 0) {
+            $productNode['offers'] = array_filter([
+                '@type' => 'Offer',
+                'url' => write_url($product->languages->first()->pivot->canonical ?? ''),
+                'price' => (string) $price,
+                'priceCurrency' => 'VND',
+                // Site khong quan ly ton kho: 492/493 san pham co stock = 0, chi
+                // 1 ban ghi co gia tri. Neu suy ra availability tu stock thi hau
+                // het san pham bi danh OutOfStock va Google se an khoi ket qua.
+                // San pham deu ban theo don nen bao InStock moi dung thuc te.
+                'availability' => 'https://schema.org/InStock',
+                'itemCondition' => 'https://schema.org/NewCondition',
+                'priceValidUntil' => now()->addYear()->format('Y-m-d'),
+                'seller' => ['@type' => 'Organization', 'name' => 'An Hưng'],
+                // Hai truong duoi la khuyen nghi cua Google, thieu thi bao
+                // canh bao 'hasMerchantReturnPolicy' / 'shippingDetails'.
+                'hasMerchantReturnPolicy' => [
+                    '@type' => 'MerchantReturnPolicy',
+                    'applicableCountry' => 'VN',
+                    'returnPolicyCategory' => 'https://schema.org/MerchantReturnFiniteReturnWindow',
+                    'merchantReturnDays' => 7,
+                    'returnMethod' => 'https://schema.org/ReturnByMail',
+                    'returnFees' => 'https://schema.org/FreeReturn',
+                ],
+                'shippingDetails' => [
+                    '@type' => 'OfferShippingDetails',
+                    'shippingRate' => [
+                        '@type' => 'MonetaryAmount',
+                        'value' => '0',
+                        'currency' => 'VND',
+                    ],
+                    'shippingDestination' => [
+                        '@type' => 'DefinedRegion',
+                        'addressCountry' => 'VN',
+                    ],
+                ],
+            ]);
+        }
+
+        // Google yeu cau Product phai co it nhat mot trong offers / review /
+        // aggregateRating. San pham "lien he bao gia" khong co gia va site chua
+        // co review nao, nen khong the thoa dieu kien -> khong phat node Product
+        // thay vi phat ra mot node chac chan bi bao loi.
+        $nodes = [[
+            '@type' => 'BreadcrumbList',
+            'itemListElement' => $breadcrumbItems,
+        ]];
+
+        $hasOfferOrRating = isset($productNode['offers'])
+            || isset($productNode['aggregateRating'])
+            || isset($productNode['review']);
+
+        if ($hasOfferOrRating) {
+            $nodes[] = array_filter($productNode, fn ($v) => $v !== '' && $v !== null);
+        }
+
+        return $this->renderSchema($nodes);
     }
+
     private function config()
     {
         return [
