@@ -88,10 +88,123 @@
         </div>
     </div>
 
-    <!-- Global CSS Overrides for Mobile -->
+    <!-- Global CSS Overrides -->
     <style>
+        /*
+            BREADCRUMB TRANG CON
+            --------------------
+            Truoc day khoi nay la mot banner cao 300-450px: anh nen + lop phu
+            den + tieu de 40-60px kem 2 duong ke trang tri. Yeu cau moi: chi con
+            breadcrumb, bo anh nen.
+
+            Dat o day vi 5 trang (danh muc/chi tiet bai viet, danh muc/chi tiet
+            san pham, lien he) moi trang co mot khoi <style> inline rieng dinh
+            nghia lai .about-hero. Block nay nam cuoi <body> nen nap sau tat ca,
+            sua mot cho la ap dung cho ca 5 trang.
+        */
+        /*
+            Chi ap dung khi khoi CO breadcrumb - dung :has(). Trang gioi-thieu /
+            ve-chung-toi cung dung .about-hero nhung KHONG co breadcrumb (do la
+            banner tieu de) va con dung header trong suot de len anh nen, nen
+            phai de nguyen. Trinh duyet cu khong ho tro :has() se bo qua ca khoi
+            nay va giu thiet ke cu - suy giam nhe nhang, khong vo layout.
+        */
+        .about-hero:has(.hero-breadcrumb) {
+            height: auto !important;
+            min-height: 0 !important;
+            padding: 18px 0 !important;
+            margin-top: 0 !important;
+            /* Nen den dong bo voi khu vuc noi dung ben duoi, khong con anh nen */
+            background: #000 !important;
+            display: block !important;
+            overflow: visible !important;
+        }
+
+        /* Anh nen va lop phu khong con dung den */
+        .about-hero:has(.hero-breadcrumb) .about-hero__bg,
+        .about-hero:has(.hero-breadcrumb) .hero-overlay {
+            display: none !important;
+        }
+
+        .about-hero:has(.hero-breadcrumb) .hero-content {
+            text-align: left !important;
+        }
+
+        /*
+            Tieu de H1: an bang CSS chu KHONG bo khoi HTML. Day la the H1 duy
+            nhat cua trang, bo han thi trang mat H1 va anh huong SEO. Cach nay
+            hien thi dung nhu yeu cau (chi con breadcrumb) ma van giu the H1
+            cho may tim kiem - giong cach trang chu dang lam.
+        */
+        .about-hero:has(.hero-breadcrumb) .hero-title {
+            position: absolute !important;
+            width: 1px !important;
+            height: 1px !important;
+            margin: -1px !important;
+            padding: 0 !important;
+            overflow: hidden !important;
+            clip: rect(0, 0, 0, 0) !important;
+            white-space: nowrap !important;
+            border: 0 !important;
+        }
+
+        /* Breadcrumb: mot dong gon gang, can trai */
+        .about-hero:has(.hero-breadcrumb) .hero-breadcrumb {
+            display: block !important;
+            justify-content: flex-start !important;
+            margin: 0 !important;
+        }
+
+        .about-hero:has(.hero-breadcrumb) .hero-breadcrumb .uk-breadcrumb {
+            display: flex !important;
+            flex-wrap: wrap !important;
+            align-items: center !important;
+            justify-content: flex-start !important;
+            gap: 6px 10px !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            list-style: none !important;
+        }
+
+        .about-hero:has(.hero-breadcrumb) .hero-breadcrumb .uk-breadcrumb > li {
+            color: rgba(255, 255, 255, 0.65) !important;
+            font-size: 13px !important;
+        }
+
+        .about-hero:has(.hero-breadcrumb) .hero-breadcrumb .uk-breadcrumb > li > a {
+            color: rgba(255, 255, 255, 0.65) !important;
+            text-decoration: none !important;
+        }
+
+        .about-hero:has(.hero-breadcrumb) .hero-breadcrumb .uk-breadcrumb > li > a:hover {
+            color: #00e0ff !important;
+        }
+
+        /* Dau phan cach giua cac cap */
+        .about-hero:has(.hero-breadcrumb) .hero-breadcrumb .uk-breadcrumb > li + li::before {
+            content: "/";
+            margin-right: 10px;
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Cap cuoi la trang hien tai -> lam ro hon, khong phai link */
+        .about-hero:has(.hero-breadcrumb) .hero-breadcrumb .uk-breadcrumb > li:last-child,
+        .about-hero:has(.hero-breadcrumb) .hero-breadcrumb .uk-breadcrumb > li:last-child > a {
+            color: #fff !important;
+        }
+
         @media (max-width: 959px) {
-            .about-hero {
+            /* Dai breadcrumb: chi thu nho padding, khong can rule rieng khac */
+            .about-hero:has(.hero-breadcrumb) {
+                padding: 14px 0 !important;
+            }
+
+            /*
+                Cac trang KHONG co breadcrumb (gioi-thieu / ve-chung-toi) van la
+                banner tieu de nhu cu, nen giu nguyen cac dieu chinh mobile von
+                co cho chung.
+            */
+            .about-hero:not(:has(.hero-breadcrumb)) {
                 height: auto !important;
                 min-height: 180px !important;
                 padding: 30px 0 !important;
@@ -99,7 +212,7 @@
                 align-items: center !important;
                 justify-content: center !important;
             }
-            .about-hero .hero-title {
+            .about-hero:not(:has(.hero-breadcrumb)) .hero-title {
                 font-size: 22px !important;
                 line-height: 1.5 !important;
                 padding: 0 15px !important;
@@ -108,11 +221,8 @@
                 justify-content: center !important;
                 text-align: center !important;
             }
-            .about-hero .hero-title .decor-line {
+            .about-hero:not(:has(.hero-breadcrumb)) .hero-title .decor-line {
                 display: none !important;
-            }
-            .about-hero .hero-breadcrumb {
-                margin-top: 10px !important;
             }
         }
     </style>

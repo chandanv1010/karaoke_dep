@@ -128,7 +128,10 @@ $white: #fff;
     &__stats-wrap {
         position: relative;
         z-index: 3;
-        margin-top: -58px;
+        // Truoc day margin-top: -58px keo khoi so lieu de len anh slide.
+        // Bo di de khoi nam han duoi slide, cach tren duoi 30px.
+        margin-top: 0;
+        padding: 30px 0;
     }
 
     &__stats {
@@ -136,8 +139,9 @@ $white: #fff;
         grid-template-columns: repeat(4, 1fr);
         max-width: 900px;
         margin: 0 auto;
-        padding: 23px 18px 21px;
-        background: linear-gradient(135deg, #20269e 0%, #6d20a8 100%);
+        // Da bo nen gradient tim; padding cua nen cung khong con can.
+        padding: 0;
+        background: none;
     }
 
     &__stat {
@@ -164,7 +168,10 @@ $white: #fff;
 }
 
 .karaoke-intro {
-    padding: 105px 0 70px;
+    // padding-top truoc day la 105px de bu cho khoi so lieu de len tren.
+    // Khoi so lieu gio nam trong luong binh thuong va da tu co 30px o duoi,
+    // nen dat 0 o day de khoang cach duoi khoi so lieu dung bang 30px.
+    padding: 0 0 70px;
     background: $black;
 
     &__grid {

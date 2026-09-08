@@ -12125,15 +12125,19 @@ div#tocDiv {
 .karaoke-hero__stats-wrap {
   position: relative;
   z-index: 3;
-  margin-top: -58px;
+  /* Truoc day margin-top: -58px keo khoi so lieu de len anh slide.
+     Bo di de khoi nam han duoi slide, cach tren duoi 30px. */
+  margin-top: 0;
+  padding: 30px 0;
 }
 .karaoke-hero__stats {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   max-width: 900px;
   margin: 0 auto;
-  padding: 23px 18px 21px;
-  background: linear-gradient(135deg, #20269e 0%, #6d20a8 100%);
+  /* Da bo nen gradient tim va padding cua nen. */
+  padding: 0;
+  background: none;
 }
 .karaoke-hero__stat {
   text-align: center;
