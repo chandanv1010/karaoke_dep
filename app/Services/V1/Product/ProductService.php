@@ -113,7 +113,12 @@ class ProductService extends BaseService
 
         $orderBy = ['products.order', 'DESC'];
 
-        $relations = ['product_catalogues'];
+        // Eager-load 'languages': LegacyFrontend::translatedValue() xin them
+        // 'description' va 'content' - hai cot khong nam trong paginateSelect()
+        // nen no fallback sang quan he languages va lazy-load TUNG san pham
+        // mot, sinh 18 query product_language cho mot trang danh muc.
+        // Nap truoc thanh 1 query.
+        $relations = ['product_catalogues', 'languages'];
 
         $rawQuery = $this->whereRaw($request, $languageId, $productCatalogue);
 

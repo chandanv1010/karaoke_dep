@@ -3,7 +3,7 @@
 .env
 /public/uploads
 /public/upload
-/public/image-cacherm public.zip
+/public/image-cache
 /db/*backup.sql
 /scratch
 /db

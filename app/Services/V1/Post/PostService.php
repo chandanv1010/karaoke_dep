@@ -75,7 +75,10 @@ class PostService extends BaseService
 
 
         $orderBy = isset($sort) ? $sort : ['posts.id', 'DESC'];
-        $relations = ['post_catalogues'];
+        // Eager-load 'languages' cung ly do nhu ProductService: LegacyFrontend
+        // xin 'content' - cot khong nam trong paginateColumns() - nen lazy-load
+        // tung bai viet mot.
+        $relations = ['post_catalogues', 'languages'];
         $rawQuery = $this->whereRaw($request, $languageId, $postCatalogue);
 
         $joins = [

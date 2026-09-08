@@ -270,8 +270,13 @@ class ProductCatalogueController extends FrontendController
                 'position' => $position++,
                 'item' => [
                     '@type' => 'Product',
-                    'name' => (string) $product->languages->first()->pivot->name,
-                    'url' => write_url($product->languages->first()->pivot->canonical),
+                    // Dung truc tiep cot da JOIN san thay vi quan he languages.
+                    // ProductService::paginateSelect() da select tb2.name va
+                    // tb2.canonical, nen $product->name / ->canonical co san.
+                    // Goi ->languages->first() trong vong lap nay sinh N+1:
+                    // 18 query product_language cho mot trang danh muc.
+                    'name' => (string) ($product->name ?? ''),
+                    'url' => write_url($product->canonical ?? ''),
                     'image' => (string) $product->image,
                 ],
             ];

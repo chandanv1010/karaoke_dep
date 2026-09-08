@@ -64,7 +64,13 @@ class PostCatalogueController extends FrontendController
             $postCatalogue,
             $page,
             ['path' => $postCatalogue->canonical],
-            ['posts.recommend', 'desc']
+            // Sap theo bai moi nhat. Truoc day sap theo 'posts.recommend' nhung
+            // ca 657 bai deu co recommend = 1 nen dieu kien nay la hang so,
+            // khong co tac dung gi; thu tu thuc te roi ve tiebreaker id DESC.
+            // Dung created_at moi dung nghia "moi nhat": bang co 330 ngay khac
+            // nhau tu 2017 den 2026, va id khong khop thu tu ngay vi du lieu
+            // duoc migrate tu he thong cu.
+            ['posts.created_at', 'desc']
         );
 
         // dd($posts->toArray());
@@ -124,7 +130,10 @@ class PostCatalogueController extends FrontendController
         foreach ($posts as $post) {
             $blogPosts[] = [
                 '@type' => 'BlogPosting',
-                'headline' => (string) $post->languages->first()->pivot->name,
+                // Dung cot da JOIN san (PostService::paginateColumns() select
+                // tb2.name) thay vi quan he languages: goi ->languages->first()
+                // trong vong lap nay sinh N+1, moi bai viet mot query.
+                'headline' => (string) ($post->name ?? ''),
                 'url' => write_url($post->canonical ?? ''),
                 'datePublished' => (string) convertDateTime($post->created_at, 'd-m-Y'),
                 'author' => [
