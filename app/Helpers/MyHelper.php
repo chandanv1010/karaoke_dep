@@ -405,6 +405,39 @@ if(!function_exists('getthumb')){
     }
 }
 
+if(!function_exists('thumb_srcset')){
+    /**
+     * Sinh chuoi srcset cho mot anh: moi be rong mot ban resize qua /thumb.
+     *
+     * Dung cho anh co khung thay doi theo be rong man hinh (anh full-bleed,
+     * the trong luoi). Truoc day chi co mot ban goc 1920px: dien thoai rong
+     * 390px cung phai tai dung anh do. Voi srcset trinh duyet tu chon ban vua
+     * khung, tiet kiem phan lon dung luong tren mobile.
+     *
+     * Tra ve chuoi rong neu anh khong resize duoc (anh ngoai domain, no-image)
+     * - luc do view chi dung src nhu cu, khong hong gi.
+     */
+    function thumb_srcset($image = null, array $widths = []){
+        if (empty($widths)) {
+            return '';
+        }
+
+        $parts = [];
+        foreach (array_unique($widths) as $w) {
+            $w = (int) $w;
+            if ($w <= 0) { continue; }
+
+            $url = getthumb($image, $w);
+            // getthumb tra nguyen URL khi khong resize duoc -> khong co /thumb.
+            if (!str_contains($url, '/thumb?')) { return ''; }
+
+            $parts[] = $url . ' ' . $w . 'w';
+        }
+
+        return implode(', ', $parts);
+    }
+}
+
 if(!function_exists('navigations_array')){
     function navigations_array($position = 'main', $language = null){
         return \App\Support\LegacyFrontend::navigations($position, $language ?: 1);

@@ -72,6 +72,27 @@
         }
         return asset($imageFallbacks[$index % count($imageFallbacks)]);
     };
+
+    /*
+        BO BE RONG CHO srcset - do bang getBoundingClientRect tren trang that
+        (Chrome, do o 1440px va 390px):
+
+          anh full-bleed (hero, nen khoi thi cong, banner) : 1425px / 390px
+          the san pham + the phong hat                     :  335px / 386px
+          the tin tuc trong luoi                           :  348px / 364px
+          2 anh khoi gioi thieu                            :  219px / 280px
+
+        Truoc day moi anh chi co mot ban goc (thuong 1920px, 500KB-1MB) nen
+        dien thoai rong 390px van phai tai dung anh do. Voi srcset trinh duyet
+        chon ban vua khung; sizes cho no biet khung rong bao nhieu ngay tu luc
+        doc the <img>, truoc khi CSS ve xong.
+    */
+    $bleedWidths = [480, 768, 1200, 1600];
+    $bleedSizes  = '100vw';
+    $cardWidths  = [400, 800];
+    $cardSizes   = '(max-width: 959px) 100vw, 400px';
+    $introWidths = [280, 560];
+    $introSizes  = '(max-width: 959px) 280px, 220px';
 @endphp
 
 <main class="karaoke-home">
@@ -95,7 +116,9 @@
                                         Cac slide sau lazy-load, truoc day tat ca deu tai
                                         cung luc va tranh bang thong voi anh LCP.
                                     --}}
-                                    <img class="karaoke-section-bg" src="{{ $heroImage }}"
+                                    <img class="karaoke-section-bg" src="{{ getthumb($heroImage, 1600) }}"
+                                        srcset="{{ thumb_srcset($heroImage, $bleedWidths) }}"
+                                        sizes="{{ $bleedSizes }}"
                                         alt="{{ $item['alt'] ?? ($item['name'] ?? '') }}"
                                         width="1920" height="800" decoding="async"
                                         @if ($heroIndex === 0) fetchpriority="high" @else loading="lazy" @endif>
@@ -170,7 +193,9 @@
                         <div class="karaoke-intro__media">
                             @foreach (array_slice($introImages, 0, 2) as $key => $image)
                                 <div class="karaoke-intro__image karaoke-intro__image--{{ $key + 1 }}">
-                                    <img src="{{ $image }}"
+                                    <img src="{{ getthumb($image, 560) }}"
+                                        srcset="{{ thumb_srcset($image, $introWidths) }}"
+                                        sizes="{{ $introSizes }}"
                                         alt="{{ $introTitle }}"
                                         loading="lazy">
                                 </div>
@@ -230,7 +255,9 @@
     @if ($constructionWidget)
         <section class="karaoke-card-section karaoke-card-section--construction">
             @if (!empty($constructionBg))
-                <img class="karaoke-section-bg" src="{{ asset($constructionBg) }}"
+                <img class="karaoke-section-bg" src="{{ getthumb($constructionBg, 1600) }}"
+                    srcset="{{ thumb_srcset($constructionBg, $bleedWidths) }}"
+                    sizes="{{ $bleedSizes }}"
                     alt="{{ $constructionWidget->name ?? '' }}" loading="lazy">
             @endif
             <div class="karaoke-card-section__overlay"></div>
@@ -252,8 +279,11 @@
                             @endphp
                             <a class="karaoke-room-card" href="{{ $cardUrl }}" title="{{ $cardTitle }}">
                                 @if ($cardImage)
-                                    <img src="{{ $imageUrl($cardImage, $loop->index) }}" alt="{{ $cardTitle }}"
-                                        loading="lazy">
+                                    @php $cardSrc = $imageUrl($cardImage, $loop->index); @endphp
+                                    <img src="{{ getthumb($cardSrc, 800) }}"
+                                        srcset="{{ thumb_srcset($cardSrc, $cardWidths) }}"
+                                        sizes="{{ $cardSizes }}"
+                                        alt="{{ $cardTitle }}" loading="lazy">
                                 @endif
                                 <span>{{ $cardTitle }}</span>
                             </a>
@@ -289,8 +319,11 @@
                                 <a class="karaoke-product-card__image" href="{{ $cardUrl }}"
                                     title="{{ $cardTitle }}">
                                     @if ($cardImage)
-                                        <img src="{{ $imageUrl($cardImage, $loop->index) }}" alt="{{ $cardTitle }}"
-                                            loading="lazy">
+                                        @php $cardSrc = $imageUrl($cardImage, $loop->index); @endphp
+                                        <img src="{{ getthumb($cardSrc, 800) }}"
+                                            srcset="{{ thumb_srcset($cardSrc, $cardWidths) }}"
+                                            sizes="{{ $cardSizes }}"
+                                            alt="{{ $cardTitle }}" loading="lazy">
                                     @endif
                                 </a>
                                 <div class="karaoke-product-card__body">
@@ -327,8 +360,10 @@
             @foreach ($slides['home-banner']['item'] as $slide)
                 <div class="banner-item">
                     <a href="{{ $slide['url'] ?? '#' }}" target="{{ $slide['target'] ?? '_self' }}">
-                        <img src="{{ asset($slide['image']) }}" alt="{{ $slide['title'] ?? 'Banner' }}"
-                            loading="lazy">
+                        <img src="{{ getthumb($slide['image'] ?? null, 1600) }}"
+                            srcset="{{ thumb_srcset($slide['image'] ?? null, $bleedWidths) }}"
+                            sizes="{{ $bleedSizes }}"
+                            alt="{{ $slide['title'] ?? 'Banner' }}" loading="lazy">
                     </a>
                 </div>
             @endforeach
@@ -399,7 +434,10 @@
                                 <div class="card">
                                     <div class="image-wrapper">
                                         <a href="{{ $cardUrl }}">
-                                            <img src="{{ $imageUrl($card->image ?? '', $loop->index) }}"
+                                            @php $cardSrc = $imageUrl($card->image ?? '', $loop->index); @endphp
+                                            <img src="{{ getthumb($cardSrc, 800) }}"
+                                                srcset="{{ thumb_srcset($cardSrc, $cardWidths) }}"
+                                                sizes="{{ $cardSizes }}"
                                                 alt="{{ $cardTitle }}" loading="lazy">
                                         </a>
                                     </div>
@@ -459,7 +497,10 @@
                             @if ($feature)
                                 <div class="image-wrapper with-corners">
                                     <a href="{{ $featureUrl }}">
-                                        <img src="{{ $imageUrl($feature->image ?? '', $loop->index) }}"
+                                        @php $featureSrc = $imageUrl($feature->image ?? '', $loop->index); @endphp
+                                        <img src="{{ getthumb($featureSrc, 800) }}"
+                                            srcset="{{ thumb_srcset($featureSrc, $cardWidths) }}"
+                                            sizes="{{ $cardSizes }}"
                                             alt="{{ $featureTitle }}" loading="lazy">
                                     </a>
                                 </div>

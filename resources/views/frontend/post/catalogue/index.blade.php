@@ -157,7 +157,8 @@
                                     @php
                                         $title = $post['title'] ?? '';
                                         $href = rewrite_url($post['canonical'] ?? '');
-                                        $image = getthumb($post['images'] ?? null);
+                                        // Khung .mostViewed .article-item .thumb co dinh 80x60px -> 160px = 2x.
+                                        $image = getthumb($post['images'] ?? null, 160);
                                     @endphp
                                     <div class="article-item">
                                         <div class="thumb">
@@ -183,7 +184,9 @@
                                     $pName = $item->languages->first()->pivot->name ?? $item->name ?? '';
                                     $pDesc = cutnchar(strip_tags($item->languages->first()->pivot->description ?? $item->description ?? ''), 100);
                                     $pHref = rewrite_url($item->languages->first()->pivot->canonical ?? $item->canonical ?? '');
-                                    $pImage = getthumb($item->image ?? $item->images ?? '');
+                                    // Khung .featured-item .thumb-link do duoc: 259px (PC 1440) - 328px
+                                    // (mobile 390). Xin 600px du cho ca hai o mat do 2x.
+                                    $pImage = getthumb($item->image ?? $item->images ?? '', 600);
                                 @endphp
                                 <div class="featured-item">
                                     <a class="thumb-link img-shine" href="{{ $pHref }}" title="{{ $pName }}">
@@ -220,7 +223,8 @@
                                 @php
                                     $title = $post['title'] ?? '';
                                     $href = rewrite_url($post['canonical'] ?? '');
-                                    $image = getthumb($post['images'] ?? null);
+                                    // Khung .listArticle .article-item .thumb do duoc 307x173px (PC).
+                                    $image = getthumb($post['images'] ?? null, 600);
                                     $description = cutnchar(strip_tags($post['description'] ?? ''), 220);
                                     $created = $post['created'] ?? '';
                                 @endphp

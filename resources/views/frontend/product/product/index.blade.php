@@ -74,20 +74,27 @@
                     <div class="gallery-container">
                         <div class="main-image-card">
                             <a id="main-image-link" href="{{ $DetailProducts['images'] }}" data-uk-lightbox="{group:'#product-gallery'}" title="{{ $DetailProducts['title'] }}">
-                                <img id="main-product-image" src="{{ $DetailProducts['images'] }}" alt="{{ $DetailProducts['title'] }}">
+                                {{-- Khung .main-image-card do duoc 623x350px (PC 1440) va 340x350px
+                                     (mobile 390). Xin 1000px: net o mat do ~1.6x ma nho hon nhieu so
+                                     voi anh goc 500KB-1MB. The <a> ben ngoai van tro anh goc de
+                                     lightbox xem full. --}}
+                                <img id="main-product-image" src="{{ getthumb($DetailProducts['images'] ?? null, 1000) }}" alt="{{ $DetailProducts['title'] }}">
                             </a>
                         </div>
                         
                         @if(count($albums))
                             <div class="thumbnail-grid">
-                                <div class="thumbnail-card active" data-src="{{ $DetailProducts['images'] }}">
-                                    <img src="{{ $DetailProducts['images'] }}" alt="{{ $DetailProducts['title'] }}">
+                                {{-- Khung .thumbnail-card co dinh 80x80px (do tren trang that) -> 160px = 2x.
+                                     data-src la ban 1000px de doi vao khung anh chinh; data-full giu anh
+                                     goc cho lightbox. --}}
+                                <div class="thumbnail-card active" data-src="{{ getthumb($DetailProducts['images'] ?? null, 1000) }}" data-full="{{ $DetailProducts['images'] }}">
+                                    <img src="{{ getthumb($DetailProducts['images'] ?? null, 160) }}" alt="{{ $DetailProducts['title'] }}">
                                 </div>
                                 @foreach($albums as $album)
                                     @php $albumImage = $album['images'] ?? $album['image'] ?? ''; @endphp
                                     @if($albumImage)
-                                        <div class="thumbnail-card" data-src="{{ getthumb($albumImage) }}">
-                                            <img src="{{ getthumb($albumImage) }}" alt="{{ $DetailProducts['title'] }}">
+                                        <div class="thumbnail-card" data-src="{{ getthumb($albumImage, 1000) }}" data-full="{{ getthumb($albumImage) }}">
+                                            <img src="{{ getthumb($albumImage, 160) }}" alt="{{ $DetailProducts['title'] }}">
                                         </div>
                                     @endif
                                 @endforeach
@@ -197,7 +204,9 @@
                             @php
                                 $pTitle = $prod['title'] ?? '';
                                 $pHref = rewrite_url($prod['canonical'] ?? '');
-                                $pImage = getthumb($prod['images'] ?? $prod['image'] ?? '');
+                                // Khung .related-product-card .card-thumb do duoc: 413px (PC) -
+                                // 174px (mobile, luoi 2 cot). 600px phu ca hai.
+                                $pImage = getthumb($prod['images'] ?? $prod['image'] ?? '', 600);
                                 $pDesc = cutnchar(strip_tags($prod['description'] ?? ''), 120) ?: 'Thiết kế phòng hát karaoke sang trọng, hiện đại, mang phong cách đẳng cấp và thời thượng nhất hiện nay...';
                             @endphp
                             <div class="related-item-wrapper">
@@ -767,8 +776,10 @@
         // Thumbnail Click Switcher
         $('.thumbnail-card').on('click', function() {
             var src = $(this).attr('data-src');
+            // href cho lightbox lay anh goc (data-full), src cho khung anh chinh
+            // lay ban 1000px - khung chi rong toi da 623px nen khong can hon.
             $('#main-product-image').attr('src', src);
-            $('#main-image-link').attr('href', src);
+            $('#main-image-link').attr('href', $(this).attr('data-full') || src);
             $('.thumbnail-card').removeClass('active');
             $(this).addClass('active');
         });
