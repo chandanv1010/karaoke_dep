@@ -1,7 +1,9 @@
 @php
     $title = $product['title'] ?? '';
     $href = rewrite_url($product['canonical'] ?? '');
-    $image = getthumb($product['images'] ?? null);
+    // Khung card san pham theo CSS la 180-285px. Xin 600px: du net tren man
+    // hinh retina 2x ma van nho hon rat nhieu so voi anh goc 500KB-1MB.
+    $image = getthumb($product['images'] ?? null, 600);
     $price = (float) ($product['price'] ?? 0);
     $saleoff = (float) ($product['saleoff'] ?? 0);
     $percent = percent($price, $saleoff);

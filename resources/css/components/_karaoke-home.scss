@@ -893,6 +893,12 @@ $white: #fff;
 
         .logo img {
             max-height: 80px;
+            // Bat buoc phai co width: auto. The <img> co thuoc tinh width="396"
+            // height="162" (dat de tranh CLS), neu khong co dong nay thi trinh
+            // duyet lay dung 396px lam chieu rong trong khi max-height ep chieu
+            // cao xuong 80px -> logo bi bop meo.
+            width: auto;
+            height: auto;
             transition: max-height .3s ease;
         }
 
@@ -940,6 +946,8 @@ $white: #fff;
 
         .logo img {
             max-height: 50px;
+            width: auto;   // xem ghi chu o .main-header-new .logo img
+            height: auto;
         }
 
         .toggle-btn {
@@ -1289,6 +1297,8 @@ $white: #fff;
 
             .logo img {
                 max-width: 120px;
+                width: auto;   // xem ghi chu o .main-header-new .logo img
+                height: auto;
             }
 
             .toggle-btn {

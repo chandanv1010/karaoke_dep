@@ -12787,6 +12787,11 @@ div#tocDiv {
 }
 .header-new .main-header-new .logo img {
   max-height: 80px;
+  /* Bat buoc: the <img> co width="396" height="162" (dat de tranh CLS), khong
+     co width/height auto thi trinh duyet lay 396px lam chieu rong trong khi
+     max-height ep chieu cao 80px -> logo bi bop meo. */
+  width: auto;
+  height: auto;
   transition: max-height 0.3s ease;
 }
 .header-new .main-header-new .main-nav {
@@ -12827,6 +12832,8 @@ div#tocDiv {
 }
 .header-new .mobile-header .logo img {
   max-height: 50px;
+  width: auto;
+  height: auto;
 }
 .header-new .mobile-header .toggle-btn {
   color: #fff;
@@ -13576,3 +13583,24 @@ div#tocDiv {
 /* karaoke-about:end */
 
 
+
+/* ============================================================
+   LOGO: giu dung ti le
+   ------------------------------------------------------------
+   The <img> logo co thuoc tinh width="396" height="162" (dat de tranh CLS).
+   Cac rule logo chi dat max-height (80px / 50px) hoac max-width (120px) ma
+   khong dat width/height, nen trinh duyet lay so trong thuoc tinh lam kich
+   thuoc thuc -> logo bi bop meo.
+   Dat width/height: auto de anh co lai dung ti le. Dat o cuoi file va khong
+   dung !important: app.css khong khai bao width/height cho logo nen rule nay
+   van co hieu luc, va bat ky rule nao co y dinh dat kich thuoc that van de
+   dang ghi de.
+   ============================================================ */
+.logo img,
+.header-new .logo img,
+.header-new .main-header-new .logo img,
+.header-new .mobile-header .logo img,
+.mobile-header-new .logo img {
+  width: auto;
+  height: auto;
+}

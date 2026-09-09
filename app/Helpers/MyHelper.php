@@ -361,8 +361,47 @@ if(!function_exists('pagination_legacy_url')){
 }
 
 if(!function_exists('getthumb')){
-    function getthumb($image = null){
-        return \App\Support\LegacyFrontend::image($image);
+    /**
+     * Tra ve URL anh. Neu truyen $width/$height thi tra ve URL qua /thumb de
+     * anh duoc resize dung kich thuoc khung va cache lai trong public/image-cache.
+     *
+     * Truoc day ham nay chi tra ve anh GOC, nen mot anh 1500px / 800KB van bi
+     * nhoi vao khung 250px. Anh tren site dao dong 500KB - 1MB, day la nguyen
+     * nhan chinh lam PageSpeed thap.
+     *
+     * Khong truyen kich thuoc -> giu nguyen hanh vi cu (anh goc), nen cac cho
+     * dang goi getthumb($img) khong bi anh huong.
+     *
+     *   getthumb($img)            -> /uploads/images/abc.jpg      (nhu cu)
+     *   getthumb($img, 600)       -> /thumb?src=/uploads/...&w=600
+     *   getthumb($img, 600, 400)  -> /thumb?src=/uploads/...&w=600&h=400
+     */
+    function getthumb($image = null, $width = null, $height = null){
+        $url = \App\Support\LegacyFrontend::image($image);
+
+        if (empty($width) && empty($height)) {
+            return $url;
+        }
+
+        // Chi resize duoc anh noi bo. Anh dat tren domain khac thi tra nguyen.
+        $base = rtrim(asset('/'), '/');
+        if (!str_starts_with($url, $base)) {
+            return $url;
+        }
+
+        $relative = substr($url, strlen($base));
+        $relative = '/' . ltrim(strtok($relative, '?#') ?: '', '/');
+
+        // Anh du phong no-image thi khong can qua resizer.
+        if (str_contains($relative, 'no-image')) {
+            return $url;
+        }
+
+        $params = ['src' => $relative];
+        if (!empty($width))  { $params['w'] = (int) $width; }
+        if (!empty($height)) { $params['h'] = (int) $height; }
+
+        return url('/thumb') . '?' . http_build_query($params);
     }
 }
 

@@ -1,7 +1,8 @@
 @php
     $title = $post['title'] ?? '';
     $href = rewrite_url($post['canonical'] ?? '');
-    $image = getthumb($post['images'] ?? null);
+    // Khung card bai viet theo CSS toi da 280px -> xin 600px cho retina 2x.
+    $image = getthumb($post['images'] ?? null, 600);
     $description = cutnchar(strip_tags($post['description'] ?? ''), $descriptionLength ?? 250);
 @endphp
 <article class="article">

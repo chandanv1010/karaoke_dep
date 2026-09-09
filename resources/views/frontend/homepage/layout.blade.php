@@ -180,11 +180,22 @@
             color: #00e0ff !important;
         }
 
-        /* Dau phan cach giua cac cap */
+        /*
+            Dau phan cach giua cac cap.
+            Truoc dat mau rgba(255,255,255,.3) - trang 30% tren nen den nen gan
+            nhu khong nhin thay, trong nhu chi co khoang trang. Dung chevron va
+            tang do tuong phan.
+            font-size dat tuong minh vi UIkit dat .uk-breadcrumb { font-size: 0 }
+            de bo khoang trang giua cac the inline-block; pseudo-element se ke
+            thua so 0 do neu khong ghi de.
+        */
         .about-hero:has(.hero-breadcrumb) .hero-breadcrumb .uk-breadcrumb > li + li::before {
-            content: "/";
+            content: "\203A";           /* › */
+            display: inline-block;
             margin-right: 10px;
-            color: rgba(255, 255, 255, 0.3);
+            font-size: 15px;
+            line-height: 1;
+            color: rgba(255, 255, 255, 0.55);
         }
 
         /* Cap cuoi la trang hien tai -> lam ro hon, khong phai link */
