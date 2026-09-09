@@ -22,6 +22,18 @@ use Exception;
  *
  *  3. DoS: w/h khong gioi han, ?w=99999&h=99999 lam can RAM. Gio chan tran
  *     kich thuoc va khong cho phong to hon anh goc.
+ *
+ * WEBP
+ * ----
+ * Trinh duyet nao gui Accept co image/webp thi nhan ban WebP, con lai giu
+ * dinh dang goc. Ly do: nhieu anh tren site la anh chup nhung luu duoi dang
+ * PNG, ma PNG khong nen mat mat nen resize xuong roi van rat nang - do duoc
+ * karaoke-section-bg.png (2560x1529) o 1200px con 634KB.
+ *
+ * Dinh dang dau ra nam trong khoa cache va response co Vary: Accept, de CDN
+ * khong phat ban WebP cho trinh duyet khong doc duoc.
+ *
+ * Neu GD tren may chu khong build kem WebP thi tu dong bo qua, khong loi.
  */
 class ImageResizerController extends Controller
 {
@@ -67,18 +79,30 @@ class ImageResizerController extends Controller
                 $originalWidth, $originalHeight, $width, $height
             );
 
+            // Trinh duyet co nhan WebP thi xuat WebP, khong thi giu dinh dang goc.
+            $toWebp = $this->wantsWebp($request, $type);
+
             // Anh goc da nho hon khung -> khong phong to (vua mo, vua ton dung
-            // luong hon ban goc), tra ve file goc.
+            // luong hon ban goc).
             if ($newWidth >= $originalWidth && $newHeight >= $originalHeight) {
-                return response()->file($originalPath);
+                // Van con dang lam duoc: chuyen sang WebP o dung kich thuoc goc.
+                // Vi du card.jpg 1600px la 1097KB, sang WebP con khoang 1/5.
+                if (!$toWebp) {
+                    return response()->file($originalPath);
+                }
+                $newWidth = $originalWidth;
+                $newHeight = $originalHeight;
             }
 
             $cacheDir = public_path('image-cache');
-            $ext = strtolower(pathinfo($originalPath, PATHINFO_EXTENSION));
-            $cachePath = $cacheDir . '/' . md5($originalPath . $newWidth . 'x' . $newHeight) . '.' . $ext;
+            $ext = $toWebp ? 'webp' : strtolower(pathinfo($originalPath, PATHINFO_EXTENSION));
+            // Dinh dang nam trong khoa cache: neu khong, ban WebP va ban goc
+            // ghi de len nhau va trinh duyet khong ho tro WebP se nhan sai file.
+            $cacheKey = md5($originalPath . $newWidth . 'x' . $newHeight . '.' . $ext);
+            $cachePath = $cacheDir . '/' . $cacheKey . '.' . $ext;
 
             if (File::exists($cachePath)) {
-                return response()->file($cachePath);
+                return $this->imageResponse($cachePath);
             }
 
             if (!File::exists($cacheDir)) {
@@ -92,8 +116,9 @@ class ImageResizerController extends Controller
 
             $newImage = imagecreatetruecolor($newWidth, $newHeight);
 
-            // Giu nen trong suot cho PNG va GIF
-            if ($type === IMAGETYPE_PNG || $type === IMAGETYPE_GIF) {
+            // Giu nen trong suot cho PNG va GIF. WebP cung ho tro kenh alpha
+            // nen PNG trong suot chuyen sang WebP van giu duoc nen trong.
+            if ($type === IMAGETYPE_PNG || $type === IMAGETYPE_GIF || $toWebp) {
                 imagealphablending($newImage, false);
                 imagesavealpha($newImage, true);
                 $transparent = imagecolorallocatealpha($newImage, 0, 0, 0, 127);
@@ -106,17 +131,18 @@ class ImageResizerController extends Controller
                 $newWidth, $newHeight, $originalWidth, $originalHeight
             );
 
-            $this->saveImage($newImage, $cachePath, $type);
+            $this->saveImage($newImage, $cachePath, $toWebp ? IMAGETYPE_WEBP : $type);
 
             imagedestroy($sourceImage);
             imagedestroy($newImage);
 
-            return response()->file($cachePath);
+            return $this->imageResponse($cachePath);
         } catch (Exception $e) {
             report($e);
             // Resize that bai -> tra ve anh goc (duong dan noi bo da kiem tra),
-            // khong dung redirect($src).
-            return response()->file($originalPath);
+            // khong dung redirect($src). Van gan Vary: Accept cho nhat quan voi
+            // cac nhanh thanh cong, de CDN khong cache lan giua hai dinh dang.
+            return $this->imageResponse($originalPath);
         }
     }
 
@@ -170,6 +196,41 @@ class ImageResizerController extends Controller
         }
 
         return is_file($full) ? $full : null;
+    }
+
+    /**
+     * Co nen xuat WebP cho request nay khong.
+     *
+     * Dieu kien:
+     *  - trinh duyet gui Accept co image/webp (Chrome, Firefox, Safari 14+,
+     *    Edge deu gui; IE va Safari cu thi khong -> giu dinh dang goc)
+     *  - GD tren may chu build kem WebP. Neu khong co thi tu dong bo qua,
+     *    khong loi gi ca.
+     *  - anh goc khong phai WebP san.
+     */
+    private function wantsWebp(Request $request, int $type): bool
+    {
+        if ($type === IMAGETYPE_WEBP) {
+            return false;
+        }
+
+        if (!function_exists('imagewebp')) {
+            return false;
+        }
+
+        return str_contains((string) $request->header('Accept', ''), 'image/webp');
+    }
+
+    /**
+     * Tra ve file anh kem Vary: Accept.
+     *
+     * Bat buoc phai co Vary khi cung mot URL co the tra ve WebP hoac dinh
+     * dang goc: khong co no thi CDN / proxy cache mot ban roi phat cho moi
+     * trinh duyet, may nao khong doc duoc WebP se thay anh loi.
+     */
+    private function imageResponse(string $path)
+    {
+        return response()->file($path, ['Vary' => 'Accept']);
     }
 
     /** Chi nhan so nguyen duong, chan tran MAX_DIMENSION. */
