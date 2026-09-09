@@ -311,7 +311,7 @@
                             @php
                                 $cardTitle = $objectName($card);
                                 $cardImage = $card->image ?? '';
-                                $cardDescription = strip_tags($objectDescription($card));
+                                $cardDescription = cut_string_and_decode($objectDescription($card), 300);
                                 $cardUrl = $objectUrl($card);
                                 $cardLabel = $productCardLabel;
                             @endphp
@@ -428,7 +428,7 @@
                             @foreach ($tabCards as $card)
                                 @php
                                     $cardTitle = $objectName($card);
-                                    $cardDescription = strip_tags($objectDescription($card));
+                                    $cardDescription = cut_string_and_decode($objectDescription($card), 300);
                                     $cardUrl = $objectUrl($card);
                                 @endphp
                                 <div class="card">

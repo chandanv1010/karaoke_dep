@@ -178,7 +178,7 @@
                                     
                                     $pUrl = rewrite_url($pCanonical);
                                     $pImage = \App\Support\LegacyFrontend::image($pImage);
-                                    $pDesc = cutnchar(strip_tags($pDescription), 120);
+                                    $pDesc = cut_string_and_decode($pDescription, 120);
                                 @endphp
                                 <div class="featured-item">
                                     <a href="{{ $pUrl }}" class="thumb-link img-cover">

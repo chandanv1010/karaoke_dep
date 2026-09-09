@@ -680,17 +680,42 @@ if(!function_exists('renderQuickBuy')){
 
 if(!function_exists('cutnchar')){
 	function cutnchar($str = NULL, $n = 320){
-		if(strlen($str) < $n) return $str;
-		$html = substr($str, 0, $n);
-		$html = substr($html, 0, strrpos($html,' '));
+		// Dung mb_* thay cho strlen/substr: noi dung la tieng Viet UTF-8 nen
+		// mot ky tu co dau chiem 2-3 byte. Ban cu dem theo byte, tuc $n = 220
+		// chi ra khoang 150 ky tu that, va co the cat doi mot ky tu nhieu byte.
+		$str = (string) $str;
+		if (mb_strlen($str) < $n) return $str;
+		$html = mb_substr($str, 0, $n);
+		$pos = mb_strrpos($html, ' ');
+		// Neu khong co dau cach ASCII nao trong doan da cat thi giu nguyen doan
+		// do. Ban cu goi substr($html, 0, false) -> chuoi rong, mo ta chi con
+		// dau "...". Chuyen nay xay ra khi chuoi mo dau bang &nbsp; da decode
+		// thanh U+00A0 - khoang trang khong ngat, khong phai dau cach ASCII.
+		if ($pos !== false) {
+			$html = mb_substr($html, 0, $pos);
+		}
 		return $html.'...';
 	}
 }
 
 if(!function_exists('cut_string_and_decode')){
+	/**
+	 * Lay mo ta ngan tu HTML do trinh soan thao sinh ra.
+	 *
+	 * Phai decode entity TRUOC khi bo tag va cat, vi hai ly do:
+	 *  - Blade {{ }} se escape dau & mot lan nua, nen &nbsp; trong DB ra
+	 *    &amp;nbsp; va trang hien dung chu "&nbsp;" thay vi khoang trang.
+	 *  - Do dai dem sau khi decode moi dung: "&aacute;" la 8 ky tu truoc khi
+	 *    decode nhung chi la 1 ky tu ("a") sau khi decode.
+	 */
 	function cut_string_and_decode($str = NULL, $n = 200){
-        $str = html_entity_decode($str);
+        $str = html_entity_decode((string) $str, ENT_QUOTES | ENT_HTML5, 'UTF-8');
         $str = strip_tags($str);
+        // &nbsp; decode ra U+00A0 chu khong phai dau cach ASCII. Mo ta trong
+        // DB thuong mo dau bang vai cai &nbsp; nen phai gom khoang trang lai,
+        // neu khong excerpt bi thut dau dong va cutnchar khong tim duoc cho cat.
+        $str = preg_replace('/[\s\x{00A0}]+/u', ' ', $str);
+        $str = trim($str);
         $str = cutnchar($str, $n);
         return $str;
 	}

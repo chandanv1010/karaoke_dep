@@ -207,7 +207,7 @@
                                 // Khung .related-product-card .card-thumb do duoc: 413px (PC) -
                                 // 174px (mobile, luoi 2 cot). 600px phu ca hai.
                                 $pImage = getthumb($prod['images'] ?? $prod['image'] ?? '', 600);
-                                $pDesc = cutnchar(strip_tags($prod['description'] ?? ''), 120) ?: 'Thiết kế phòng hát karaoke sang trọng, hiện đại, mang phong cách đẳng cấp và thời thượng nhất hiện nay...';
+                                $pDesc = cut_string_and_decode($prod['description'] ?? '', 120) ?: 'Thiết kế phòng hát karaoke sang trọng, hiện đại, mang phong cách đẳng cấp và thời thượng nhất hiện nay...';
                             @endphp
                             <div class="related-item-wrapper">
                                 <div class="related-product-card">

@@ -161,7 +161,7 @@
                             @foreach($featuredProducts as $item)
                                 @php
                                     $pName = $item->languages->first()->pivot->name ?? $item->name ?? '';
-                                    $pDesc = cutnchar(strip_tags($item->languages->first()->pivot->description ?? $item->description ?? ''), 100);
+                                    $pDesc = cut_string_and_decode($item->languages->first()->pivot->description ?? $item->description ?? '', 100);
                                     $pHref = rewrite_url($item->languages->first()->pivot->canonical ?? $item->canonical ?? '');
                                     // Khung .featured-item .thumb-link do duoc: 259px (PC) - 328px (mobile).
                                     $pImage = getthumb($item->image ?? $item->images ?? '', 600);
@@ -222,7 +222,7 @@
                             // Khung .post-card .image-wrapper do duoc: 298px (PC, luoi 4 cot) -
                             // 370px (mobile, 1 cot). 600px phu ca hai.
                             $image = getthumb($postItem['images'] ?? null, 600);
-                            $description = cutnchar(strip_tags($postItem['description'] ?? ''), 120);
+                            $description = cut_string_and_decode($postItem['description'] ?? '', 120);
                         @endphp
                         <div class="post-card">
                             <div class="image-wrapper">

@@ -182,7 +182,7 @@
                             @foreach($featuredProducts as $item)
                                 @php
                                     $pName = $item->languages->first()->pivot->name ?? $item->name ?? '';
-                                    $pDesc = cutnchar(strip_tags($item->languages->first()->pivot->description ?? $item->description ?? ''), 100);
+                                    $pDesc = cut_string_and_decode($item->languages->first()->pivot->description ?? $item->description ?? '', 100);
                                     $pHref = rewrite_url($item->languages->first()->pivot->canonical ?? $item->canonical ?? '');
                                     // Khung .featured-item .thumb-link do duoc: 259px (PC 1440) - 328px
                                     // (mobile 390). Xin 600px du cho ca hai o mat do 2x.
@@ -225,7 +225,7 @@
                                     $href = rewrite_url($post['canonical'] ?? '');
                                     // Khung .listArticle .article-item .thumb do duoc 307x173px (PC).
                                     $image = getthumb($post['images'] ?? null, 600);
-                                    $description = cutnchar(strip_tags($post['description'] ?? ''), 220);
+                                    $description = cut_string_and_decode($post['description'] ?? '', 220);
                                     $created = $post['created'] ?? '';
                                 @endphp
                                 <div class="article-item">
