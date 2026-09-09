@@ -98,7 +98,21 @@
         // Fixed background image same as gioi-thieu page
         $heroBg = '/userfiles/image/bg-about-hero.png';
     @endphp
-    <img class="about-hero__bg" src="{{ asset($heroBg) }}" alt="{{ $heroTitle }}" loading="lazy">
+    {{--
+        Nen hero trai het be ngang: do bang getBoundingClientRect duoc 1425px
+        (PC 1440) va 390px (mobile 390). File goc bg-about-hero.png nang 489KB
+        va truoc day gui nguyen ban do cho ca dien thoai. srcset de trinh duyet
+        chon ban vua khung, sizes noi cho no biet khung rong 100vw ngay tu luc
+        doc the <img>.
+
+        Anh nay nam ngay dau trang nen thuong la phan tu LCP. Truoc day no
+        co loading="lazy" - Chrome hoan tai den sau khi layout xong, tuc la
+        tu lam cham chinh diem do LCP. Doi sang fetchpriority="high".
+    --}}
+    <img class="about-hero__bg" src="{{ getthumb($heroBg, 1600) }}"
+        srcset="{{ thumb_srcset($heroBg, [480, 768, 1200, 1600]) }}"
+        sizes="100vw"
+        alt="{{ $heroTitle }}" fetchpriority="high">
     <div class="hero-overlay"></div>
     <div class="uk-container uk-container-center hero-content">
         <h1 class="hero-title">
@@ -177,7 +191,11 @@
                                     }
                                     
                                     $pUrl = rewrite_url($pCanonical);
-                                    $pImage = \App\Support\LegacyFrontend::image($pImage);
+                                    // Khung .featured-item .thumb-link img do duoc 249px (PC 1440)
+                                    // va 318px (mobile 390). 600px du cho ca hai o mat do 2x.
+                                    // getthumb() goi LegacyFrontend::image() ben trong nen van
+                                    // giu nguyen anh du phong no-image.
+                                    $pImage = getthumb($pImage, 600);
                                     $pDesc = cut_string_and_decode($pDescription, 120);
                                 @endphp
                                 <div class="featured-item">
@@ -236,7 +254,10 @@
 @if ($constructionWidget)
     <section class="karaoke-card-section karaoke-card-section--construction">
         @if (!empty($constructionBg))
-            <img class="karaoke-section-bg" src="{{ asset($constructionBg) }}"
+            {{-- Nen trai het be ngang: do duoc 1425px (PC) / 390px (mobile). --}}
+            <img class="karaoke-section-bg" src="{{ getthumb($constructionBg, 1600) }}"
+                srcset="{{ thumb_srcset($constructionBg, [480, 768, 1200, 1600]) }}"
+                sizes="100vw"
                 alt="{{ $constructionWidget->name ?? '' }}" loading="lazy">
         @endif
         <div class="karaoke-card-section__overlay"></div>
@@ -258,8 +279,12 @@
                         @endphp
                         <a class="karaoke-room-card" href="{{ $cardUrl }}" title="{{ $cardTitle }}">
                             @if ($cardImage)
-                                <img src="{{ $imageUrl($cardImage, $loop->index) }}" alt="{{ $cardTitle }}"
-                                    loading="lazy">
+                                @php $cardSrc = $imageUrl($cardImage, $loop->index); @endphp
+                                {{-- Khung .karaoke-room-card img do duoc 335px (PC) / 386px (mobile). --}}
+                                <img src="{{ getthumb($cardSrc, 800) }}"
+                                    srcset="{{ thumb_srcset($cardSrc, [400, 800]) }}"
+                                    sizes="(max-width: 959px) 100vw, 400px"
+                                    alt="{{ $cardTitle }}" loading="lazy">
                             @endif
                             <span>{{ $cardTitle }}</span>
                         </a>

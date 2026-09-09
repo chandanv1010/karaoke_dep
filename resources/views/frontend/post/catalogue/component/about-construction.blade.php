@@ -31,7 +31,10 @@
 @if ($constructionWidget)
     <section class="karaoke-card-section karaoke-card-section--construction">
         @if (!empty($constructionBg))
-            <img class="karaoke-section-bg" src="{{ asset($constructionBg) }}"
+            {{-- Nen trai het be ngang: do duoc 1425px (PC) / 390px (mobile). --}}
+            <img class="karaoke-section-bg" src="{{ getthumb($constructionBg, 1600) }}"
+                srcset="{{ thumb_srcset($constructionBg, [480, 768, 1200, 1600]) }}"
+                sizes="100vw"
                 alt="{{ $constructionWidget->name ?? '' }}" loading="lazy">
         @endif
         <div class="karaoke-card-section__overlay"></div>
@@ -53,8 +56,12 @@
                         @endphp
                         <a class="karaoke-room-card" href="{{ $cardUrl }}" title="{{ $cardTitle }}">
                             @if ($cardImage)
-                                <img src="{{ $imageUrl($cardImage, $loop->index) }}" alt="{{ $cardTitle }}"
-                                    loading="lazy">
+                                @php $cardSrc = $imageUrl($cardImage, $loop->index); @endphp
+                                {{-- Khung .karaoke-room-card img do duoc 335px (PC) / 386px (mobile). --}}
+                                <img src="{{ getthumb($cardSrc, 800) }}"
+                                    srcset="{{ thumb_srcset($cardSrc, [400, 800]) }}"
+                                    sizes="(max-width: 959px) 100vw, 400px"
+                                    alt="{{ $cardTitle }}" loading="lazy">
                             @endif
                             <span>{{ $cardTitle }}</span>
                         </a>

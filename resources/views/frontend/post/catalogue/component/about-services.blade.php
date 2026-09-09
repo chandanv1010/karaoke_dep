@@ -27,7 +27,14 @@
 
 @if(count($services) > 0)
 <section class="karaoke-card-section karaoke-card-section--services">
-    <img class="karaoke-section-bg" src="{{ asset($servicesBg) }}" alt="{{ $servicesHeading }}" loading="lazy">
+    {{--
+        Nen trai het be ngang. File goc karaoke-section-bg.png la PNG
+        2560x1529 nang 1375KB, trong khi khung rong nhat chi 1425px.
+    --}}
+    <img class="karaoke-section-bg" src="{{ getthumb($servicesBg, 1600) }}"
+        srcset="{{ thumb_srcset($servicesBg, [480, 768, 1200, 1600]) }}"
+        sizes="100vw"
+        alt="{{ $servicesHeading }}" loading="lazy">
     <div class="karaoke-card-section__overlay"></div>
 
     <div class="karaoke-shell">

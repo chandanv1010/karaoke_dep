@@ -68,7 +68,21 @@
         $heroTitle = $DetailCatalogues['title'] ?? $postCatalogue->name ?? '';
         $heroBg = '/userfiles/image/bg-about-hero.png';
     @endphp
-    <img class="about-hero__bg" src="{{ asset($heroBg) }}" alt="{{ $heroTitle }}" loading="lazy">
+    {{--
+        Nen hero trai het be ngang: do bang getBoundingClientRect duoc 1425px
+        (PC 1440) va 390px (mobile 390). File goc bg-about-hero.png nang 489KB
+        va truoc day gui nguyen ban do cho ca dien thoai. srcset de trinh duyet
+        chon ban vua khung, sizes noi cho no biet khung rong 100vw ngay tu luc
+        doc the <img>.
+
+        Anh nay nam ngay dau trang nen thuong la phan tu LCP. Truoc day no
+        co loading="lazy" - Chrome hoan tai den sau khi layout xong, tuc la
+        tu lam cham chinh diem do LCP. Doi sang fetchpriority="high".
+    --}}
+    <img class="about-hero__bg" src="{{ getthumb($heroBg, 1600) }}"
+        srcset="{{ thumb_srcset($heroBg, [480, 768, 1200, 1600]) }}"
+        sizes="100vw"
+        alt="{{ $heroTitle }}" fetchpriority="high">
     <div class="hero-overlay"></div>
     <div class="uk-container uk-container-center hero-content">
         <h1 class="hero-title">
