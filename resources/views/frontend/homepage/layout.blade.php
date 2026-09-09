@@ -166,7 +166,21 @@
             list-style: none !important;
         }
 
+        /*
+            UIkit dat .uk-breadcrumb { font-size: 0; line-height: 0 } de bo
+            khoang trang giua cac the inline-block. He qua: li dau tien
+            ("Trang chu") co height = 0, con cac li sau - do co ::before voi
+            line-height rieng - cao 15px. Hai loai li vi the lech duong chan
+            chu, du ul da align-items: center.
+
+            Cach xu ly: tra lai line-height that cho li, va cho moi li thanh
+            mot flex row tu can giua. Luc do dau phan cach va chu nam tren
+            cung mot truc, khong con phu thuoc vao baseline.
+        */
         .about-hero:has(.hero-breadcrumb) .hero-breadcrumb .uk-breadcrumb > li {
+            display: flex !important;
+            align-items: center !important;
+            line-height: 1.4 !important;
             color: rgba(255, 255, 255, 0.65) !important;
             font-size: 13px !important;
         }
@@ -191,11 +205,22 @@
         */
         .about-hero:has(.hero-breadcrumb) .hero-breadcrumb .uk-breadcrumb > li + li::before {
             content: "\203A";           /* › */
-            display: inline-block;
+            /*
+                display: block de no la mot flex item cua li -> duoc
+                align-items: center can giua, thay vi phu thuoc baseline.
+            */
+            display: block;
             margin-right: 10px;
             font-size: 15px;
-            line-height: 1;
-            color: rgba(255, 255, 255, 0.55);
+            line-height: 1.4;
+            /*
+                !important vi ca 5 trang con (danh muc/chi tiet bai viet,
+                danh muc/chi tiet san pham, lien he) deu co rule rieng
+                .uk-breadcrumb > li:nth-child(n+2):before { color: ... !important }
+                voi do mo 0.3-0.6. Khong co !important thi mau o day bi ghi de,
+                dau phan cach lai mo gan nhu khong thay.
+            */
+            color: rgba(255, 255, 255, 0.55) !important;
         }
 
         /* Cap cuoi la trang hien tai -> lam ro hon, khong phai link */
