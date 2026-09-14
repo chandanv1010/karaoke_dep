@@ -159,12 +159,12 @@ class postController extends FrontendController
             'dateModified' => (string) $modified,
             'author' => [
                 '@type' => 'Organization',
-                'name' => 'An Hưng',
+                'name' => $this->organizationName(),
                 'url' => config('app.url'),
             ],
             'publisher' => [
                 '@type' => 'Organization',
-                'name' => 'An Hưng',
+                'name' => $this->organizationName(),
                 'logo' => [
                     '@type' => 'ImageObject',
                     'url' => trim((string) ($this->system['homepage_logo'] ?? '')),

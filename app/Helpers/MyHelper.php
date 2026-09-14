@@ -1027,3 +1027,46 @@ if (!function_exists('calculateCourses')) {
         return $chapters;
     }
 }
+
+if(!function_exists('company_name')){
+    /**
+     * Ten cong ty / thuong hieu, lay tu Cau hinh > He thong trong admin.
+     *
+     * Dung cho nhung noi KHONG co san $this->system: mail (chay trong queue,
+     * khong co request), view backend (composer chi chia se 'system' cho
+     * frontend.* va mobile.*)...
+     *
+     * Doc theo dung khoa cache ma FrontendController dung, nen khi admin luu
+     * cau hinh thi SystemService::save() xoa cache la cho nay cung doi theo.
+     *
+     * Thu tu uu tien:
+     *   homepage_company   - ten phap nhan
+     *   homepage_brandname - ten thuong hieu, dung khi chua dat ten cong ty
+     *   config('app.name') - luoi cuoi, de khong bao gio tra ve chuoi rong
+     */
+    function company_name($languageId = 1){
+        try {
+            $system = \Illuminate\Support\Facades\Cache::remember(
+                \App\Http\Controllers\FrontendController::systemCacheKey((int) $languageId),
+                3600,
+                fn () => convert_array(
+                    \App\Models\System::where('language_id', $languageId)->get(),
+                    'keyword',
+                    'content'
+                )
+            );
+        } catch (\Throwable $e) {
+            report($e);
+            $system = [];
+        }
+
+        foreach (['homepage_company', 'homepage_brandname'] as $key) {
+            $value = trim((string) ($system[$key] ?? ''));
+            if ($value !== '') {
+                return $value;
+            }
+        }
+
+        return (string) config('app.name');
+    }
+}

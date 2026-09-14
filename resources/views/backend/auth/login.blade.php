@@ -21,23 +21,24 @@
         <div class="loginColumns animated fadeInDown">
             <div class="row">
 
+                {{-- Truoc day cho nay con nguyen chu demo cua theme admin:
+                     "Welcome to IN+" kem ba doan Lorem Ipsum. Thay bang ten cong
+                     ty lay tu Cau hinh > He thong, doi ten cong ty la trang nay
+                     tu doi theo. --}}
                 <div class="col-md-6">
-                    <h2 class="font-bold">Welcome to IN+</h2>
+                    <h2 class="font-bold">{{ company_name() }}</h2>
 
                     <p>
-                        Perfectly designed and precisely prepared admin theme with over 50 pages with extra new web app views.
+                        Trang quản trị nội dung website.
                     </p>
 
                     <p>
-                        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.
+                        Đăng nhập bằng tài khoản được cấp để quản lý sản phẩm, bài viết,
+                        đơn liên hệ và các cấu hình của website.
                     </p>
 
                     <p>
-                        When an unknown printer took a galley of type and scrambled it to make a type specimen book.
-                    </p>
-
-                    <p>
-                        <small>It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</small>
+                        <small>Nếu quên mật khẩu hoặc cần cấp thêm tài khoản, vui lòng liên hệ quản trị viên.</small>
                     </p>
 
                 </div>

@@ -36,6 +36,32 @@ class FrontendController extends Controller
         return 'frontend.system.' . $languageId;
     }
 
+    /**
+     * Ten to chuc dung cho du lieu co cau truc (JSON-LD): brand, manufacturer,
+     * publisher, seller...
+     *
+     * Truoc day tat ca nhung cho do deu ghi cung chuoi 'An Hung' - ten cua mot
+     * cong ty noi that, sot lai tu ma nguon goc ma site nay duoc nhan ban ra.
+     * Google doc du lieu do va hieu san pham karaoke thuoc thuong hieu An Hung.
+     *
+     * Lay theo cau hinh trong admin (Cau hinh > He thong) de doi ten cong ty la
+     * moi noi tu doi theo, khong phai sua ma nguon:
+     *   homepage_company   - ten phap nhan, uu tien vi day la "to chuc"
+     *   homepage_brandname - ten thuong hieu, dung khi chua dat ten cong ty
+     *   config('app.name') - luoi cuoi, de khong bao gio phat ra chuoi rong
+     */
+    protected function organizationName(): string
+    {
+        foreach (['homepage_company', 'homepage_brandname'] as $key) {
+            $value = trim((string) ($this->system[$key] ?? ''));
+            if ($value !== '') {
+                return $value;
+            }
+        }
+
+        return (string) config('app.name');
+    }
+
     public function setSystem(){
         // Bang systems duoc doc o MOI request de dung cho layout (logo, hotline,
         // SEO, script...) nhung noi dung chi doi khi admin luu cau hinh. Truoc

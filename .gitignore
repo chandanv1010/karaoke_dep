@@ -12,3 +12,5 @@
 *.tar.gz
 *.rar
 *.tar
+# Anh chup man hinh dung de trao doi, khong thuoc ma nguon
+/kara.jpg

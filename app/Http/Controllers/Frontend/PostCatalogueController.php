@@ -138,7 +138,7 @@ class PostCatalogueController extends FrontendController
                 'datePublished' => (string) convertDateTime($post->created_at, 'd-m-Y'),
                 'author' => [
                     '@type' => 'Organization',
-                    'name' => 'An Hưng',
+                    'name' => $this->organizationName(),
                 ],
             ];
         }
@@ -171,7 +171,7 @@ class PostCatalogueController extends FrontendController
                 'url' => trim($cat_canonical),
                 'publisher' => [
                     '@type' => 'Organization',
-                    'name' => 'An Hưng',
+                    'name' => $this->organizationName(),
                 ],
                 'blogPost' => $blogPosts,
             ],

@@ -226,10 +226,10 @@ class ProductController extends FrontendController
             'name' => trim($name),
             'description' => trim($description),
             'image' => trim($image),
-            'brand' => ['@type' => 'Brand', 'name' => 'An Hưng'],
+            'brand' => ['@type' => 'Brand', 'name' => $this->organizationName()],
             'manufacturer' => [
                 '@type' => 'Organization',
-                'name' => 'An Hưng',
+                'name' => $this->organizationName(),
                 'url' => config('app.url'),
             ],
             'material' => trim($cat_name),
@@ -266,7 +266,7 @@ class ProductController extends FrontendController
                 'availability' => 'https://schema.org/InStock',
                 'itemCondition' => 'https://schema.org/NewCondition',
                 'priceValidUntil' => now()->addYear()->format('Y-m-d'),
-                'seller' => ['@type' => 'Organization', 'name' => 'An Hưng'],
+                'seller' => ['@type' => 'Organization', 'name' => $this->organizationName()],
                 // Hai truong duoi la khuyen nghi cua Google, thieu thi bao
                 // canh bao 'hasMerchantReturnPolicy' / 'shippingDetails'.
                 'hasMerchantReturnPolicy' => [

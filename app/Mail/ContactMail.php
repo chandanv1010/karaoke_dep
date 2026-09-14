@@ -27,9 +27,23 @@ class ContactMail extends Mailable
      */
     public function envelope(): Envelope
     {
+        // Truoc day tieu de mail ghi cung 'Nội Thất An Hưng' - ten cong ty cua
+        // ma nguon goc, nen khach lien he qua karaokedep.com.vn nhan duoc mail
+        // mang ten mot cong ty noi that. Lay theo cau hinh trong admin.
         return new Envelope(
-            subject: 'Thông báo từ website Nội Thất An Hưng',
+            subject: 'Thông báo từ website ' . $this->companyName(),
         );
+    }
+
+    /**
+     * Ten cong ty lay tu Cau hinh > He thong, khong ghi cung trong ma nguon.
+     *
+     * Mailable co the chay trong queue (khong co request/view context) nen dung
+     * helper doc thang tu bang systems thay vi bien duoc share cho view.
+     */
+    private function companyName(): string
+    {
+        return company_name();
     }
 
     /**

@@ -59,21 +59,23 @@
             </section>
         @endforeach
     @endif
+    {{-- Khoi nay truoc day lay hai anh tu https://vinahome.vn (website cua don vi
+         khac) va ghi cung so hotline 0968643487 - khong phai so cua cong ty, trong
+         khi so that nam o Cau hinh > He thong (contact_hotline).
+         Da bo hai anh ngoai: phu thuoc vao may chu cua ben thu ba, ho doi/xoa file
+         la vo anh, va moi luot xem deu gui referrer sang do. --}}
+    @php $hotline = trim((string) ($system['contact_hotline'] ?? '')); @endphp
+    @if($hotline !== '')
     <div class="support">
-        <div class="images">
-            <img src="https://vinahome.vn/template/frontend/images/suport.png" alt="">
-        </div>
         <div class="hotline">
-            <div class="icon">
-                <img src="https://vinahome.vn/template/frontend/images/icon-holine.jpg" alt="">
-            </div>
             <div class="nav-icon">
                 <span class="sp1">Hotline</span>
-                <span class="sp2">0968643487</span>
+                <span class="sp2"><a href="tel:{{ preg_replace('/[^0-9+]/', '', $hotline) }}">{{ $hotline }}</a></span>
             </div>
             <div class="clearfix"></div>
         </div>
     </div>
+    @endif
 </aside>
 
 {{-- SCRIPT DROPDOWN --}}
