@@ -59,19 +59,6 @@
     $objectUrl = static fn($object) => !empty($languageOf($object)->canonical ?? null)
         ? rewrite_url($languageOf($object)->canonical)
         : '#';
-    $imageFallbacks = [
-        '/uploads/images/thiet-ke/thiet-ke-phong-khach-01.jpg',
-        '/uploads/images/thiet-ke/thiet-ke-phong-hop-01.jpg',
-        '/uploads/images/thiet-ke/thiet-ke-phong-giam-doc-01.jpg',
-        '/uploads/images/thiet-ke/thiet-ke-nha-hang-01.jpg',
-    ];
-    $imageUrl = static function ($path, $index = 0) use ($imageFallbacks) {
-        $path = $path ?: '';
-        if ($path && file_exists(public_path(ltrim($path, '/')))) {
-            return asset($path);
-        }
-        return asset($imageFallbacks[$index % count($imageFallbacks)]);
-    };
 
     /*
         BO BE RONG CHO srcset - do bang getBoundingClientRect tren trang that
@@ -279,7 +266,7 @@
                             @endphp
                             <a class="karaoke-room-card" href="{{ $cardUrl }}" title="{{ $cardTitle }}">
                                 @if ($cardImage)
-                                    @php $cardSrc = $imageUrl($cardImage, $loop->index); @endphp
+                                    @php $cardSrc = image_or_fallback($cardImage); @endphp
                                     <img src="{{ getthumb($cardSrc, 800) }}"
                                         srcset="{{ thumb_srcset($cardSrc, $cardWidths) }}"
                                         sizes="{{ $cardSizes }}"
@@ -319,7 +306,7 @@
                                 <a class="karaoke-product-card__image" href="{{ $cardUrl }}"
                                     title="{{ $cardTitle }}">
                                     @if ($cardImage)
-                                        @php $cardSrc = $imageUrl($cardImage, $loop->index); @endphp
+                                        @php $cardSrc = image_or_fallback($cardImage); @endphp
                                         <img src="{{ getthumb($cardSrc, 800) }}"
                                             srcset="{{ thumb_srcset($cardSrc, $cardWidths) }}"
                                             sizes="{{ $cardSizes }}"
@@ -434,7 +421,7 @@
                                 <div class="card">
                                     <div class="image-wrapper">
                                         <a href="{{ $cardUrl }}">
-                                            @php $cardSrc = $imageUrl($card->image ?? '', $loop->index); @endphp
+                                            @php $cardSrc = image_or_fallback($card->image ?? ''); @endphp
                                             <img src="{{ getthumb($cardSrc, 800) }}"
                                                 srcset="{{ thumb_srcset($cardSrc, $cardWidths) }}"
                                                 sizes="{{ $cardSizes }}"
@@ -497,7 +484,7 @@
                             @if ($feature)
                                 <div class="image-wrapper with-corners">
                                     <a href="{{ $featureUrl }}">
-                                        @php $featureSrc = $imageUrl($feature->image ?? '', $loop->index); @endphp
+                                        @php $featureSrc = image_or_fallback($feature->image ?? ''); @endphp
                                         <img src="{{ getthumb($featureSrc, 800) }}"
                                             srcset="{{ thumb_srcset($featureSrc, $cardWidths) }}"
                                             sizes="{{ $cardSizes }}"

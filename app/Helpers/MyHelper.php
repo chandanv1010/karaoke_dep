@@ -1070,3 +1070,76 @@ if(!function_exists('company_name')){
         return (string) config('app.name');
     }
 }
+
+if(!function_exists('image_file_exists')){
+    /**
+     * Anh nay co that tren dia khong?
+     *
+     * PHAI giai ma URL truoc khi hoi he thong tap tin. CSDL luu duong dan da
+     * ma hoa URL - anh upload qua trinh soan thao duoc luu kieu
+     *
+     *     /userfiles/image/123/thiet-ke-karaoke...azktv%20(1).jpg
+     *
+     * trong khi ten file that tren dia co DAU CACH. file_exists() doc dia chu
+     * khong doc URL, nen dua thang chuoi %20 vao la no di tim mot file ten
+     * '...azktv%20(1).jpg' va khong bao gio thay.
+     *
+     * Hau qua that: tren trang chu, hai the trong khoi "Thi cong karaoke" rot
+     * xuong anh du phong, ma anh du phong luc do cung khong ton tai - thanh ra
+     * o vo anh. Cung bai do o trang danh muc lai hien binh thuong, vi duong do
+     * di qua getthumb() khong he kiem tra su ton tai.
+     */
+    function image_file_exists(?string $path): bool
+    {
+        $path = trim((string) $path);
+
+        if ($path === '') {
+            return false;
+        }
+
+        // Anh dat tren domain khac thi khong kiem tra duoc, coi nhu co.
+        if (\Illuminate\Support\Str::startsWith($path, ['http://', 'https://', '//'])) {
+            return true;
+        }
+
+        // Giai ma xong phai chot lai bang realpath.
+        //
+        // rawurldecode bien ca '%2e%2e%2f' thanh '../', nen neu chi ghep chuoi
+        // roi hoi is_file thi mot duong dan nhu '/%2e%2e%2f.env' se tra ve
+        // true - dung cai bay path traversal ma ImageResizerController da phai
+        // va mot lan.
+        $that = realpath(public_path(rawurldecode(ltrim($path, '/'))));
+        $goc = realpath(public_path());
+
+        if ($that === false || $goc === false) {
+            return false;
+        }
+
+        return str_starts_with($that, $goc . DIRECTORY_SEPARATOR) && is_file($that);
+    }
+}
+
+if(!function_exists('image_or_fallback')){
+    /**
+     * Duong dan anh, hoac anh thay the neu thieu file.
+     *
+     * Truoc day doan nay duoc chep tay vao sau view, moi ban deu kem mot danh
+     * sach bon anh du phong ghi cung - ma ca bon deu khong con tren may chu.
+     * Gom ve mot cho de lan sau sua mot lan la xong, va de mac dinh tro vao
+     * /images/no-image.jpg (co that).
+     */
+    function image_or_fallback(?string $path, ?string $fallback = null): string
+    {
+        $fallback = $fallback ?: '/images/no-image.jpg';
+
+        if (!image_file_exists($path)) {
+            return asset(ltrim($fallback, '/'));
+        }
+
+        $path = trim((string) $path);
+
+        return \Illuminate\Support\Str::startsWith($path, ['http://', 'https://', '//'])
+            ? $path
+            : asset(ltrim($path, '/'));
+    }
+}

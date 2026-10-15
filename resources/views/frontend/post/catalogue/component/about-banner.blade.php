@@ -4,7 +4,7 @@
     $bannerTarget = '_self';
     $bannerTitle = $introduce['block_4_heading'] ?? 'Banner';
 
-    if (empty($bannerImage) || !file_exists(public_path(ltrim($bannerImage, '/')))) {
+    if (!image_file_exists($bannerImage)) {
         $languageId = $config['language'] ?? 1;
         $bannerSlide = \App\Models\Slide::where('keyword', 'home-banner')->first();
         $bannerItems = $bannerSlide ? $bannerSlide->item[$languageId] ?? ($bannerSlide->item['1'] ?? []) : [];

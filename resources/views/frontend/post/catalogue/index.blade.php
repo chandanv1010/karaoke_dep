@@ -52,19 +52,6 @@
     $objectUrl = static fn($object) => !empty($languageOf($object)->canonical ?? null)
         ? rewrite_url($languageOf($object)->canonical)
         : '#';
-    $imageFallbacks = [
-        '/uploads/images/thiet-ke/thiet-ke-phong-khach-01.jpg',
-        '/uploads/images/thiet-ke/thiet-ke-phong-hop-01.jpg',
-        '/uploads/images/thiet-ke/thiet-ke-phong-giam-doc-01.jpg',
-        '/uploads/images/thiet-ke/thiet-ke-nha-hang-01.jpg',
-    ];
-    $imageUrl = static function ($path, $index = 0) use ($imageFallbacks) {
-        $path = $path ?: '';
-        if ($path && file_exists(public_path(ltrim($path, '/')))) {
-            return asset($path);
-        }
-        return asset($imageFallbacks[$index % count($imageFallbacks)]);
-    };
 
     // Construction Widget
     $constructionWidget = $widgets['karaoke-construction'] ?? null;
@@ -306,7 +293,7 @@
                         @endphp
                         <a class="karaoke-room-card" href="{{ $cardUrl }}" title="{{ $cardTitle }}">
                             @if ($cardImage)
-                                @php $cardSrc = $imageUrl($cardImage, $loop->index); @endphp
+                                @php $cardSrc = image_or_fallback($cardImage); @endphp
                                 {{-- Khung .karaoke-room-card img do duoc 335px (PC) / 386px (mobile). --}}
                                 <img src="{{ getthumb($cardSrc, 800) }}"
                                     srcset="{{ thumb_srcset($cardSrc, [400, 800]) }}"
