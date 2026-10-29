@@ -4,7 +4,7 @@
     <base href="{{ url('/') }}/">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,100..900;1,100..900&amp;family=Manrope:wght@200..800&amp;family=Yeseva+One&amp;display=optional" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,100..900;1,100..900&amp;family=Manrope:wght@200..800&amp;family=Yeseva+One&amp;display=swap" rel="stylesheet">
     <meta charset="utf-8">
     <meta http-equiv="content-language" content="vi">
     <meta name="robots" content="index,follow">

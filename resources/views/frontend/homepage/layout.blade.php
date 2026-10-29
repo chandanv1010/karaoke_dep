@@ -9,22 +9,23 @@
         bai viet / san pham). Da bo Playfair Display, Roboto Condensed,
         Montserrat va Unbounded - grep toan bo CSS, view va build ra 0 lan dung.
 
-        display=optional thay vi swap: voi swap, trinh duyet ve chu bang font
-        du phong roi DOI sang font that khi font ve, va vi hai font co kich
-        thuoc chu khac nhau nen ca trang bi xe dich. PageSpeed do duoc CLS
-        0,319 tren desktop, va danh sach thu pham gan nhu toan la file font.
-        Voi optional, font nao khong kip trong ~100ms thi lan tai do dung luon
-        font du phong, khong doi nua - het xe dich. Doi lai khach vao lan dau
-        co the thay font du phong; tu lan sau font da nam trong cache trinh
-        duyet nen hien dung ngay.
+        Giu display=swap. DA THU display=optional va do lai hai lan: CLS
+        mobile tang tu 0,002 len 0,405 ca hai lan (diem tu 48 xuong 35 roi
+        31), con CLS desktop 0,319 thi khong he giam. Optional khong phai
+        cach tri cho nay.
+
+        Cho xe dich that su la section.karaoke-intro: chieu cao cua no phu
+        thuoc vao chu, nen font ve xong la day moi thu ben duoi. Cach tri dung
+        la cho khoi do mot chieu cao toi thieu, hoac khai font du phong co
+        size-adjust khop metric voi Inter - khong phai doi font-display.
     --}}
     <link rel="preload" as="style"
-          href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,100..900;1,100..900&family=Manrope:wght@200..800&family=Yeseva+One&display=optional">
+          href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,100..900;1,100..900&family=Manrope:wght@200..800&family=Yeseva+One&display=swap">
     <link rel="stylesheet" media="print" onload="this.media='all';this.onload=null"
-          href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,100..900;1,100..900&family=Manrope:wght@200..800&family=Yeseva+One&display=optional">
+          href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,100..900;1,100..900&family=Manrope:wght@200..800&family=Yeseva+One&display=swap">
     <noscript>
         <link rel="stylesheet"
-              href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,100..900;1,100..900&family=Manrope:wght@200..800&family=Yeseva+One&display=optional">
+              href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,100..900;1,100..900&family=Manrope:wght@200..800&family=Yeseva+One&display=swap">
     </noscript>
     {{-- Preload anh LCP.
          Anh hero nam sau rat nhieu HTML va chi hien ra khi CSS cua slideshow
