@@ -14,8 +14,34 @@
     RewriteCond %{REQUEST_URI} (.+)/$
     RewriteRule ^ %1 [L,R=301]
 
+    # --- Anh da resize: uu tien ban WebP ---------------------------------
+    # Mot URL /image-cache/... co san hai file tren dia: ban dinh dang goc va
+    # ban .webp ben canh. Trinh duyet nao gui Accept: image/webp thi nhan ban
+    # .webp, con lai nhan ban goc. Bat buoc kem Vary: Accept (xem duoi), neu
+    # khong CDN se cache mot ban roi phat cho ca hai loai trinh duyet.
+    RewriteCond %{HTTP_ACCEPT} image/webp
+    RewriteCond %{REQUEST_URI} ^/image-cache/
+    RewriteCond %{REQUEST_FILENAME}.webp -f
+    RewriteRule ^(.*)$ /$1.webp [T=image/webp,L]
+
     # Send Requests To Front Controller...
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
+</IfModule>
+
+<IfModule mod_headers.c>
+    <FilesMatch "\.(jpe?g|png|gif|webp)$">
+        Header append Vary Accept
+    </FilesMatch>
+</IfModule>
+
+<IfModule mod_expires.c>
+    ExpiresActive On
+    # Anh trong /image-cache mang san kich thuoc ngay trong duong dan, nen doi
+    # anh la doi duong dan - cache dai ngay duoc ma khong so phat ban cu.
+    ExpiresByType image/jpeg "access plus 1 year"
+    ExpiresByType image/png  "access plus 1 year"
+    ExpiresByType image/gif  "access plus 1 year"
+    ExpiresByType image/webp "access plus 1 year"
 </IfModule>

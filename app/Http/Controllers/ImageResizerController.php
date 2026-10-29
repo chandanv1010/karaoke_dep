@@ -147,6 +147,112 @@ class ImageResizerController extends Controller
     }
 
     /**
+     * Phuc vu /image-cache/{w}x{h}/{duong-dan-anh-goc}.
+     *
+     * Chi chay khi web server KHONG tim thay file - tuc lan dau mot kich thuoc
+     * duoc yeu cau. Ham nay resize, ghi ra dung duong dan URL dang hoi (va
+     * them ban .webp ben canh), roi tu lan sau nginx/Apache phuc vu thang,
+     * khong dung toi PHP nua.
+     *
+     * Vi sao ghi hai file thay vi mot:
+     *   Cung mot URL nhung trinh duyet doc duoc WebP thi nen nhan WebP, con
+     *   lai phai nhan dinh dang goc. Web server chon giup bang try_files
+     *   ($uri.webp truoc, roi $uri) dua tren header Accept - nen phai co san
+     *   ca hai file tren dia. Response luon kem Vary: Accept de CDN khong
+     *   phat nham ban WebP cho trinh duyet khong doc duoc.
+     */
+    public function serve(Request $request, string $path)
+    {
+        if (!preg_match('#^(\d+)x(\d+)/(.+)$#', $path, $m)) {
+            return abort(404, 'Image not found');
+        }
+
+        $width  = $this->normalizeDimension($m[1]);
+        $height = $this->normalizeDimension($m[2]);
+        $src    = $m[3];
+
+        $originalPath = $this->resolveSafePath($src);
+        if ($originalPath === null) {
+            return abort(404, 'Image not found');
+        }
+
+        if (!$width && !$height) {
+            return $this->imageResponse($originalPath);
+        }
+
+        try {
+            $info = @getimagesize($originalPath);
+            if ($info === false) {
+                return abort(415, 'Unsupported image type');
+            }
+            [$originalWidth, $originalHeight, $type] = $info;
+            if ($originalWidth < 1 || $originalHeight < 1) {
+                return abort(415, 'Unsupported image type');
+            }
+
+            [$newWidth, $newHeight] = $this->targetSize(
+                $originalWidth, $originalHeight, $width, $height
+            );
+
+            // Anh goc nho hon khung thi khong phong to - vua mo, vua nang hon ban goc.
+            $upscale = ($newWidth >= $originalWidth && $newHeight >= $originalHeight);
+            if ($upscale) {
+                $newWidth  = $originalWidth;
+                $newHeight = $originalHeight;
+            }
+
+            $target = public_path('image-cache/' . $path);
+            $dir    = dirname($target);
+            if (!File::exists($dir)) {
+                File::makeDirectory($dir, 0755, true);
+            }
+
+            $source = $this->createFrom($originalPath, $type);
+            if ($source === null) {
+                return abort(415, 'Unsupported image type');
+            }
+
+            $resized = $this->resample($source, $originalWidth, $originalHeight, $newWidth, $newHeight, $type);
+
+            // Ban dinh dang goc - cho trinh duyet khong doc duoc WebP.
+            $this->saveImage($resized, $target, $type);
+
+            // Ban WebP ben canh, chi khi GD tren may chu co ho tro.
+            if ($type !== IMAGETYPE_WEBP && function_exists('imagewebp')) {
+                @imagewebp($resized, $target . '.webp', 82);
+            }
+
+            imagedestroy($source);
+            imagedestroy($resized);
+
+            $wantsWebp = File::exists($target . '.webp')
+                && str_contains((string) $request->header('Accept', ''), 'image/webp');
+
+            return $this->imageResponse($wantsWebp ? $target . '.webp' : $target);
+        } catch (Exception $e) {
+            report($e);
+            return $this->imageResponse($originalPath);
+        }
+    }
+
+    /** Tao anh moi dung kich thuoc, giu nen trong suot cho PNG/GIF/WebP. */
+    private function resample($source, int $ow, int $oh, int $nw, int $nh, int $type)
+    {
+        $new = imagecreatetruecolor($nw, $nh);
+
+        if ($type === IMAGETYPE_PNG || $type === IMAGETYPE_GIF || $type === IMAGETYPE_WEBP) {
+            imagealphablending($new, false);
+            imagesavealpha($new, true);
+            $transparent = imagecolorallocatealpha($new, 0, 0, 0, 127);
+            imagefilledrectangle($new, 0, 0, $nw, $nh, $transparent);
+        }
+
+        imagecopyresampled($new, $source, 0, 0, 0, 0, $nw, $nh, $ow, $oh);
+
+        return $new;
+    }
+
+    /**
      * Doi chieu $src ve mot duong dan that su nam trong public/ va thuoc thu muc
      * cho phep. Tra ve null neu khong hop le.
      */

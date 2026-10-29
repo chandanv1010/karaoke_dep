@@ -32,14 +32,29 @@ require __DIR__ . '/web/custom.route.php';
 |
 */
 /* FRONTEND ROUTES  */
+/* Sitemap sinh tu CSDL. File tinh public/sitemap.xml da duoc xoa: neu con,
+ * web server se phuc vu file do va khong bao gio cham toi route nay. */
+Route::get('/sitemap.xml', [App\Http\Controllers\Frontend\SitemapController::class, 'index'])
+    ->name('sitemap');
+
+/* Anh da resize: /image-cache/{rong}x{cao}/{duong-dan-anh-goc}
+ *
+ * Dat NGOAI nhom 'locale' vi anh khong phu thuoc ngon ngu. Route nay chi chay
+ * khi web server khong tim thay file tren dia - tuc lan dau mot kich thuoc
+ * duoc yeu cau. Nhung lan sau nginx/Apache phuc vu thang file tinh, khong
+ * cham toi PHP. */
+Route::get('/image-cache/{path}', [App\Http\Controllers\ImageResizerController::class, 'serve'])
+    ->where('path', '.*')
+    ->name('image.cache');
+
 Route::group(['middleware' => ['locale']], function () {
     Route::get('/', [HomeController::class, 'index'])->name('home.index');
-    Route::get('lien-he.html', [FeContactController::class, 'index'])->name('contact.index');
+    Route::get('lien-he.html', [FeContactController::class, 'index'])->name('contact.fe.index');
     Route::post('lien-he.html', [FeContactController::class, 'saveContact'])->name('contact.save');
     Route::get('/thumb', [App\Http\Controllers\ImageResizerController::class, 'resize'])->name('thumb');
 
     Route::get('tim-kiem', [FeProductCatalogueController::class, 'search'])->name('product.catalogue.search');
-    Route::get('tim-kiem/trang-{page}', [FeProductCatalogueController::class, 'search'])->name('product.catalogue.search')->where('page', '[0-9]+');
+    Route::get('tim-kiem/trang-{page}', [FeProductCatalogueController::class, 'search'])->name('product.catalogue.search.page')->where('page', '[0-9]+');
     Route::get('yeu-thich' . config('apps.general.suffix'), [FeProductCatalogueController::class, 'wishlist'])->name('product.wishlist.index');
     Route::get('so-sanh' . config('apps.general.suffix'), [FeProductCatalogueController::class, 'compare'])->name('product.compare.index');
 

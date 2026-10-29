@@ -360,21 +360,41 @@ if(!function_exists('pagination_legacy_url')){
     }
 }
 
+if(!function_exists('thumb_cache_path')){
+    /**
+     * Duong dan tuong doi cua ban anh da resize, dung lam ca URL lan duong dan
+     * file tren dia:
+     *
+     *     /image-cache/600x0/uploads/images/abc.jpg
+     *                  ^^^^^ rong x cao, 0 = khong chi dinh
+     *
+     * Co y KHONG bam ma (hash): duong dan tu mo ta duoc chinh no, nen khi
+     * nginx khong tim thay file va chuyen xuong PHP thi PHP doc nguoc ra duoc
+     * anh goc va kich thuoc can resize. Bam ma thi khong lam dieu do duoc.
+     */
+    function thumb_cache_path(string $relative, ?int $width, ?int $height): string
+    {
+        return '/image-cache/' . (int) $width . 'x' . (int) $height . '/' . ltrim($relative, '/');
+    }
+}
+
 if(!function_exists('getthumb')){
     /**
-     * Tra ve URL anh. Neu truyen $width/$height thi tra ve URL qua /thumb de
-     * anh duoc resize dung kich thuoc khung va cache lai trong public/image-cache.
+     * Tra ve URL anh. Co truyen $width/$height thi tra ve URL ban da resize.
      *
-     * Truoc day ham nay chi tra ve anh GOC, nen mot anh 1500px / 800KB van bi
-     * nhoi vao khung 250px. Anh tren site dao dong 500KB - 1MB, day la nguyen
-     * nhan chinh lam PageSpeed thap.
+     * TRUOC DAY: tra ve /thumb?src=...&w=600 - moi tam anh di qua Laravel, ke
+     * ca anh da nam san trong cache. Do duoc tren production: mot anh da cache
+     * mat 0,56s vi phai khoi dong ca framework, trong khi nginx phuc vu file
+     * tinh chi mat 0,011s. Trang chu co 114 request anh, tuc khoang 65 giay
+     * thoi gian worker cho MOT luot xem trang - day la ly do pool php-fpm bao
+     * hoa (log ghi 307 lan "server reached max_children").
      *
-     * Khong truyen kich thuoc -> giu nguyen hanh vi cu (anh goc), nen cac cho
-     * dang goi getthumb($img) khong bi anh huong.
+     * NAY: tra ve duong dan tinh /image-cache/600x0/uploads/images/abc.jpg.
+     * File ton tai thi nginx/Apache phuc vu thang, khong dung toi PHP. Chua co
+     * thi try_files roi xuong index.php, Laravel resize, ghi file ra dung
+     * duong dan do, va tu lan sau tro di web server lo.
      *
-     *   getthumb($img)            -> /uploads/images/abc.jpg      (nhu cu)
-     *   getthumb($img, 600)       -> /thumb?src=/uploads/...&w=600
-     *   getthumb($img, 600, 400)  -> /thumb?src=/uploads/...&w=600&h=400
+     * Khong truyen kich thuoc -> van tra anh goc nhu cu.
      */
     function getthumb($image = null, $width = null, $height = null){
         $url = \App\Support\LegacyFrontend::image($image);
@@ -397,11 +417,7 @@ if(!function_exists('getthumb')){
             return $url;
         }
 
-        $params = ['src' => $relative];
-        if (!empty($width))  { $params['w'] = (int) $width; }
-        if (!empty($height)) { $params['h'] = (int) $height; }
-
-        return url('/thumb') . '?' . http_build_query($params);
+        return url(thumb_cache_path($relative, (int) $width, (int) $height));
     }
 }
 
@@ -428,8 +444,8 @@ if(!function_exists('thumb_srcset')){
             if ($w <= 0) { continue; }
 
             $url = getthumb($image, $w);
-            // getthumb tra nguyen URL khi khong resize duoc -> khong co /thumb.
-            if (!str_contains($url, '/thumb?')) { return ''; }
+            // getthumb tra nguyen URL khi khong resize duoc -> khong co /image-cache/.
+            if (!str_contains($url, '/image-cache/')) { return ''; }
 
             $parts[] = $url . ' ' . $w . 'w';
         }
@@ -474,12 +490,34 @@ if(!function_exists('percent')){
 }
 
 if(!function_exists('seo')){
+    /**
+     * Gan nhan trang cho tieu de va mo ta khi $page > 1.
+     *
+     * Truoc day moi trang phan trang dung Y HET tieu de va mo ta cua trang 1 -
+     * chi khac canonical. Search Console bao 44 trang "Trang trung lap, Google
+     * da chon mot trang chinh tac khac", phan lon la cac duong
+     * /{danh-muc}/trang-2.html ... /trang-13.html: noi dung the hien ra giong
+     * nhau nen Google gop het ve trang 1.
+     *
+     * Them " - Trang N" la cach chuan de phan biet. Khong dung rel=next/prev
+     * vi Google da ngung ho tro tu 2019.
+     */
     function seo($model = null, $page = 1){
+        $page = max(1, (int) $page);
         $canonical = ($page > 1) ? write_url($model->canonical, true, false).'/trang-'.$page.config('apps.general.suffix'): write_url($model->canonical, true, true);
+
+        $title       = ($model->meta_title) ?? $model->name;
+        $description = ($model->meta_description) ?? cut_string_and_decode($model->descipriont, 168);
+
+        if ($page > 1) {
+            $title       = $title . ' - Trang ' . $page;
+            $description = $description . ' (Trang ' . $page . ')';
+        }
+
         return [
-            'meta_title' => ($model->meta_title) ?? $model->name,
+            'meta_title' => $title,
             'meta_keyword' => ($model->meta_keyword) ?? '',
-            'meta_description' => ($model->meta_description) ?? cut_string_and_decode($model->descipriont, 168),
+            'meta_description' => $description,
             'meta_image' => $model->image,
             'canonical' => $canonical,
         ];
