@@ -86,7 +86,16 @@
     @if (!empty($heroItems))
         <section class="karaoke-hero">
             <div class="karaoke-hero__slider uk-slidenav-position"
-                data-uk-slideshow="{animation:'fade', autoplay:true, autoplayInterval:5500}">
+                {{-- Chi bat autoplay khi co tu 2 slide tro len.
+                     Hien CSDL chi co 1 slide, nhung autoplay van bat nen UIkit
+                     cu chay vong lap hieu ung 5,5 giay mot lan du khong co gi
+                     de xoay. Lighthouse dem moi lan ve lai la mot ung vien LCP
+                     moi, nen LCP bi day ra rat xa: cac thanh phan cong lai chi
+                     1,74 giay (0ms TTFB + 1.170ms cho tai + 70ms tai + 500ms
+                     ve) ma con so bao cao nhay 7,5 / 9,3 / 10,7 giay tuy lan
+                     do. Chan doan cung ghi "8 animated elements found".
+                     Them slide thu hai thi autoplay tu bat lai. --}}
+                data-uk-slideshow="{animation:'fade'@if (count($heroItems) > 1), autoplay:true, autoplayInterval:5500 @endif}">
                 <ul class="uk-slideshow">
                     @foreach ($heroItems as $heroIndex => $item)
                         @php
