@@ -40,12 +40,31 @@ import urllib.request
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DEST = os.path.join(ROOT, 'resources/views/frontend/component/fonts.blade.php')
 
-# Dung y nguyen chuoi ma CSS dang yeu cau, de khong doi gi ve mat hinh thuc.
+# DA BO TRUC opsz (optical size) khoi Inter va Playfair.
+#
+# Chuoi goc trong CSS co ca truc opsz. Do dung luong that cua cac subset ma
+# mot trang tieng Viet tai (latin, latin-ext, vietnamese):
+#
+#   Inter    ital,opsz,wght   453 KB  ->  ital,wght   291 KB
+#   Playfair ital,opsz,wght   501 KB  ->  ital,wght   ~123-250 KB
+#
+# opsz chi tinh chinh rat nhe hinh dang chu theo co chu hien thi - o co chu
+# cua trang nay thi khong the thay bang mat, nhung lai lam moi file phinh gan
+# gap ba. Bo di la lai thuan, khong doi gi ve mat nhin.
+#
+# CON MOT BUOC NUA CHUA LAM: bo luon kieu NGHIENG.
+#   Inter      ital,wght  291 KB  ->  wght  140 KB
+#   Montserrat ital,wght  244 KB  ->  wght  119 KB
+# Tiet kiem them khoang 100 KB tren trang chu. Chu nghieng tren site chi dung
+# o phu de 13px, lien ket 12px va chu goi y (_karaoke-home.scss:266 va 567,
+# _karaoke-about.scss:201, app.scss:3731) - nhung cho ma trinh duyet tu nghieng
+# lay cung khong phan biet duoc. Day la quyet dinh ve mat thiet ke nen de
+# nguoi dung chon, khong tu bo.
 FAMILIES = [
-    'Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900',
+    'Inter:ital,wght@0,100..900;1,100..900',
     'Manrope:wght@200..800',
     'Montserrat:ital,wght@0,100..900;1,100..900',
-    'Playfair:ital,opsz,wght@0,5..1200,300..900;1,5..1200,300..900',
+    'Playfair:ital,wght@0,300..900;1,300..900',
     'Yeseva+One',
 ]
 
