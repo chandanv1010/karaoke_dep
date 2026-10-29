@@ -1,6 +1,24 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
+    {{-- charset va viewport PHAI dung ngay dau <head>, TRUOC moi the
+         preload/preconnect.
+
+         Truoc day viewport nam o duoi, sau the <link rel="preload" as="image">
+         cua anh hero. Trinh duyet quet san <head> va tinh imagesizes="100vw"
+         NGAY luc gap the preload - luc do no chua doc den viewport nen dung
+         khung nhin mac dinh 980px thay vi 375px. 980 x DPR 2 = 1960 -> no
+         chon ban rong nhat trong srcset (1600w) cho mot man hinh 375px.
+
+         Do duoc tren production: anh hero tai ve ban 1600x0 (44,9 KB) trong
+         khi ban 768x0 (24,9 KB) la vua du. The <img> sau do cung dung lai
+         ban to vi no da nam san trong bo nho dem.
+
+         Them bat ky the preload/preconnect nao moi thi van phai dat SAU hai
+         dong nay. --}}
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
     <base href="{{ url('/') }}/">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -26,11 +44,9 @@
               fetchpriority="high">
     @endif
 
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
     <meta http-equiv="content-language" content="vi">
     <link rel="alternate" href="{{ url('/') }}" hreflang="vi-vn">
     <meta name="robots" content="index,follow">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <meta name="author" content="{{ $system['homepage_brandname'] ?? $system['homepage_brand'] ?? '' }}">
     <meta name="copyright" content="{{ $system['homepage_brandname'] ?? $system['homepage_brand'] ?? '' }}">
     {{-- Da bo <meta http-equiv="refresh" content="1800">: the nay tu tai lai
