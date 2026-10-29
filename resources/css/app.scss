@@ -39,7 +39,13 @@
 @import "../vendor/frontend/resources/fonts/font-awesome-4.7.0/css/font-awesome.min.css";
 @import "../vendor/frontend/resources/uikit/css/uikit.modify.css";
 @import "../vendor/frontend/resources/library/css/library.css";
-@import "../vendor/frontend/resources/plugins/wow/css/libs/animate.css";
+// animate.css da duoc cat xuong con 8 hieu ung site that su dung:
+// 56 KB -> 5,5 KB. Ban day du dinh nghia 61 hieu ung, doi chieu toan bo ma
+// nguon thi chi 8 cai duoc goi den. File goc van con nguyen o
+// resources/vendor/.../animate.css - chi la khong nap nua.
+// Them hieu ung moi: them vao USED trong deploy/gen-animate-subset.py roi
+// chay lai script do, neu khong hieu ung se khong chay.
+@import "vendor-subset/animate.used.css";
 @import "../vendor/frontend/core/plugins/jquery-nice-select-1.1.0/css/nice-select.css";
 @import "../vendor/frontend/resources/config.css";
 
