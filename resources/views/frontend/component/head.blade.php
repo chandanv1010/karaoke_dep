@@ -9,28 +9,29 @@
 
      Swiper van tu host (khong lay tu unpkg) nhu truoc, chi la gio nam trong
      bundle. Thu tu cascade giu nguyen y het - xem chu thich trong app.scss. --}}
-{{-- Trang chu: nhung CSS toi thieu cho phan dau trang va tai file CSS day du
-     theo kieu khong chan hien thi.
+{{-- CSS gop lam mot file, tai theo kieu chan hien thi.
 
-     PageSpeed bao "Render-blocking requests - Est savings of 1.140 ms": trinh
-     duyet phai tai xong ca 91 KB CSS roi moi ve duoc gi len man hinh. Phan dau
-     trang chi dung 91 luat trong so do, gom lai con 9,6 KB - nhung thang vao
-     HTML thi ve duoc ngay, file day du tai song song va gan vao sau.
+     DA THU nhung CSS toi thieu cho phan dau trang chu va tai file day du
+     khong chan (commit b94080c). Ket qua do tren production:
 
-     CHI AP CHO TRANG CHU. Cac trang khac co bo cuc khac nen CSS toi thieu nay
-     khong dung cho chung; ap rong ra la chung bi nhay giao dien luc moi tai.
-     Day cung la trang ma PageSpeed do.
+                        FCP      CLS      diem
+       truoc khi thu    4,8s     0,002    58
+       sau, lan 1       2,4s     0,039    54
+       sau, lan 2       2,4s     0,039    58
+       sau, lan 3       2,4s     1,039    38
 
-     critical-css.blade.php sinh tu dong boi deploy/gen-critical-css.py - doi
-     bo cuc phan dau trang chu thi phai chay lai script do. --}}
-@if (request()->is('/'))
-    @include('frontend.component.critical-css')
-    <link rel="preload" as="style" href="{{ Vite::asset('resources/css/app.scss') }}"
-          onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="{{ Vite::asset('resources/css/app.scss') }}"></noscript>
-@else
-    @vite('resources/css/app.scss')
-@endif
+     FCP giam mot nua that, nhung CLS mat on dinh va co lan vot len 1,039 -
+     tuc khach that thay trang nhay manh luc moi tai. Diem thi khong hon
+     duoc trang thai cu, ma trang thai cu co CLS 0,002.
+
+     Nguyen nhan: bo CSS toi thieu 9,6 KB chua phu het phan dau trang; cho
+     nao thieu thi ve bang kieu mac dinh roi nhay khi file day du gan vao.
+     Muon lam cho dung phai tach CSS toi thieu RIENG cho tung loai trang va
+     doi chieu anh chup tung trang - khong phai mot bo dung chung.
+
+     Hai file deploy/gen-critical-css.py va deploy/critical-selectors.md van
+     giu lai de lan sau lam tiep. --}}
+@vite('resources/css/app.scss')
 
 {{--
     jQuery va UIkit truoc day khong co defer nen chan hoan toan viec ve trang.
