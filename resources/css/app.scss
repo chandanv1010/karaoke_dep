@@ -24,8 +24,14 @@
 //  `.uk-link:hover, a:hover { color: #0B5F90 }` ma ban vendor khong co; neu
 //  de ban vendor chay sau nhu hien nay thi luat do van song, nhung neu dao
 //  len truoc thi mau hover doi.
-@import "../../public/templates/frontend/resources/fonts/font-awesome-4.4.0/css/font-awesome.min.css";
-@import "../../public/templates/frontend/resources/uikit/css/uikit.modify.css";
+// font-awesome 4.4.0 da BO: doi chieu selector thi ban 4.7.0 (import ben
+// duoi) la tap cha hoan toan - 0 selector nao cua 4.4 ma 4.7 khong co. Bo
+// duoc 27 KB trung lap.
+//
+// uikit.modify.css ban public cung BO, chi giu 22 khoi rieng cua no (xem chu
+// thich trong file duoi). Ca hai ban deu 1.055 khoi va chi khac 22 - giu ca
+// file la lap 132 KB.
+@import "../vendor/frontend/resources/uikit/css/uikit.modify.public-only.css";
 @import "../../public/templates/frontend/resources/style.css";
 @import "../../public/templates/frontend/resources/vendor/swiper/swiper-bundle.min.css";
 
