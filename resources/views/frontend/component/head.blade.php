@@ -9,7 +9,28 @@
 
      Swiper van tu host (khong lay tu unpkg) nhu truoc, chi la gio nam trong
      bundle. Thu tu cascade giu nguyen y het - xem chu thich trong app.scss. --}}
-@vite('resources/css/app.scss')
+{{-- Trang chu: nhung CSS toi thieu cho phan dau trang va tai file CSS day du
+     theo kieu khong chan hien thi.
+
+     PageSpeed bao "Render-blocking requests - Est savings of 1.140 ms": trinh
+     duyet phai tai xong ca 91 KB CSS roi moi ve duoc gi len man hinh. Phan dau
+     trang chi dung 91 luat trong so do, gom lai con 9,6 KB - nhung thang vao
+     HTML thi ve duoc ngay, file day du tai song song va gan vao sau.
+
+     CHI AP CHO TRANG CHU. Cac trang khac co bo cuc khac nen CSS toi thieu nay
+     khong dung cho chung; ap rong ra la chung bi nhay giao dien luc moi tai.
+     Day cung la trang ma PageSpeed do.
+
+     critical-css.blade.php sinh tu dong boi deploy/gen-critical-css.py - doi
+     bo cuc phan dau trang chu thi phai chay lai script do. --}}
+@if (request()->is('/'))
+    @include('frontend.component.critical-css')
+    <link rel="preload" as="style" href="{{ Vite::asset('resources/css/app.scss') }}"
+          onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="{{ Vite::asset('resources/css/app.scss') }}"></noscript>
+@else
+    @vite('resources/css/app.scss')
+@endif
 
 {{--
     jQuery va UIkit truoc day khong co defer nen chan hoan toan viec ve trang.
