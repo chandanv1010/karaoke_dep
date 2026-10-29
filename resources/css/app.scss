@@ -4960,3 +4960,47 @@ html.wowjs .wow {
     padding-right:0;
     padding-left:0;
 }
+
+// ============================================================================
+//  Font du phong khop metric voi Inter - chong xe dich bo cuc (CLS)
+// ============================================================================
+//  PageSpeed do CLS tren trang chu nhay giua 0 va 0,405 tuy tung lan chay, va
+//  thu pham luon la section.karaoke-intro. Do tren chinh production:
+//
+//      desktop 1280px : cot anh 580px cao hon cot chu 440px -> chu doi chieu
+//                       cao cung khong day gi, khong xe dich
+//      mobile 375px   : grid xep mot cot, min-height 490px cua cot anh KHONG
+//                       ap dung (computed = auto), cot chu cao 626px va hoan
+//                       toan do chu quyet dinh -> font ve xong la day toan bo
+//                       phan duoi trang
+//
+//  Vi sao khong phai doi font-display: da thu display=optional, CLS mobile
+//  van ra 0,405. Doi font-display chi doi THOI DIEM chu ve, khong lam khoi
+//  do thoi co gian.
+//
+//  Cach nay khai mot font du phong dung glyph cua Arial nhung bop lai cho
+//  khop metric cua Inter, nen chu ve bang font du phong chiem dung bang chu
+//  ve bang Inter - doi font khong con lam doi chieu cao. Cac chi so duoi lay
+//  tu bang doi chieu Inter/Arial cua cong cu fontaine.
+//
+//  Chi ap cho rieng khoi karaoke-intro chu khong ap toan trang: khoi nay la
+//  cho duy nhat do duoc xe dich, con ap rong ra se de len cac font rieng
+//  (Yeseva One o tieu de bai viet, font-awesome o icon).
+@font-face {
+    font-family: 'Inter Fallback';
+    src: local('Arial');
+    size-adjust: 107.12%;
+    ascent-override: 90.2%;
+    descent-override: 22.48%;
+    line-gap-override: 0%;
+}
+
+.karaoke-intro__content,
+.karaoke-intro__content p,
+.karaoke-intro__content h1,
+.karaoke-intro__content h2,
+.karaoke-intro__content h3,
+.karaoke-intro__content span:not([class*="fa-"]),
+.karaoke-intro__content div {
+    font-family: Inter, 'Inter Fallback', sans-serif;
+}
