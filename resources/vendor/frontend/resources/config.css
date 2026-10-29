@@ -1,4 +1,7 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+/* @import url('https://fonts.googleapis.com/css2?family=Inter:...') da BO.
+   Inter gio duoc khai bao trong resources/views/frontend/component/
+   fonts.blade.php, nhung thang vao <head>. Ly do: @import trong CSS la
+   chan hien thi va noi tiep - xem ghi chu dai trong resources/css/app.scss. */
 @font-face{
     font-family:"uicons-regular-straight";
     src:url("fonts/uicons-regular-straight.eot#iefix") format("embedded-opentype"),

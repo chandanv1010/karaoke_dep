@@ -43,10 +43,23 @@
 @import "../vendor/frontend/core/plugins/jquery-nice-select-1.1.0/css/nice-select.css";
 @import "../vendor/frontend/resources/config.css";
 
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&family=Playfair:ital,opsz,wght@0,5..1200,300..900;1,5..1200,300..900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+// Bon lenh @import url('https://fonts.googleapis.com/...') tung nam o day da
+// duoc BO. Cac luat @font-face tuong duong gio nhung thang vao <head> qua
+// resources/views/frontend/component/fonts.blade.php (sinh boi
+// deploy/gen-fonts.py).
+//
+// Vi sao phai bo: @import trong CSS la chan hien thi va NOI TIEP. esbuild gom
+// chung len dau file da build, ngay sau @charset, nen chung hop le va van
+// chay. Trinh duyet phai tai xong app.css 90 KB, phan tich, moi phat hien ra
+// cac @import nay, roi tai tiep nam file CSS nua tu fonts.googleapis.com -
+// cung chan hien thi - roi moi bat dau tai .woff2. Them han mot vong DNS,
+// bat tay TLS va request vao duong gang.
+//
+// KHONG ho font nao bi bo: Montserrat (var(--main-font), 19 cho), Manrope
+// ($second-font), Playfair (app.scss:1292), Inter va Yeseva One deu duoc giu
+// nguyen trong fonts.blade.php. Them hoac bot ho font thi sua FAMILIES trong
+// deploy/gen-fonts.py roi chay lai script do.
+
 // ================
 // IMPORT FONTS
 // ================
