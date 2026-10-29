@@ -52,19 +52,25 @@ DEST = os.path.join(ROOT, 'resources/views/frontend/component/fonts.blade.php')
 # cua trang nay thi khong the thay bang mat, nhung lai lam moi file phinh gan
 # gap ba. Bo di la lai thuan, khong doi gi ve mat nhin.
 #
-# CON MOT BUOC NUA CHUA LAM: bo luon kieu NGHIENG.
+# DA BO LUON KIEU NGHIENG (nguoi dung dong y ngay 29/10/2026).
 #   Inter      ital,wght  291 KB  ->  wght  140 KB
 #   Montserrat ital,wght  244 KB  ->  wght  119 KB
-# Tiet kiem them khoang 100 KB tren trang chu. Chu nghieng tren site chi dung
-# o phu de 13px, lien ket 12px va chu goi y (_karaoke-home.scss:266 va 567,
-# _karaoke-about.scss:201, app.scss:3731) - nhung cho ma trinh duyet tu nghieng
-# lay cung khong phan biet duoc. Day la quyet dinh ve mat thiet ke nen de
-# nguoi dung chon, khong tu bo.
+#   Playfair   ital,wght           ->  wght  123 KB
+# Chu nghieng tren site chi dung o phu de 13px, lien ket 12px va chu goi y
+# (_karaoke-home.scss:266 va 567, _karaoke-about.scss:201, app.scss:3731).
+# Bo ban nghieng that thi trinh duyet tu nghieng chu thang lay (synthetic
+# oblique) - o co chu do khong phan biet duoc bang mat.
+#
+# MUON LAY LAI CHU NGHIENG THAT: doi lai thanh
+#   'Inter:ital,wght@0,100..900;1,100..900'
+#   'Montserrat:ital,wght@0,100..900;1,100..900'
+#   'Playfair:ital,wght@0,300..900;1,300..900'
+# roi chay lai script. Doi lai trang nang them khoang 90-100 KB moi luot.
 FAMILIES = [
-    'Inter:ital,wght@0,100..900;1,100..900',
+    'Inter:wght@100..900',
     'Manrope:wght@200..800',
-    'Montserrat:ital,wght@0,100..900;1,100..900',
-    'Playfair:ital,wght@0,300..900;1,300..900',
+    'Montserrat:wght@100..900',
+    'Playfair:wght@300..900',
     'Yeseva+One',
 ]
 
