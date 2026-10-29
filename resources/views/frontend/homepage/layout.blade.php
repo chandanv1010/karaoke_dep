@@ -4,29 +4,7 @@
     <base href="{{ url('/') }}/">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    {{--
-        Con 3 ho font: Inter (chu than), Manrope, Yeseva One (tieu de o trang
-        bai viet / san pham). Da bo Playfair Display, Roboto Condensed,
-        Montserrat va Unbounded - grep toan bo CSS, view va build ra 0 lan dung.
-
-        Giu display=swap. DA THU display=optional va do lai hai lan: CLS
-        mobile tang tu 0,002 len 0,405 ca hai lan (diem tu 48 xuong 35 roi
-        31), con CLS desktop 0,319 thi khong he giam. Optional khong phai
-        cach tri cho nay.
-
-        Cho xe dich that su la section.karaoke-intro: chieu cao cua no phu
-        thuoc vao chu, nen font ve xong la day moi thu ben duoi. Cach tri dung
-        la cho khoi do mot chieu cao toi thieu, hoac khai font du phong co
-        size-adjust khop metric voi Inter - khong phai doi font-display.
-    --}}
-    <link rel="preload" as="style"
-          href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,100..900;1,100..900&family=Manrope:wght@200..800&family=Yeseva+One&display=swap">
-    <link rel="stylesheet" media="print" onload="this.media='all';this.onload=null"
-          href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,100..900;1,100..900&family=Manrope:wght@200..800&family=Yeseva+One&display=swap">
-    <noscript>
-        <link rel="stylesheet"
-              href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,100..900;1,100..900&family=Manrope:wght@200..800&family=Yeseva+One&display=swap">
-    </noscript>
+    @include('frontend.component.fonts')
     {{-- Preload anh LCP.
          Anh hero nam sau rat nhieu HTML va chi hien ra khi CSS cua slideshow
          da ve, nen trinh duyet tim thay no muon. PageSpeed do duoc 1.300ms
