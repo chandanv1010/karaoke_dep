@@ -5004,3 +5004,31 @@ html.wowjs .wow {
 .karaoke-intro__content div {
     font-family: Inter, 'Inter Fallback', sans-serif;
 }
+
+// ============================================================================
+//  Giu cho cho slideshow hero - chong xe dich bo cuc (CLS)
+// ============================================================================
+//  Do tren production: CLS trang chu nhay giua 0 va 0,405 tuy tung lan chay,
+//  lam diem mobile dao dong 34-54. Nguyen nhan:
+//
+//      .karaoke-hero .uk-slideshow  CSS khong khai chieu cao
+//      .karaoke-hero .uk-slideshow li   position: absolute
+//
+//  li tach khoi dong chay bo cuc nen <ul> cao 0. Mai den khi script UIkit
+//  chay xong no moi ghi inline height (do duoc: 368px o 375px, 520px o
+//  desktop) - luc do ca trang bi day xuong dung bang do.
+//
+//  PageSpeed bao thu pham la section.karaoke-intro, nhung do chi la khoi BI
+//  DAY. Da thu hai cach sai truoc khi tim ra cho nay: doi font-display sang
+//  optional, va them font du phong khop metric cho karaoke-intro - ca hai
+//  deu khong thay doi gi vi deu nham vao font.
+//
+//  Cach tri: cho slide DAU tham gia bo cuc de <ul> co chieu cao that ngay tu
+//  luc trinh duyet ve, khong phai doi JS. Co y khong dat min-height bang so
+//  cu the: chieu cao doi theo be rong (368px / 520px / ...), dat so cung la
+//  ho mot khoang trang o be rong nay hoac cat anh o be rong khac.
+//  Cac slide sau van absolute nen van chong len nhau va hieu ung fade cua
+//  UIkit khong doi.
+.karaoke-hero .uk-slideshow > li:first-child {
+    position: relative;
+}

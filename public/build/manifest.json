@@ -196,7 +196,7 @@
     "src": "public/templates/frontend/resources/img/viewed.png"
   },
   "resources/css/app.scss": {
-    "file": "assets/app-62b72996.css",
+    "file": "assets/app-1a4bd7c9.css",
     "isEntry": true,
     "src": "resources/css/app.scss"
   },
@@ -211,7 +211,7 @@
     "src": "resources/js/app.backend.js"
   },
   "resources/js/app.js": {
-    "file": "assets/app-5eb38f76.js",
+    "file": "assets/app-500a0696.js",
     "isEntry": true,
     "src": "resources/js/app.js"
   },
