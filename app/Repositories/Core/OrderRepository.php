@@ -47,7 +47,7 @@ class OrderRepository extends BaseRepository
                 ->customerCreatedAt($condition['created_at'] ?? null)
                 // ->toSql();
                 ->paginate($perPage)
-                ->withQueryString()->withPath(env('APP_URL').$extend['path']);
+                ->withQueryString()->withPath(config('app.url').$extend['path']);
     }
 
 

@@ -30,7 +30,7 @@ Route::group(['middleware' => ['admin', 'locale', 'backend_default_locale']], fu
     Route::get('ajax/dashboard/findPromotionObject', [AjaxDashboardController::class, 'findPromotionObject'])->name('ajax.dashboard.findPromotionObject');
     Route::get('ajax/dashboard/getPromotionConditionValue', [AjaxDashboardController::class, 'getPromotionConditionValue'])->name('ajax.dashboard.getPromotionConditionValue');
     Route::get('ajax/attribute/getAttribute', [AjaxAttributeController::class, 'getAttribute'])->name('ajax.attribute.getAttribute');
-    Route::get('ajax/attribute/loadAttribute', [AjaxAttributeController::class, 'loadAttribute'])->name('ajax.attribute.getAttribute');
+    Route::get('ajax/attribute/loadAttribute', [AjaxAttributeController::class, 'loadAttribute'])->name('ajax.attribute.loadAttribute');
     Route::post('ajax/menu/createCatalogue', [AjaxMenuController::class, 'createCatalogue'])->name('ajax.menu.createCatalogue');
     Route::post('ajax/menu/drag', [AjaxMenuController::class, 'drag'])->name('ajax.menu.drag');
     Route::post('ajax/menu/deleteMenu', [AjaxMenuController::class, 'deleteMenu'])->name('ajax.menu.deleteMenu');
@@ -41,9 +41,9 @@ Route::group(['middleware' => ['admin', 'locale', 'backend_default_locale']], fu
     Route::post('ajax/order/update', [AjaxOrderController::class, 'update'])->name('ajax.order.update');
     Route::get('ajax/order/chart', [AjaxOrderController::class, 'chart'])->name('ajax.order.chart');
     Route::get('ajax/dashboard/findInformationObject', [AjaxDashboardController::class, 'findInformationObject'])->name('ajax.findInformationObject');
-    Route::get('ajax/product/updateOrder', [AjaxProductController::class, 'updateOrder'])->name('ajax.updateOrder');
+    Route::get('ajax/product/updateOrder', [AjaxProductController::class, 'updateOrder'])->name('ajax.product.updateOrder');
     Route::post('ajax/review/changeStatus', [AjaxReviewController::class, 'changeStatus'])->name('ajax.review.changeStatus');
-    Route::get('ajax/post/updateOrder', [AjaxPostController::class, 'updateOrder'])->name('ajax.updateOrder');
+    Route::get('ajax/post/updateOrder', [AjaxPostController::class, 'updateOrder'])->name('ajax.post.updateOrder');
     Route::post('ajax/excel/export', [AjaxExcelController::class, 'export'])->name('ajax.excel.export');
     Route::post('ajax/sort', [HandlerController::class, 'sort'])->name('ajax.sort');
     Route::post('ajax/changeStatusField', [HandlerController::class, 'changeFieldStatus'])->name('ajax.changeFieldStatus');
@@ -55,7 +55,7 @@ Route::group(['middleware' => ['locale']], function () {
     Route::get('ajax/dashboard/findProductObject', [AjaxDashboardController::class, 'findProductObject'])->name('ajax.findProductObject');
     Route::post('ajax/cart/pay', [AjaxCartController::class, 'pay'])->name('ajax.cart.pay');
 
-    Route::post('ajax/contact/saveContact', [ContactController::class, 'create'])->name('ajax.cart.pay');
+    Route::post('ajax/contact/saveContact', [ContactController::class, 'create'])->name('ajax.contact.saveContact');
     Route::post('ajax/order/buy/now', [ContactController::class, 'buyNow'])->name('ajax.buy.now');
 
     Route::post('ajax/review/create', [AjaxReviewController::class, 'create'])->name('ajax.review.create');

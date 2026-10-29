@@ -36,12 +36,6 @@ Route::group(['middleware' => ['admin','locale','backend_default_locale']], func
     });
 
 
-    Route::group(['prefix' => 'introduce'], function () {
-        Route::get('index', [IntroduceController::class, 'index'])->name('introduce.index');
-        Route::post('store', [IntroduceController::class, 'store'])->name('introduce.store');
-        Route::get('{languageId}/translate', [IntroduceController::class, 'translate'])->where(['languageId' => '[0-9]+'])->name('introduce.translate');
-        Route::post('{languageId}/saveTranslate', [IntroduceController::class, 'saveTranslate'])->where(['languageId' => '[0-9]+'])->name('introduce.save.translate');
-    });
 
     Route::group(['prefix' => 'review'], function () {
         Route::get('index', [ReviewController::class, 'index'])->name('review.index');
@@ -118,6 +112,8 @@ Route::group(['middleware' => ['admin','locale','backend_default_locale']], func
         Route::post('{id}/update', [IntroduceController::class, 'update'])->where(['id' => '[0-9]+'])->name('introduce.update');
         Route::get('{id}/delete', [IntroduceController::class, 'delete'])->where(['id' => '[0-9]+'])->name('introduce.delete');
         Route::delete('{id}/destroy', [IntroduceController::class, 'destroy'])->where(['id' => '[0-9]+'])->name('introduce.destroy');
+        Route::get('{languageId}/translate', [IntroduceController::class, 'translate'])->where(['languageId' => '[0-9]+'])->name('introduce.translate');
+        Route::post('{languageId}/saveTranslate', [IntroduceController::class, 'saveTranslate'])->where(['languageId' => '[0-9]+'])->name('introduce.save.translate');
     });
 
 });

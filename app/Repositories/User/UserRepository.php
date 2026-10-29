@@ -47,6 +47,6 @@ class UserRepository extends BaseRepository
         }
 
         return $query->paginate($perPage)
-                    ->withQueryString()->withPath(env('APP_URL').$extend['path']);
+                    ->withQueryString()->withPath(config('app.url').$extend['path']);
     }
 }

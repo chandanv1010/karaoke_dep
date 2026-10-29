@@ -4,7 +4,7 @@
     <div class="uk-container uk-container-center">
         <ul class="uk-breadcrumb uk-margin-remove">
             <li><a href="{{ url('/') }}">Trang chủ</a></li>
-            <li><a href="{{ route('contact.index') }}">Liên hệ</a></li>
+            <li><a href="{{ route('contact.fe.index') }}">Liên hệ</a></li>
         </ul>
     </div>
 </div>

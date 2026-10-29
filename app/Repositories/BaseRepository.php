@@ -46,7 +46,7 @@ class BaseRepository
                 ->customOrderBy($orderBy ?? null)
                 // ->toSql();
                 ->paginate($perPage)
-                ->withQueryString()->withPath(env('APP_URL').$extend['path']);
+                ->withQueryString()->withPath(config('app.url').$extend['path']);
     }
 
     public function create(array $payload = []){
@@ -308,7 +308,7 @@ class BaseRepository
             fn($q) => isset($specs['path'])
             ? $q->paginate($specs['perpage'])
                 ->withQueryString()
-                ->withPath(env('APP_URL').$specs['path'])
+                ->withPath(config('app.url').$specs['path'])
             : $q->paginate($specs['perpage'])
             // fn($q) => $q->toSql()
         );
