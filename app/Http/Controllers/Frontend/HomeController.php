@@ -74,6 +74,20 @@ class HomeController extends FrontendController
         ];
         $schema = $this->schema($seo);
         $legacy = LegacyFrontend::homePayload($this->language);
+
+        /* Anh LCP cua trang chu - de layout phat the <link rel="preload">.
+         *
+         * Phai tinh o day chu khong tinh trong layout: layout chi nhan duoc
+         * bien qua @extends, ma @yield('content') chay SAU khi <head> da in
+         * xong, nen moi cach lay tu phia noi dung (ke ca @push/@stack) deu
+         * toi muon. Truyen thang tu controller la cach duy nhat chac chan.
+         *
+         * Vi sao can preload: anh hero nam sau rat nhieu HTML va chi hien khi
+         * CSS slideshow da ve, nen trinh duyet tim thay no muon - PageSpeed
+         * do duoc 1.300ms "resource load delay" trước cả lúc bắt đầu tải.
+         */
+        $lcpImage = ($slides['index-slide']['item'][0]['image'] ?? null);
+
         $template = 'frontend.homepage.home.index';
         return view($template, compact(
             'config',
@@ -83,6 +97,7 @@ class HomeController extends FrontendController
             'schema',
             'widgets',
             'introduce',
+            'lcpImage',
         ) + $legacy);
     }
 

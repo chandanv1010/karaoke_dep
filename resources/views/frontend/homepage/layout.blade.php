@@ -5,19 +5,48 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     {{--
-        Font: da bo 2 ho khong dung den (Playfair Display, Roboto Condensed -
-        grep toan bo CSS/view ra 0 lan) va bo truc italic cua Montserrat.
-        Tai kieu khong chan render: trinh duyet ve chu bang font du phong roi
-        doi sang font that khi CSS ve - dung voi display=swap dang dat san.
+        Con 3 ho font: Inter (chu than), Manrope, Yeseva One (tieu de o trang
+        bai viet / san pham). Da bo Playfair Display, Roboto Condensed,
+        Montserrat va Unbounded - grep toan bo CSS, view va build ra 0 lan dung.
+
+        display=optional thay vi swap: voi swap, trinh duyet ve chu bang font
+        du phong roi DOI sang font that khi font ve, va vi hai font co kich
+        thuoc chu khac nhau nen ca trang bi xe dich. PageSpeed do duoc CLS
+        0,319 tren desktop, va danh sach thu pham gan nhu toan la file font.
+        Voi optional, font nao khong kip trong ~100ms thi lan tai do dung luon
+        font du phong, khong doi nua - het xe dich. Doi lai khach vao lan dau
+        co the thay font du phong; tu lan sau font da nam trong cache trinh
+        duyet nen hien dung ngay.
     --}}
     <link rel="preload" as="style"
-          href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,100..900;1,100..900&family=Manrope:wght@200..800&family=Montserrat:wght@100..900&family=Unbounded:wght@200..900&family=Yeseva+One&display=swap">
+          href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,100..900;1,100..900&family=Manrope:wght@200..800&family=Yeseva+One&display=optional">
     <link rel="stylesheet" media="print" onload="this.media='all';this.onload=null"
-          href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,100..900;1,100..900&family=Manrope:wght@200..800&family=Montserrat:wght@100..900&family=Unbounded:wght@200..900&family=Yeseva+One&display=swap">
+          href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,100..900;1,100..900&family=Manrope:wght@200..800&family=Yeseva+One&display=optional">
     <noscript>
         <link rel="stylesheet"
-              href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,100..900;1,100..900&family=Manrope:wght@200..800&family=Montserrat:wght@100..900&family=Unbounded:wght@200..900&family=Yeseva+One&display=swap">
+              href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,100..900;1,100..900&family=Manrope:wght@200..800&family=Yeseva+One&display=optional">
     </noscript>
+    {{-- Preload anh LCP.
+         Anh hero nam sau rat nhieu HTML va chi hien ra khi CSS cua slideshow
+         da ve, nen trinh duyet tim thay no muon. PageSpeed do duoc 1.300ms
+         "resource load delay" - tuc ca giay ruoi chi de CHO toi luc bat dau
+         tai anh, chua tinh thoi gian tai.
+         Khai bao o day cho trinh duyet biet ngay tu dong dau cua <head>.
+         Dung imagesrcset/imagesizes khop y het the <img> ben duoi, neu khong
+         trinh duyet se tai hai anh khac nhau.
+
+         $lcpImage do HomeController truyen vao. Da thu hai cach khac va ca
+         hai deu khong chay: @push/@stack thi toi muon (layout in <head> xong
+         truoc khi @yield('content') chay), con doc thang $slides tai day thi
+         bien do khong co trong scope cua layout. --}}
+    @if (!empty($lcpImage))
+        <link rel="preload" as="image"
+              href="{{ getthumb($lcpImage, 1600) }}"
+              imagesrcset="{{ thumb_srcset($lcpImage, [480, 768, 1200, 1600]) }}"
+              imagesizes="100vw"
+              fetchpriority="high">
+    @endif
+
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
     <meta http-equiv="content-language" content="vi">
     <link rel="alternate" href="{{ url('/') }}" hreflang="vi-vn">
