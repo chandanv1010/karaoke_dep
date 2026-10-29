@@ -6,8 +6,12 @@
 {{-- 5 component cua UIkit (slider, slideshow, sticky, lightbox, accordion) da
      duoc gop thanh mot file: 5 request con 1, giu nguyen thu tu nap. --}}
 <script defer src="{{ asset('templates/frontend/resources/uikit/js/uikit-components.min.js') }}"></script>
-<script defer src="{{ asset('templates/frontend/resources/plugins/flex-slider/jquery.flexslider-min.js') }}"></script>
-{{-- swiper-bundle da chuyen len head (truoc app.js) vi app.js can Swiper. --}}
+{{-- Swiper duoc bundle thang vao resources/js/app.js, khong con the <script>
+     rieng. --}}
+{{-- Da bo jquery.flexslider-min.js (22 KB): ca frontend desktop khong he goi
+     .flexslider() o dau - lan goi duy nhat nam trong cac file demo cua chinh
+     plugin. Cac template mobile/* dung flexslider that su va co the <script>
+     rieng cua chung, khong bi anh huong. --}}
 <script defer src="{{ asset('templates/frontend/resources/function.js') }}"></script>
 <script defer src="{{ asset('templates/frontend/resources/js/karaoke-home.js') }}"></script>
 <script>
