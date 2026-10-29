@@ -265,20 +265,30 @@ class ProductCatalogueController extends FrontendController
         $itemListElements = [];
         $position = 1;
         foreach ($products as $product) {
+            // KHONG dung '@type' => 'Product' o day.
+            //
+            // Google doi moi node Product phai co it nhat mot trong offers /
+            // review / aggregateRating. Trang danh muc chi liet ke ten + anh,
+            // khong co gia (391/494 san pham cua site la "lien he bao gia") va
+            // site chua co review nao - nen moi node Product o day deu bi bao
+            // 'Phai chi dinh "offers", "review" hoac "aggregateRating"'.
+            // Day la nguon con lai cua 243 loi Doan trich san pham trong
+            // Search Console: trang chi tiet da duoc sua, nhung moi trang danh
+            // muc van phat ra 18 node Product thieu dieu kien.
+            //
+            // Dung ListItem tro bang URL la dung khuyen nghi cua Google cho
+            // trang tong hop: trang chi tiet moi la noi mang du lieu Product.
+            //
+            // Dung truc tiep cot da JOIN san thay vi quan he languages.
+            // ProductService::paginateSelect() da select tb2.name va
+            // tb2.canonical, nen $product->name / ->canonical co san. Goi
+            // ->languages->first() trong vong lap nay sinh N+1: 18 query
+            // product_language cho mot trang danh muc.
             $itemListElements[] = [
                 '@type' => 'ListItem',
                 'position' => $position++,
-                'item' => [
-                    '@type' => 'Product',
-                    // Dung truc tiep cot da JOIN san thay vi quan he languages.
-                    // ProductService::paginateSelect() da select tb2.name va
-                    // tb2.canonical, nen $product->name / ->canonical co san.
-                    // Goi ->languages->first() trong vong lap nay sinh N+1:
-                    // 18 query product_language cho mot trang danh muc.
-                    'name' => (string) ($product->name ?? ''),
-                    'url' => write_url($product->canonical ?? ''),
-                    'image' => (string) $product->image,
-                ],
+                'name' => (string) ($product->name ?? ''),
+                'url' => write_url($product->canonical ?? ''),
             ];
         }
 

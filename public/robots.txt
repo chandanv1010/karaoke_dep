@@ -1,2 +1,12 @@
 User-agent: *
-Allow:
+Allow: /
+
+# Cac duong khong co ich cho tim kiem va ton ngan sach thu thap cua Google.
+# KHONG chan /image-cache/: anh can duoc thu thap de len Google Image va de
+# Google do duoc LCP.
+Disallow: /gio-hang
+Disallow: /thanh-toan
+Disallow: /tim-kiem
+Disallow: /*?keyword=
+
+Sitemap: https://karaokedep.com.vn/sitemap.xml
