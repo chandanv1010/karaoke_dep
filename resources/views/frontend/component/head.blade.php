@@ -1,11 +1,14 @@
-<link href="{{ asset('templates/frontend/resources/fonts/font-awesome-4.4.0/css/font-awesome.min.css') }}" rel="stylesheet">
-<link href="{{ asset('templates/frontend/resources/uikit/css/uikit.modify.css') }}" rel="stylesheet">
-<link href="{{ asset('templates/frontend/resources/style.css') }}" rel="stylesheet">
-{{-- Swiper: tu host thay vi tai tu unpkg.com. Bo mot lan bat tay DNS/TLS ra
-     CDN ngoai va khong con phu thuoc do on dinh cua unpkg. --}}
-<link href="{{ asset('templates/frontend/resources/vendor/swiper/swiper-bundle.min.css') }}" rel="stylesheet">
+{{-- Bon file CSS truoc day nam o day (font-awesome, uikit.modify, style.css,
+     swiper-bundle) da duoc dua vao resources/css/app.scss de Vite gop chung
+     vao mot file.
 
-{{-- CSS cua vite giu nguyen vi tri (sau style.css) de thu tu cascade khong doi. --}}
+     Truoc: 5 stylesheet chan hien thi, 136,5 KiB truyen tai.
+     Sau  : 1 stylesheet, 90,75 KiB gzip.
+     PageSpeed bao "Render-blocking requests - Est savings of 1.430 ms" va day
+     la tran cua diem mobile.
+
+     Swiper van tu host (khong lay tu unpkg) nhu truoc, chi la gio nam trong
+     bundle. Thu tu cascade giu nguyen y het - xem chu thich trong app.scss. --}}
 @vite('resources/css/app.scss')
 
 {{--

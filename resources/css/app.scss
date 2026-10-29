@@ -10,6 +10,25 @@
 @use "components/karaoke-home";
 @use "components/karaoke-about";
 
+// ============================================================================
+//  4 file CSS truoc day nam trong the <link> rieng o frontend/component/head.blade.php
+// ============================================================================
+//  Chuyen vao day de Vite gop chung vao MOT file. Truoc do trang chu co 5
+//  stylesheet chan hien thi, tong 136 KiB; PageSpeed do "Render-blocking
+//  requests - Est savings of 1.430 ms" va do la tran cua diem mobile.
+//
+//  THU TU O DAY PHAI GIU NGUYEN nhu thu tu cac the <link> cu, va phai nam
+//  TRUOC cac @import vendor ben duoi. Ly do: app.scss von duoc nap SAU cung,
+//  nen ban uikit/font-awesome trong vendor/ dang de len ban trong public/.
+//  Dao thu tu la doi giao dien - vi du public/uikit.modify.css co luat
+//  `.uk-link:hover, a:hover { color: #0B5F90 }` ma ban vendor khong co; neu
+//  de ban vendor chay sau nhu hien nay thi luat do van song, nhung neu dao
+//  len truoc thi mau hover doi.
+@import "../../public/templates/frontend/resources/fonts/font-awesome-4.4.0/css/font-awesome.min.css";
+@import "../../public/templates/frontend/resources/uikit/css/uikit.modify.css";
+@import "../../public/templates/frontend/resources/style.css";
+@import "../../public/templates/frontend/resources/vendor/swiper/swiper-bundle.min.css";
+
 @import "../vendor/backend/css/plugins/toastr/toastr.min.css";
 @import "../vendor/frontend/resources/fonts/font-awesome-4.7.0/css/font-awesome.min.css";
 @import "../vendor/frontend/resources/uikit/css/uikit.modify.css";

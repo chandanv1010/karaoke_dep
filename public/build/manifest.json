@@ -1,6 +1,202 @@
 {
+  "public/templates/frontend/resources/fonts/Roboto/roboto-regular-webfont.woff": {
+    "file": "assets/roboto-regular-webfont-411fcf48.woff",
+    "src": "public/templates/frontend/resources/fonts/Roboto/roboto-regular-webfont.woff"
+  },
+  "public/templates/frontend/resources/fonts/Roboto/roboto-regular-webfont.woff2": {
+    "file": "assets/roboto-regular-webfont-7eea310d.woff2",
+    "src": "public/templates/frontend/resources/fonts/Roboto/roboto-regular-webfont.woff2"
+  },
+  "public/templates/frontend/resources/fonts/RobotoBold/roboto-bold-webfont.woff": {
+    "file": "assets/roboto-bold-webfont-e5303803.woff",
+    "src": "public/templates/frontend/resources/fonts/RobotoBold/roboto-bold-webfont.woff"
+  },
+  "public/templates/frontend/resources/fonts/RobotoBold/roboto-bold-webfont.woff2": {
+    "file": "assets/roboto-bold-webfont-9808286d.woff2",
+    "src": "public/templates/frontend/resources/fonts/RobotoBold/roboto-bold-webfont.woff2"
+  },
+  "public/templates/frontend/resources/fonts/RobotoMedium/roboto-medium-webfont.woff": {
+    "file": "assets/roboto-medium-webfont-84eb115b.woff",
+    "src": "public/templates/frontend/resources/fonts/RobotoMedium/roboto-medium-webfont.woff"
+  },
+  "public/templates/frontend/resources/fonts/RobotoMedium/roboto-medium-webfont.woff2": {
+    "file": "assets/roboto-medium-webfont-58847568.woff2",
+    "src": "public/templates/frontend/resources/fonts/RobotoMedium/roboto-medium-webfont.woff2"
+  },
+  "public/templates/frontend/resources/fonts/SFUSalut/sfusalutregular-webfont.woff": {
+    "file": "assets/sfusalutregular-webfont-00e21b7e.woff",
+    "src": "public/templates/frontend/resources/fonts/SFUSalut/sfusalutregular-webfont.woff"
+  },
+  "public/templates/frontend/resources/fonts/SFUSalut/sfusalutregular-webfont.woff2": {
+    "file": "assets/sfusalutregular-webfont-1c491338.woff2",
+    "src": "public/templates/frontend/resources/fonts/SFUSalut/sfusalutregular-webfont.woff2"
+  },
+  "public/templates/frontend/resources/fonts/UTMImpact/utm_impact-webfont.woff": {
+    "file": "assets/utm_impact-webfont-5ca41024.woff",
+    "src": "public/templates/frontend/resources/fonts/UTMImpact/utm_impact-webfont.woff"
+  },
+  "public/templates/frontend/resources/fonts/UTMImpact/utm_impact-webfont.woff2": {
+    "file": "assets/utm_impact-webfont-b94dab34.woff2",
+    "src": "public/templates/frontend/resources/fonts/UTMImpact/utm_impact-webfont.woff2"
+  },
+  "public/templates/frontend/resources/fonts/UVN Bai Sau Nhe/uvnbaisau_t-webfont.woff": {
+    "file": "assets/uvnbaisau_t-webfont-868e3b5b.woff",
+    "src": "public/templates/frontend/resources/fonts/UVN Bai Sau Nhe/uvnbaisau_t-webfont.woff"
+  },
+  "public/templates/frontend/resources/fonts/UVN Bai Sau Nhe/uvnbaisau_t-webfont.woff2": {
+    "file": "assets/uvnbaisau_t-webfont-324c986f.woff2",
+    "src": "public/templates/frontend/resources/fonts/UVN Bai Sau Nhe/uvnbaisau_t-webfont.woff2"
+  },
+  "public/templates/frontend/resources/fonts/font-awesome-4.4.0/fonts/fontawesome-webfont.eot": {
+    "file": "assets/fontawesome-webfont-d4f5a992.eot",
+    "src": "public/templates/frontend/resources/fonts/font-awesome-4.4.0/fonts/fontawesome-webfont.eot"
+  },
+  "public/templates/frontend/resources/fonts/font-awesome-4.4.0/fonts/fontawesome-webfont.svg": {
+    "file": "assets/fontawesome-webfont-465bf89c.svg",
+    "src": "public/templates/frontend/resources/fonts/font-awesome-4.4.0/fonts/fontawesome-webfont.svg"
+  },
+  "public/templates/frontend/resources/fonts/font-awesome-4.4.0/fonts/fontawesome-webfont.ttf": {
+    "file": "assets/fontawesome-webfont-1b7f3de4.ttf",
+    "src": "public/templates/frontend/resources/fonts/font-awesome-4.4.0/fonts/fontawesome-webfont.ttf"
+  },
+  "public/templates/frontend/resources/fonts/font-awesome-4.4.0/fonts/fontawesome-webfont.woff": {
+    "file": "assets/fontawesome-webfont-a7c7e493.woff",
+    "src": "public/templates/frontend/resources/fonts/font-awesome-4.4.0/fonts/fontawesome-webfont.woff"
+  },
+  "public/templates/frontend/resources/fonts/font-awesome-4.4.0/fonts/fontawesome-webfont.woff2": {
+    "file": "assets/fontawesome-webfont-3c4a1bb7.woff2",
+    "src": "public/templates/frontend/resources/fonts/font-awesome-4.4.0/fonts/fontawesome-webfont.woff2"
+  },
+  "public/templates/frontend/resources/fonts/helveticaneue.ttf": {
+    "file": "assets/helveticaneue-83380417.ttf",
+    "src": "public/templates/frontend/resources/fonts/helveticaneue.ttf"
+  },
+  "public/templates/frontend/resources/fonts/helveticaneuebold.ttf": {
+    "file": "assets/helveticaneuebold-accaae88.ttf",
+    "src": "public/templates/frontend/resources/fonts/helveticaneuebold.ttf"
+  },
+  "public/templates/frontend/resources/fonts/helveticaneuelight.ttf": {
+    "file": "assets/helveticaneuelight-49f0d5a2.ttf",
+    "src": "public/templates/frontend/resources/fonts/helveticaneuelight.ttf"
+  },
+  "public/templates/frontend/resources/fonts/helveticaneuemedium.ttf": {
+    "file": "assets/helveticaneuemedium-c4a19906.ttf",
+    "src": "public/templates/frontend/resources/fonts/helveticaneuemedium.ttf"
+  },
+  "public/templates/frontend/resources/img/arrow-hover.png": {
+    "file": "assets/arrow-hover-3020ba4f.png",
+    "src": "public/templates/frontend/resources/img/arrow-hover.png"
+  },
+  "public/templates/frontend/resources/img/bar-black.png": {
+    "file": "assets/bar-black-b33aa18a.png",
+    "src": "public/templates/frontend/resources/img/bar-black.png"
+  },
+  "public/templates/frontend/resources/img/bar.png": {
+    "file": "assets/bar-0af1e788.png",
+    "src": "public/templates/frontend/resources/img/bar.png"
+  },
+  "public/templates/frontend/resources/img/bg-breadcrumb.png": {
+    "file": "assets/bg-breadcrumb-80af257c.png",
+    "src": "public/templates/frontend/resources/img/bg-breadcrumb.png"
+  },
+  "public/templates/frontend/resources/img/bg-featurednews.png": {
+    "file": "assets/bg-featurednews-92aadd59.png",
+    "src": "public/templates/frontend/resources/img/bg-featurednews.png"
+  },
+  "public/templates/frontend/resources/img/bg-featuredpost.png": {
+    "file": "assets/bg-featuredpost-19bcafed.png",
+    "src": "public/templates/frontend/resources/img/bg-featuredpost.png"
+  },
+  "public/templates/frontend/resources/img/bg-heading.png": {
+    "file": "assets/bg-heading-78f1107d.png",
+    "src": "public/templates/frontend/resources/img/bg-heading.png"
+  },
+  "public/templates/frontend/resources/img/bg-hotline.png": {
+    "file": "assets/bg-hotline-db170bed.png",
+    "src": "public/templates/frontend/resources/img/bg-hotline.png"
+  },
+  "public/templates/frontend/resources/img/bg-readmore.png": {
+    "file": "assets/bg-readmore-2d240169.png",
+    "src": "public/templates/frontend/resources/img/bg-readmore.png"
+  },
+  "public/templates/frontend/resources/img/bg-readmorehover.png": {
+    "file": "assets/bg-readmorehover-345790ee.png",
+    "src": "public/templates/frontend/resources/img/bg-readmorehover.png"
+  },
+  "public/templates/frontend/resources/img/calendar.png": {
+    "file": "assets/calendar-facba96f.png",
+    "src": "public/templates/frontend/resources/img/calendar.png"
+  },
+  "public/templates/frontend/resources/img/cart-small.png": {
+    "file": "assets/cart-small-b988ae27.png",
+    "src": "public/templates/frontend/resources/img/cart-small.png"
+  },
+  "public/templates/frontend/resources/img/filter-arrow.png": {
+    "file": "assets/filter-arrow-24bc5813.png",
+    "src": "public/templates/frontend/resources/img/filter-arrow.png"
+  },
+  "public/templates/frontend/resources/img/hotline-small.png": {
+    "file": "assets/hotline-small-e4ad9868.png",
+    "src": "public/templates/frontend/resources/img/hotline-small.png"
+  },
+  "public/templates/frontend/resources/img/ico-phongto.png": {
+    "file": "assets/ico-phongto-a795e0ea.png",
+    "src": "public/templates/frontend/resources/img/ico-phongto.png"
+  },
+  "public/templates/frontend/resources/img/ico-thunho.png": {
+    "file": "assets/ico-thunho-0f794999.png",
+    "src": "public/templates/frontend/resources/img/ico-thunho.png"
+  },
+  "public/templates/frontend/resources/img/icon-cart.png": {
+    "file": "assets/icon-cart-ebeaf165.png",
+    "src": "public/templates/frontend/resources/img/icon-cart.png"
+  },
+  "public/templates/frontend/resources/img/icon-list-menu.png": {
+    "file": "assets/icon-list-menu-274965d8.png",
+    "src": "public/templates/frontend/resources/img/icon-list-menu.png"
+  },
+  "public/templates/frontend/resources/img/icon-phone.png": {
+    "file": "assets/icon-phone-df1f0eb7.png",
+    "src": "public/templates/frontend/resources/img/icon-phone.png"
+  },
+  "public/templates/frontend/resources/img/icon-post.png": {
+    "file": "assets/icon-post-2589c28f.png",
+    "src": "public/templates/frontend/resources/img/icon-post.png"
+  },
+  "public/templates/frontend/resources/img/icon-time.png": {
+    "file": "assets/icon-time-dad62c5f.png",
+    "src": "public/templates/frontend/resources/img/icon-time.png"
+  },
+  "public/templates/frontend/resources/img/key.png": {
+    "file": "assets/key-11fdcce7.png",
+    "src": "public/templates/frontend/resources/img/key.png"
+  },
+  "public/templates/frontend/resources/img/line.png": {
+    "file": "assets/line-7a21b7b0.png",
+    "src": "public/templates/frontend/resources/img/line.png"
+  },
+  "public/templates/frontend/resources/img/login.png": {
+    "file": "assets/login-0164da5b.png",
+    "src": "public/templates/frontend/resources/img/login.png"
+  },
+  "public/templates/frontend/resources/img/radoomn_icon.png": {
+    "file": "assets/radoomn_icon-97c03920.png",
+    "src": "public/templates/frontend/resources/img/radoomn_icon.png"
+  },
+  "public/templates/frontend/resources/img/red_phone.png": {
+    "file": "assets/red_phone-c751de13.png",
+    "src": "public/templates/frontend/resources/img/red_phone.png"
+  },
+  "public/templates/frontend/resources/img/toTop.png": {
+    "file": "assets/toTop-3c401f35.png",
+    "src": "public/templates/frontend/resources/img/toTop.png"
+  },
+  "public/templates/frontend/resources/img/viewed.png": {
+    "file": "assets/viewed-fca42373.png",
+    "src": "public/templates/frontend/resources/img/viewed.png"
+  },
   "resources/css/app.scss": {
-    "file": "assets/app-14f116a1.css",
+    "file": "assets/app-22c8299e.css",
     "isEntry": true,
     "src": "resources/css/app.scss"
   },
@@ -49,23 +245,23 @@
   },
   "resources/vendor/backend/font-awesome/fonts/fontawesome-webfont.eot": {
     "file": "assets/fontawesome-webfont-7bfcab6d.eot",
-    "src": "resources/vendor/backend/font-awesome/fonts/fontawesome-webfont.eot"
+    "src": "resources/vendor/frontend/resources/fonts/font-awesome-4.7.0/fonts/fontawesome-webfont.eot"
   },
   "resources/vendor/backend/font-awesome/fonts/fontawesome-webfont.svg": {
     "file": "assets/fontawesome-webfont-fc378232.svg",
-    "src": "resources/vendor/backend/font-awesome/fonts/fontawesome-webfont.svg"
+    "src": "resources/vendor/frontend/resources/fonts/font-awesome-4.7.0/fonts/fontawesome-webfont.svg"
   },
   "resources/vendor/backend/font-awesome/fonts/fontawesome-webfont.ttf": {
     "file": "assets/fontawesome-webfont-aa58f33f.ttf",
-    "src": "resources/vendor/backend/font-awesome/fonts/fontawesome-webfont.ttf"
+    "src": "resources/vendor/frontend/resources/fonts/font-awesome-4.7.0/fonts/fontawesome-webfont.ttf"
   },
   "resources/vendor/backend/font-awesome/fonts/fontawesome-webfont.woff": {
     "file": "assets/fontawesome-webfont-ba0c59de.woff",
-    "src": "resources/vendor/backend/font-awesome/fonts/fontawesome-webfont.woff"
+    "src": "resources/vendor/frontend/resources/fonts/font-awesome-4.7.0/fonts/fontawesome-webfont.woff"
   },
   "resources/vendor/backend/font-awesome/fonts/fontawesome-webfont.woff2": {
     "file": "assets/fontawesome-webfont-2adefcbc.woff2",
-    "src": "resources/vendor/backend/font-awesome/fonts/fontawesome-webfont.woff2"
+    "src": "resources/vendor/frontend/resources/fonts/font-awesome-4.7.0/fonts/fontawesome-webfont.woff2"
   },
   "resources/vendor/backend/fonts/glyphicons-halflings-regular.eot": {
     "file": "assets/glyphicons-halflings-regular-13634da8.eot",
@@ -113,23 +309,23 @@
   },
   "resources/vendor/frontend/resources/fonts/font-awesome-4.7.0/fonts/fontawesome-webfont.eot": {
     "file": "assets/fontawesome-webfont-7bfcab6d.eot",
-    "src": "resources/vendor/backend/font-awesome/fonts/fontawesome-webfont.eot"
+    "src": "resources/vendor/frontend/resources/fonts/font-awesome-4.7.0/fonts/fontawesome-webfont.eot"
   },
   "resources/vendor/frontend/resources/fonts/font-awesome-4.7.0/fonts/fontawesome-webfont.svg": {
     "file": "assets/fontawesome-webfont-fc378232.svg",
-    "src": "resources/vendor/backend/font-awesome/fonts/fontawesome-webfont.svg"
+    "src": "resources/vendor/frontend/resources/fonts/font-awesome-4.7.0/fonts/fontawesome-webfont.svg"
   },
   "resources/vendor/frontend/resources/fonts/font-awesome-4.7.0/fonts/fontawesome-webfont.ttf": {
     "file": "assets/fontawesome-webfont-aa58f33f.ttf",
-    "src": "resources/vendor/backend/font-awesome/fonts/fontawesome-webfont.ttf"
+    "src": "resources/vendor/frontend/resources/fonts/font-awesome-4.7.0/fonts/fontawesome-webfont.ttf"
   },
   "resources/vendor/frontend/resources/fonts/font-awesome-4.7.0/fonts/fontawesome-webfont.woff": {
     "file": "assets/fontawesome-webfont-ba0c59de.woff",
-    "src": "resources/vendor/backend/font-awesome/fonts/fontawesome-webfont.woff"
+    "src": "resources/vendor/frontend/resources/fonts/font-awesome-4.7.0/fonts/fontawesome-webfont.woff"
   },
   "resources/vendor/frontend/resources/fonts/font-awesome-4.7.0/fonts/fontawesome-webfont.woff2": {
     "file": "assets/fontawesome-webfont-2adefcbc.woff2",
-    "src": "resources/vendor/backend/font-awesome/fonts/fontawesome-webfont.woff2"
+    "src": "resources/vendor/frontend/resources/fonts/font-awesome-4.7.0/fonts/fontawesome-webfont.woff2"
   },
   "resources/vendor/frontend/resources/fonts/uicons-regular-straight.woff2": {
     "file": "assets/uicons-regular-straight-e013f9ca.woff2",
