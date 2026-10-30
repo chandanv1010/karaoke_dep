@@ -25,7 +25,15 @@ class RouterController extends FrontendController
         $this->getRouter($canonical);
         if (!is_null($this->router) && !empty($this->router)) {
             $method = 'index';
-            echo app($this->router->controllers)->{$method}($this->router->module_id, $request);
+
+            // PHAI return chu khong duoc echo. Bon controller module deu
+            // return view(...), nen echo se stringify view va DAY OUTPUT RA
+            // NGAY - header khong con gan duoc nua. Hau qua do duoc ngay
+            // 30/10/2026: toan bo trang route dong (bai viet, san pham, danh
+            // muc - tuc phan lon site) KHONG he nhan duoc X-Frame-Options,
+            // X-Content-Type-Options, Referrer-Policy hay CSP, du middleware
+            // da dang ky dung. Chi trang chu va vai route tinh la co.
+            return app($this->router->controllers)->{$method}($this->router->module_id, $request);
         } else {
             if ($target = $this->legacyRedirect($canonical)) {
                 return redirect($target, 301);
@@ -41,7 +49,9 @@ class RouterController extends FrontendController
         $page = (!isset($page)) ? 1 : $page;
         if (!is_null($this->router) && !empty($this->router)) {
             $method = 'index';
-            echo app($this->router->controllers)->{$method}($this->router->module_id, $request, $page);
+
+            // Xem ghi chu o index(): phai return, khong duoc echo.
+            return app($this->router->controllers)->{$method}($this->router->module_id, $request, $page);
         } else {
             if ($target = $this->legacyRedirect($canonical)) {
                 return redirect($target, 301);
