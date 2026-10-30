@@ -83,5 +83,9 @@ Route::group(['middleware' => ['locale']], function () {
     Route::get('{canonical}' . config('apps.general.suffix'), [RouterController::class, 'index'])->name('router.index')->where('canonical', '[a-zA-Z0-9-]+');
     Route::get('{canonical}/trang-{page}' . config('apps.general.suffix'), [RouterController::class, 'page'])->name('router.page')->where('canonical', '[a-zA-Z0-9-]+')->where('page', '[0-9]+');
 
+    /** 404: thu sua URL hong truoc khi bo cuoc.
+     *  Phai dat CUOI CUNG - Route::fallback chi chay khi khong route nao khop. */
+    Route::fallback([RouterController::class, 'fallback'])->name('router.fallback');
+
     /*Schools*/
 });
