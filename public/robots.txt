@@ -9,4 +9,10 @@ Disallow: /thanh-toan
 Disallow: /tim-kiem
 Disallow: /*?keyword=
 
+# Search Console dang liet ke may duong nay trong nhom "Khong tim thay (404)".
+# Chung khong phai trang noi dung nen khong chuyen huong - chi can bao Google
+# dung thu thap de khoi bao loi va khoi ton ngan sach thu thap.
+Disallow: /admin/
+Disallow: /comments/ajax/
+
 Sitemap: https://karaokedep.com.vn/sitemap.xml
