@@ -50,7 +50,13 @@ class SecurityHeaders
             return redirect($query ? $target . '?' . $query : ($target ?: '/'), 301);
         }
 
+        // Moc do: middleware nay dung dau nhom 'web' nen thoi diem no chay
+        // xap xi "da khoi dong xong framework, chua dung toi controller".
+        $tBoot = microtime(true);
+
         $response = $next($request);
+
+        $tDone = microtime(true);
 
         // Khong dung headers->set() de ghi de neu nginx da gan san header nao do.
         $headers = [
@@ -71,8 +77,12 @@ class SecurityHeaders
         // PHP, bao nhieu la mang + TLS + hang doi php-fpm. Khong co so nay thi
         // moi phuong an tang toc deu la doan mo.
         if (defined('LARAVEL_START')) {
-            $ms = (microtime(true) - LARAVEL_START) * 1000;
-            $response->headers->set('Server-Timing', sprintf('app;dur=%.1f', $ms));
+            $response->headers->set('Server-Timing', sprintf(
+                'boot;dur=%.1f, render;dur=%.1f, app;dur=%.1f',
+                ($tBoot - LARAVEL_START) * 1000,
+                ($tDone - $tBoot) * 1000,
+                ($tDone - LARAVEL_START) * 1000
+            ));
         }
 
         return $response;
