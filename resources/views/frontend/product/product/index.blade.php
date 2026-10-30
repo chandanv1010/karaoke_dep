@@ -132,7 +132,7 @@
                         <div class="short-description-section">
                             <h4 class="section-title">Mô tả ngắn</h4>
                             <div class="desc-content">
-                                {!! optimize_content_images($DetailProducts['description'] ?? '') !!}
+                                {!! optimize_cms_content($DetailProducts['description'] ?? '') !!}
                             </div>
                         </div>
                         
@@ -180,7 +180,7 @@
                     <ul id="tab-content" class="uk-switcher tab-content">
                         <li class="tab-pane-content">
                             <div id="tocDiv"><ol id="tocListAncarat"></ol></div>
-                            <article class="article content-detail-new">{!! optimize_content_images($DetailProducts['content'] ?? '') !!}</article>
+                            <article class="article content-detail-new">{!! optimize_cms_content($DetailProducts['content'] ?? '') !!}</article>
                         </li>
                         <li class="tab-pane-content">
                             <div class="comments"><div class="fb-comments" data-href="{{ $canonicalUrl }}" data-width="100%" data-numposts="3"></div></div>

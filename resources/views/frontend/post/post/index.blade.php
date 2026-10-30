@@ -210,7 +210,7 @@
                             </div>
                             
                             <article class="article">
-                                <div class="content-detail-new">{!! optimize_content_images($contentWithToc ?? $DetailArticles['content'] ?? '') !!}</div>
+                                <div class="content-detail-new">{!! optimize_cms_content($contentWithToc ?? $DetailArticles['content'] ?? '') !!}</div>
                             </article>
                             
                             <div class="share-box uk-flex uk-flex-middle mb10" style="margin-top: 30px; border-top: 1px solid #222; padding-top: 20px;">

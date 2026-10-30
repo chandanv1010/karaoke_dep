@@ -1182,9 +1182,10 @@ if(!function_exists('image_or_fallback')){
     }
 }
 
-if(!function_exists('optimize_content_images')){
+if(!function_exists('optimize_cms_content')){
     /**
-     * Toi uu cac the <img> do bien tap vien dan thang vao noi dung qua CKEditor.
+     * Don dep khoi noi dung do bien tap vien nhap qua CKEditor: the <img>
+     * va the <a target="_blank">.
      *
      * VAN DE
      *     Anh trong than bai viet duoc dan thang dang
@@ -1213,7 +1214,7 @@ if(!function_exists('optimize_content_images')){
      * KHONG dung cache: getimagesize() chi doc phan dau file, vai phan muoi
      * mili giay moi anh - khong dang ke so voi ~900ms khoi dong framework.
      */
-    function optimize_content_images(?string $html): string
+    function optimize_cms_content(?string $html): string
     {
         $html = (string) $html;
         if (trim($html) === '') {
@@ -1320,6 +1321,25 @@ if(!function_exists('optimize_content_images')){
                 . ' sizes="(max-width: 1024px) 100vw, 925px"'
                 . ' width="' . $tw . '" height="' . $th . '"'
                 . ' decoding="async"' . $prio . '>';
+        }, $html);
+
+        $html = $out === null ? $html : $out;
+
+        // Them rel="noopener noreferrer" cho lien ket mo tab moi.
+        // Trinh duyet doi moi da ngam hieu target="_blank" la co noopener, nhung
+        // cong cu kiem toan van dem day la loi bao mat (bao cao 29/10/2026 ghi
+        // 2.328 URL), va trinh duyet cu thi chua co mac dinh do.
+        // Khong dung regex <a\b[^>]*> cho ca the: bieu thuc Blade kieu
+        // $product->iframe co dau > se cat dut the giua chung.
+        $out = preg_replace_callback('#<a\b[^>]*?>#is', function ($m) {
+            $tag = $m[0];
+            if (!preg_match('#target\s*=\s*["\']_blank["\']#i', $tag)) {
+                return $tag;
+            }
+            if (preg_match('#\brel\s*=#i', $tag)) {
+                return $tag;
+            }
+            return preg_replace('#(\s*/?>)$#', ' rel="noopener noreferrer"$1', $tag, 1);
         }, $html);
 
         return $out === null ? $html : $out;
