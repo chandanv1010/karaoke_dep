@@ -66,6 +66,15 @@ class SecurityHeaders
             }
         }
 
+        // Thoi gian PHP that su xu ly request, tinh tu luc public/index.php chay.
+        // Can de tach bach: trong TTFB ~855ms do tu ngoai vao thi bao nhieu la
+        // PHP, bao nhieu la mang + TLS + hang doi php-fpm. Khong co so nay thi
+        // moi phuong an tang toc deu la doan mo.
+        if (defined('LARAVEL_START')) {
+            $ms = (microtime(true) - LARAVEL_START) * 1000;
+            $response->headers->set('Server-Timing', sprintf('app;dur=%.1f', $ms));
+        }
+
         return $response;
     }
 }
