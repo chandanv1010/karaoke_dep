@@ -38,7 +38,33 @@ Hiện `laravel-debugbar` đang nằm trong `vendor/` trên production. Nó khô
 
 ```bash
 php artisan config:cache && php artisan route:cache && php artisan view:cache && php artisan event:cache
+php artisan icons:cache
 ```
+
+`icons:cache` là bước **quan trọng nhất** trong nhóm này, và dễ bị quên nhất
+vì nó không nằm trong bộ lệnh cache quen thuộc của Laravel.
+
+Gói `blade-ui-kit/blade-icons` quét toàn bộ thư mục SVG của mọi bộ biểu tượng
+**trên từng request** nếu chưa có tệp kê khai. Đo trên production ngày
+30/10/2026, bằng header `Server-Timing` gắn trong `SecurityHeaders`:
+
+| | trước `icons:cache` | sau |
+|---|---|---|
+| khởi động framework | **524 ms** | **10–16 ms** |
+| TTFB trang liên hệ | 735 ms | 217 ms |
+| TTFB trang chủ | 982 ms | 401 ms |
+| TTFB trang bài viết | 913 ms | 307 ms |
+
+Đây là nguyên nhân thật của TTFB ~0,9s, chứ không phải thiếu đệm trang. Trước
+khi tìm ra, phương án đang cân nhắc là bật FastCGI microcache ở nginx — việc
+đó phải tách token CSRF ra trước, nhiều rủi ro hơn hẳn, mà lại chữa sai bệnh.
+
+Cách tự kiểm: `curl -sD - -o /dev/null https://karaokedep.com.vn/lien-he.html | grep -i server-timing`
+Nếu `boot;dur=` vượt quá ~50 ms thì tệp kê khai biểu tượng đã mất — chạy lại
+`php artisan icons:cache`.
+
+Tệp sinh ra nằm ở `bootstrap/cache/blade-icons.php`. Thư mục đó bị gitignore
+nên **mỗi lần triển khai mới đều phải chạy lại lệnh này**.
 
 Trước đợt này `route:cache` **không chạy được** vì có 7 cặp route trùng tên —
 đã sửa trong commit `b312307`.

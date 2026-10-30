@@ -85,22 +85,6 @@ class SecurityHeaders
             ));
         }
 
-        // TAM THOI (30/10/2026): soi trang thai OPcache ngay trong tien trinh
-        // php-fpm. CLI co ban OPcache rieng nen do o CLI khong noi len gi.
-        // Go header nay sau khi chan doan xong.
-        if (function_exists('opcache_get_status')) {
-            $o = @opcache_get_status(false);
-            $response->headers->set('X-Opcache', $o === false ? 'TAT' : sprintf(
-                'hit=%.1f%% scripts=%d mem=%dMB/%dMB restarts=%d oom=%d',
-                $o['opcache_statistics']['opcache_hit_rate'],
-                $o['opcache_statistics']['num_cached_scripts'],
-                round($o['memory_usage']['used_memory'] / 1048576),
-                round(($o['memory_usage']['used_memory'] + $o['memory_usage']['free_memory']) / 1048576),
-                $o['opcache_statistics']['oom_restarts'] + $o['opcache_statistics']['hash_restarts'] + $o['opcache_statistics']['manual_restarts'],
-                $o['opcache_statistics']['oom_restarts']
-            ));
-        }
-
         return $response;
     }
 }
