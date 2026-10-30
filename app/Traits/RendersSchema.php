@@ -39,6 +39,33 @@ trait RendersSchema
     }
 
     /**
+     * Dua duong dan anh/URL ve dang tuyet doi cho schema.
+     *
+     * Google bat buoc truong `image` cua Product va `logo` cua Organization
+     * phai la URL day du. CSDL luu duong dan tuong doi (/uploads/images/...)
+     * va truoc day no duoc do thang vao JSON-LD. Hau qua: Search Console bao
+     * 243 "doan trich ve san pham" khong hop le. Cac truong con lai cua
+     * Product (offers, price, priceCurrency, availability, itemCondition,
+     * seller, hasMerchantReturnPolicy) deu da dung - chi moi anh la hong.
+     */
+    protected function schemaUrl($value): string
+    {
+        $v = trim((string) $value);
+
+        if ($v === '') {
+            return '';
+        }
+        if (preg_match('#^https?://#i', $v)) {
+            return $v;
+        }
+        if (str_starts_with($v, '//')) {
+            return 'https:' . $v;
+        }
+
+        return rtrim((string) config('app.url'), '/') . '/' . ltrim($v, '/');
+    }
+
+    /**
      * @param array $nodes Danh sach node schema.org (moi node la mot mang PHP).
      */
     protected function renderSchema(array $nodes): string

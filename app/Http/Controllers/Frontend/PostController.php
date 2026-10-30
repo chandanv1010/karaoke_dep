@@ -156,7 +156,7 @@ class postController extends FrontendController
             '@type' => 'BlogPosting',
             'headline' => trim($postName),
             'description' => trim($description),
-            'image' => trim((string) $image),
+            'image' => $this->schemaUrl($image),
             'url' => trim($postCanonical),
             'datePublished' => (string) $published,
             'dateModified' => (string) $modified,
@@ -170,7 +170,7 @@ class postController extends FrontendController
                 'name' => $this->organizationName(),
                 'logo' => [
                     '@type' => 'ImageObject',
-                    'url' => trim((string) ($this->system['homepage_logo'] ?? '')),
+                    'url' => $this->schemaUrl($this->system['homepage_logo'] ?? ''),
                 ],
             ],
             'mainEntityOfPage' => [

@@ -226,7 +226,8 @@ class ProductController extends FrontendController
             '@type' => 'Product',
             'name' => trim($name),
             'description' => trim($description),
-            'image' => trim($image),
+            // Phai la URL tuyet doi - xem schemaUrl() trong RendersSchema.
+            'image' => $this->schemaUrl($image),
             'brand' => ['@type' => 'Brand', 'name' => $this->organizationName()],
             'manufacturer' => [
                 '@type' => 'Organization',
