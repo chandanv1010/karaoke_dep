@@ -35,7 +35,7 @@
                             @if(!empty($system['contact_hotline']))
                                 <a href="tel:{{ $system['contact_hotline'] }}" class="link-tel"><i class="fa fa-phone"></i> {{ $system['contact_hotline'] }}</a>
                             @endif
-                            <a href="https://www.google.com/maps?q={{ urlencode($system['contact_address'] ?? 'Tầng 4, Số 25 Vũ Ngọc Phan, Đống Đa, Hà Nội') }}" target="_blank" class="link-map"><i class="fa fa-location-arrow"></i> Chỉ đường đi</a>
+                            <a href="https://www.google.com/maps?q={{ urlencode($system['contact_address'] ?? 'Tầng 4, Số 25 Vũ Ngọc Phan, Đống Đa, Hà Nội') }}" target="_blank" rel="noopener noreferrer" class="link-map"><i class="fa fa-location-arrow"></i> Chỉ đường đi</a>
                         </div>
                     </div>
                 </div>
@@ -53,7 +53,7 @@
                             @if(!empty($system['contact_hotline']))
                                 <a href="tel:{{ $system['contact_hotline'] }}" class="link-tel"><i class="fa fa-phone"></i> {{ $system['contact_hotline'] }}</a>
                             @endif
-                            <a href="https://www.google.com/maps?q={{ urlencode($system['contact_address_2'] ?? 'Số 119 Nguyễn Thị Cận, Hòa An, Cẩm Lệ, Đà Nẵng') }}" target="_blank" class="link-map"><i class="fa fa-location-arrow"></i> Chỉ đường đi</a>
+                            <a href="https://www.google.com/maps?q={{ urlencode($system['contact_address_2'] ?? 'Số 119 Nguyễn Thị Cận, Hòa An, Cẩm Lệ, Đà Nẵng') }}" target="_blank" rel="noopener noreferrer" class="link-map"><i class="fa fa-location-arrow"></i> Chỉ đường đi</a>
                         </div>
                     </div>
                 </div>
@@ -77,7 +77,7 @@
                             @if(!empty($system['contact_hotline']))
                                 <a href="tel:{{ $system['contact_hotline'] }}" class="link-tel"><i class="fa fa-phone"></i> {{ $system['contact_hotline'] }}</a>
                             @endif
-                            <a href="https://www.google.com/maps?q={{ urlencode($hcm_xuong ?: ($hcm_vp ?: '')) }}" target="_blank" class="link-map"><i class="fa fa-location-arrow"></i> Chỉ đường đi</a>
+                            <a href="https://www.google.com/maps?q={{ urlencode($hcm_xuong ?: ($hcm_vp ?: '')) }}" target="_blank" rel="noopener noreferrer" class="link-map"><i class="fa fa-location-arrow"></i> Chỉ đường đi</a>
                         </div>
                     </div>
                 </div>
@@ -101,11 +101,11 @@
                         </div>
                         <div class="action-buttons-compact">
                             @if(!empty($system['contact_Zalo'] ?? $system['contact_zalo'] ?? ''))
-                                <a href="https://zalo.me/{{ $system['contact_Zalo'] ?? $system['contact_zalo'] ?? '' }}" target="_blank" class="chat-btn-new btn-zalo-new">
+                                <a href="https://zalo.me/{{ $system['contact_Zalo'] ?? $system['contact_zalo'] ?? '' }}" target="_blank" rel="noopener noreferrer" class="chat-btn-new btn-zalo-new">
                                     <i class="fa fa-comment"></i> Zalo Chat
                                 </a>
                             @endif
-                            <a href="{{ $system['seo_facebook'] ?? 'https://facebook.com' }}" target="_blank" class="chat-btn-new btn-fb-new">
+                            <a href="{{ $system['seo_facebook'] ?? 'https://facebook.com' }}" target="_blank" rel="noopener noreferrer" class="chat-btn-new btn-fb-new">
                                 <i class="fa fa-facebook-square"></i> Fanpage
                             </a>
                         </div>

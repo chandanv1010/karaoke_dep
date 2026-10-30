@@ -49,11 +49,14 @@
         alt="{{ $heroTitle }}" fetchpriority="high">
     <div class="hero-overlay"></div>
     <div class="uk-container uk-container-center hero-content">
-        <h1 class="hero-title">
+        {{-- Day la ten chuyen muc, lap lai tren moi bai trong cung chuyen muc.
+             De la <h1> thi trang nao cung co 2 the H1 va 1.400 trang trung
+             H1 voi nhau. H1 that la tieu de bai viet/san pham ben duoi. --}}
+        <div class="hero-title">
             <span class="decor-line left"></span>
             {{ $heroTitle }}
             <span class="decor-line right"></span>
-        </h1>
+        </div>
         <div class="hero-breadcrumb">
             <ul class="uk-breadcrumb">
                 <li><a href="{{ url('/') }}" title="Trang chủ">Trang chủ</a></li>
@@ -148,7 +151,7 @@
                                     <button type="button" class="btn-primary-action btn-lienhe-modal">LIÊN HỆ</button>
                                     <div class="sub-actions-flex">
                                         <a href="tel:{{ $system['contact_hotline'] ?? '' }}" class="btn-sub-action btn-call">GỌI NGAY</a>
-                                        <a href="https://zalo.me/{{ preg_replace('/\D/', '', $system['contact_hotline'] ?? '') }}" target="_blank" class="btn-sub-action btn-zalo">CHAT ZALO</a>
+                                        <a href="https://zalo.me/{{ preg_replace('/\D/', '', $system['contact_hotline'] ?? '') }}" target="_blank" rel="noopener noreferrer" class="btn-sub-action btn-zalo">CHAT ZALO</a>
                                     </div>
                                 </div>
                             </form>
@@ -158,11 +161,11 @@
                             <span class="share-label">Chia sẻ:</span>
                             <div class="share-icons uk-flex">
                                 <a href="#" class="share-icon icon-link" title="Sao chép liên kết" onclick="copyLink(event)"><i class="fa fa-link"></i></a>
-                                <a href="https://zalo.me/share?url={{ urlencode($canonicalUrl) }}" target="_blank" class="share-icon icon-zalo" title="Chia sẻ Zalo">
+                                <a href="https://zalo.me/share?url={{ urlencode($canonicalUrl) }}" target="_blank" rel="noopener noreferrer" class="share-icon icon-zalo" title="Chia sẻ Zalo">
                                     <img src="https://chat.zalo.me/favicon.ico" alt="Zalo" style="width:18px;height:18px;object-fit:contain;filter:brightness(0) invert(1);">
                                 </a>
-                                <a href="https://www.messenger.com/t/" target="_blank" class="share-icon icon-messenger" title="Messenger"><i class="fa fa-commenting"></i></a>
-                                <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode($canonicalUrl) }}" target="_blank" class="share-icon icon-facebook" title="Facebook"><i class="fa fa-facebook"></i></a>
+                                <a href="https://www.messenger.com/t/" target="_blank" rel="noopener noreferrer" class="share-icon icon-messenger" title="Messenger"><i class="fa fa-commenting"></i></a>
+                                <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode($canonicalUrl) }}" target="_blank" rel="noopener noreferrer" class="share-icon icon-facebook" title="Facebook"><i class="fa fa-facebook"></i></a>
                             </div>
                         </div>
                     </section>

@@ -38,7 +38,7 @@
                         <div class="bg">
                             {!! $qrcode !!}
                         </div>
-                        <a href="" data-video="{{ json_encode($product->iframe) }}" class="image img-cover wow fadeInUp video preview-video" data-wow-delay="0.2s" target="_blank" style="visibility: visible; animation-delay: 0.2s; animation-name: fadeInUp;">
+                        <a href="" data-video="{{ json_encode($product->iframe) }}" class="image img-cover wow fadeInUp video preview-video" data-wow-delay="0.2s" target="_blank" rel="noopener noreferrer" style="visibility: visible; animation-delay: 0.2s; animation-name: fadeInUp;">
                             <img src="{{ $product->image }}" alt="{{ $product->name }}">
                             <button class="btn-play">
                                 <img src="/frontend/resources/img/play.svg" alt="">

@@ -17,7 +17,7 @@
                                 </div>
                                 <div class="compare-slot-meta uk-width-1-1">
                                     <a href="{{ $slot['product']['canonical'] }}"
-                                        class="compare-slot-name uk-display-block uk-text-center" target="_blank"
+                                        class="compare-slot-name uk-display-block uk-text-center" target="_blank" rel="noopener noreferrer"
                                         rel="noopener">
                                         {{ $slot['product']['name'] }}
                                     </a>

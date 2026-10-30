@@ -47,7 +47,16 @@
     @endif
 
     <meta http-equiv="content-language" content="vi">
-    <link rel="alternate" href="{{ url('/') }}" hreflang="vi-vn">
+    {{-- DA GO the hreflang.
+         Truoc day moi trang deu phat DUNG MOT the hreflang="vi-vn" tro ve
+         TRANG CHU - khong trang con nao tu tro vao chinh no, va khong co
+         x-default. Bao cao kiem toan dem duoc 2.328 URL thieu x-default va
+         2.325 URL thieu self-reference, tat ca deu tu mot dong nay.
+         Bang languages co ban ghi tieng Anh nhung post_language va routers
+         deu co 0 dong language_id=2 - tuc la khong co lay mot trang tieng
+         Anh nao. Hreflang chi danh cho site nhieu ngon ngu, nen cach dung
+         nhat la go han thay vi sua. Khi nao thuc su chay ban tieng Anh thi
+         dat lai cho tung trang kem x-default. --}}
     <meta name="robots" content="index,follow">
     <meta name="author" content="{{ $system['homepage_brandname'] ?? $system['homepage_brand'] ?? '' }}">
     <meta name="copyright" content="{{ $system['homepage_brandname'] ?? $system['homepage_brand'] ?? '' }}">

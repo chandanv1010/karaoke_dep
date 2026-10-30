@@ -100,12 +100,12 @@
 <div class="social-icons-float">
     <a href="tel:{{ $system['contact_hotline'] ?? '' }}" class="phone" title="Gọi điện"><i
             class="fa fa-phone"></i></a>
-    <a href="https://zalo.me/{{ $system['contact_Zalo'] ?? '' }}" class="zalo" target="_blank" title="Zalo"><i
+    <a href="https://zalo.me/{{ $system['contact_Zalo'] ?? '' }}" class="zalo" target="_blank" rel="noopener noreferrer" title="Zalo"><i
             class="fa fa-commenting-o"></i></a>
-    <a href="{{ $system['seo_facebook'] ?? '#' }}" class="messenger" target="_blank" title="Messenger"><i
+    <a href="{{ $system['seo_facebook'] ?? '#' }}" class="messenger" target="_blank" rel="noopener noreferrer" title="Messenger"><i
             class="fa fa-facebook"></i></a>
     @if(!empty($system['contact_whatsapp'] ?? ''))
-    <a href="https://wa.me/{{ $system['contact_whatsapp'] }}" class="whatsapp" target="_blank" title="WhatsApp"><i
+    <a href="https://wa.me/{{ $system['contact_whatsapp'] }}" class="whatsapp" target="_blank" rel="noopener noreferrer" title="WhatsApp"><i
             class="fa fa-whatsapp"></i></a>
     @endif
 </div>

@@ -85,11 +85,14 @@
         alt="{{ $heroTitle }}" fetchpriority="high">
     <div class="hero-overlay"></div>
     <div class="uk-container uk-container-center hero-content">
-        <h1 class="hero-title">
+        {{-- Day la ten chuyen muc, lap lai tren moi bai trong cung chuyen muc.
+             De la <h1> thi trang nao cung co 2 the H1 va 1.400 trang trung
+             H1 voi nhau. H1 that la tieu de bai viet/san pham ben duoi. --}}
+        <div class="hero-title">
             <span class="decor-line left"></span>
             {{ $heroTitle }}
             <span class="decor-line right"></span>
-        </h1>
+        </div>
         <div class="hero-breadcrumb">
             <ul class="uk-breadcrumb">
                 <li><a href="{{ url('/') }}" title="Trang chủ">Trang chủ</a></li>
