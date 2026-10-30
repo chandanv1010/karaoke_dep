@@ -1301,8 +1301,23 @@ if(!function_exists('optimize_content_images')){
             // Anh dau tien thuong la phan tu LCP: khong hoan tai, uu tien cao.
             $prio = $index === 1 ? ' fetchpriority="high"' : ' loading="lazy"';
 
+            // srcset: khung noi dung rong ~925px tren may tinh nhung chi ~355px
+            // tren dien thoai. Khong co srcset thi dien thoai van phai tai ban
+            // 900-1000px - day chinh la cho Search Console dang bao LCP cham,
+            // va no bao cho THIET BI DI DONG chu khong phai may tinh.
+            $cands = [];
+            foreach ([400, 700, 1000] as $w) {
+                if ($w <= $ow) {
+                    $cands[$w] = url(thumb_cache_path($relUrl, $w, 0)) . ' ' . $w . 'w';
+                }
+            }
+            $cands[$tw] = url(thumb_cache_path($relUrl, $tw, 0)) . ' ' . $tw . 'w';
+            ksort($cands);
+
             return $tag
                 . ' src="' . htmlspecialchars(url(thumb_cache_path($relUrl, $tw, 0)), ENT_QUOTES) . '"'
+                . ' srcset="' . htmlspecialchars(implode(', ', $cands), ENT_QUOTES) . '"'
+                . ' sizes="(max-width: 1024px) 100vw, 925px"'
                 . ' width="' . $tw . '" height="' . $th . '"'
                 . ' decoding="async"' . $prio . '>';
         }, $html);
