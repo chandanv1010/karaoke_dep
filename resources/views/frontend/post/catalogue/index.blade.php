@@ -211,7 +211,7 @@
                     @if(!empty($DetailCatalogues['description']))
                         <div class="category-description-wrapper">
                             <div class="category-description">
-                                {!! $DetailCatalogues['description'] !!}
+                                {!! optimize_content_images($DetailCatalogues['description'] ?? '') !!}
                             </div>
                             <a href="#" class="btn-readmore">Xem thêm <i class="fa fa-long-arrow-right"></i></a>
                         </div>

@@ -1181,3 +1181,132 @@ if(!function_exists('image_or_fallback')){
             : asset(ltrim($path, '/'));
     }
 }
+
+if(!function_exists('optimize_content_images')){
+    /**
+     * Toi uu cac the <img> do bien tap vien dan thang vao noi dung qua CKEditor.
+     *
+     * VAN DE
+     *     Anh trong than bai viet duoc dan thang dang
+     *         <img src="/uploads/images/abc.jpg" style="width: 700px; height: 525px;">
+     *     tuc la lay THANG file goc tren dia, khong di qua /image-cache/. Do
+     *     duoc tren trang loi bai hat - 374 trong so 435 URL ma Search Console
+     *     dang bao "LCP lau hon 2,5s":
+     *         - 2.039 KB anh moi trang, trong khi trang chu chi 310 KB
+     *         - 19/28 anh khong co loading=lazy
+     *         -  3/28 anh co width+height  -> nhay layout (CLS)
+     *         - anh nang nhat 297 KB JPEG; qua image-cache con 37 KB WebP (-88%)
+     *
+     * CACH LAM: CHI sua dung may thuoc tinh can sua tren tung the <img>, khong
+     * phan tich lai ca khoi HTML. Noi dung CKEditor thuong khong chuan (co ca
+     * the <html><body> lot ben trong). Neu nap bang DOMDocument roi xuat lai
+     * thi moi ky tu tieng Viet bi doi thanh ma so, lam phinh HTML, va ca khoi
+     * noi dung bi viet lai - rui ro lon hon nhieu so voi cai duoc.
+     *
+     *     - src  -> /image-cache/{w}x0/... de lay ban WebP da nen
+     *     - width/height theo kich thuoc that de trinh duyet chua cho san.
+     *       Thuoc tinh cua the YEU HON moi quy tac CSS, nen giao dien khong doi;
+     *       no chi cung cap ty le khung hinh truoc khi anh tai xong.
+     *     - anh dau tien: fetchpriority=high (thuong chinh la phan tu LCP)
+     *     - cac anh con lai: loading=lazy
+     *
+     * KHONG dung cache: getimagesize() chi doc phan dau file, vai phan muoi
+     * mili giay moi anh - khong dang ke so voi ~900ms khoi dong framework.
+     */
+    function optimize_content_images(?string $html): string
+    {
+        $html = (string) $html;
+        if (trim($html) === '') {
+            return '';
+        }
+
+        // Noi dung CKEditor doi khi chua nguyen ca <html><body> - day la mot
+        // trong hai nguyen nhan khien moi trang co 2-3 the <body>.
+        $html = preg_replace('#<!DOCTYPE[^>]*>#i', '', $html);
+        $html = preg_replace('#</?(?:html|body|head)\b[^>]*>#i', '', $html);
+
+        $index = 0;
+
+        $out = preg_replace_callback('#<img\b[^>]*>#i', function ($m) use (&$index) {
+            $tag = $m[0];
+
+            if (!preg_match('#\bsrc\s*=\s*("([^"]*)"|\'([^\']*)\'|([^\s>]+))#i', $tag, $s)) {
+                return $tag;
+            }
+
+            $src = $s[2] ?? '';
+            if ($src === '') { $src = $s[3] ?? ''; }
+            if ($src === '') { $src = $s[4] ?? ''; }
+            $src = trim($src);
+
+            if ($src === '' || stripos($src, 'data:') === 0) {
+                return $tag;
+            }
+
+            // Anh dat tren domain khac thi khong resize duoc, de nguyen.
+            $base = rtrim(asset('/'), '/');
+            if (preg_match('#^(https?:)?//#i', $src)) {
+                if (strpos($src, $base) !== 0) {
+                    return $tag;
+                }
+                $src = substr($src, strlen($base));
+            }
+
+            // Giu ban da ma hoa URL de dung lam duong dan, va ban da giai ma
+            // de tra cuu file tren dia.
+            $relUrl = '/' . ltrim(strtok($src, '?#') ?: '', '/');
+            if (stripos($relUrl, '/image-cache/') === 0 || strpos($relUrl, '..') !== false) {
+                return $tag;
+            }
+
+            $relFs = urldecode($relUrl);
+            $first = strtolower(explode('/', ltrim($relFs, '/'))[0] ?? '');
+            if (!in_array($first, ['uploads', 'userfiles', 'images', 'templates'], true)) {
+                return $tag;
+            }
+
+            $ext = strtolower(pathinfo($relFs, PATHINFO_EXTENSION));
+            if (!in_array($ext, ['jpg', 'jpeg', 'png', 'gif', 'webp'], true)) {
+                return $tag;
+            }
+
+            $full = public_path(ltrim($relFs, '/'));
+            if (!is_file($full)) {
+                return $tag;
+            }
+
+            $size = @getimagesize($full);
+            if (!$size || empty($size[0]) || empty($size[1])) {
+                return $tag;
+            }
+
+            $ow = (int) $size[0];
+            $oh = (int) $size[1];
+
+            // Khung noi dung rong khoang 925px tren may tinh. Khong bao gio
+            // phong to anh goc.
+            $tw = min($ow, 1000);
+            $th = max(1, (int) round($oh * ($tw / $ow)));
+
+            $index++;
+
+            foreach (['src', 'srcset', 'sizes', 'width', 'height',
+                      'loading', 'decoding', 'fetchpriority'] as $attr) {
+                $tag = preg_replace(
+                    '#\s+' . $attr . '\s*=\s*("[^"]*"|\'[^\']*\'|[^\s>]+)#i', '', $tag
+                );
+            }
+            $tag = preg_replace('#\s*/?>$#', '', $tag);
+
+            // Anh dau tien thuong la phan tu LCP: khong hoan tai, uu tien cao.
+            $prio = $index === 1 ? ' fetchpriority="high"' : ' loading="lazy"';
+
+            return $tag
+                . ' src="' . htmlspecialchars(url(thumb_cache_path($relUrl, $tw, 0)), ENT_QUOTES) . '"'
+                . ' width="' . $tw . '" height="' . $th . '"'
+                . ' decoding="async"' . $prio . '>';
+        }, $html);
+
+        return $out === null ? $html : $out;
+    }
+}
