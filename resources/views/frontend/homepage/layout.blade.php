@@ -20,7 +20,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
     <base href="{{ url('/') }}/">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
+    {{-- Da bo preconnect toi fonts.googleapis.com: tu khi @font-face duoc
+         nhung thang vao <head>, trang khong con goi gi toi domain do nua.
+         Mot preconnect thua van ton mot luot phan giai DNS + bat tay TLS. --}}
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     @include('frontend.component.fonts')
     {{-- Preload anh LCP.
@@ -123,7 +125,7 @@
 
             Dat o day vi 5 trang (danh muc/chi tiet bai viet, danh muc/chi tiet
             san pham, lien he) moi trang co mot khoi <style> inline rieng dinh
-            nghia lai .about-hero. Block nay nam cuoi <body> nen nap sau tat ca,
+            nghia lai .about-hero. Block nay nam cuoi trang nen nap sau tat ca,
             sua mot cho la ap dung cho ca 5 trang.
         */
         /*

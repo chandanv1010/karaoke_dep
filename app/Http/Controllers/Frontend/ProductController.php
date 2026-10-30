@@ -201,7 +201,8 @@ class ProductController extends FrontendController
                     'name' => (string) $review->fullname,
                 ],
                 'reviewBody' => $this->schemaText($review->description, 1000),
-                'datePublished' => (string) convertDateTime($review->created_at),
+                // schema.org bat buoc ISO 8601, khong phai 'd/m/Y H:i' mac dinh.
+                'datePublished' => (string) convertDateTime($review->created_at, 'c'),
             ];
         }
 

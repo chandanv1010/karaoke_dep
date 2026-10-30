@@ -135,7 +135,9 @@ class PostCatalogueController extends FrontendController
                 // trong vong lap nay sinh N+1, moi bai viet mot query.
                 'headline' => (string) ($post->name ?? ''),
                 'url' => write_url($post->canonical ?? ''),
-                'datePublished' => (string) convertDateTime($post->created_at, 'd-m-Y'),
+                // schema.org bat buoc ISO 8601. Truoc day xuat 'd-m-Y' (14-09-2026) nen
+                // Google doc khong ra, bao loi trong bao cao du lieu co cau truc.
+                'datePublished' => (string) convertDateTime($post->created_at, 'c'),
                 'author' => [
                     '@type' => 'Organization',
                     'name' => $this->organizationName(),

@@ -146,8 +146,11 @@ class postController extends FrontendController
             ];
         }
 
-        $published = convertDateTime($post->created_at, 'd-m-y');
-        $modified = convertDateTime($post->updated_at ?? $post->created_at, 'd-m-y');
+        // schema.org bat buoc ISO 8601. Truoc day xuat 'd-m-y' (14-09-26):
+        // vua sai thu tu vua chi co 2 chu so nam - Google khong doc duoc.
+        // Hai bien nay chi dung trong schema, khong hien thi ra trang.
+        $published = convertDateTime($post->created_at, 'c');
+        $modified = convertDateTime($post->updated_at ?? $post->created_at, 'c');
 
         $posting = [
             '@type' => 'BlogPosting',
