@@ -9,12 +9,15 @@ use App\Services\V1\Core\SlideService;
 use App\Enums\SlideEnum;
 use App\Services\V1\Core\WidgetService;
 use Illuminate\Http\Request;
+use App\Traits\RendersSchema;
 use App\Support\LegacyFrontend;
 use App\Models\Introduce;
 use Jenssegers\Agent\Facades\Agent;
 
 class HomeController extends FrontendController
 {
+    use RendersSchema;
+
     protected $systemRepository;
     protected $slideService;
     protected $widgetService;
@@ -105,31 +108,105 @@ class HomeController extends FrontendController
          * @param array $seo
          * @return string
          */
+        /**
+         * JSON-LD trang chu: WebSite (+ o tim kiem) va GeneralContractor.
+         *
+         * Truoc day noi chuoi JSON bang tay (khong escape) va o tim kiem tro vao
+         * /search?q= - duong khong ton tai; trang tim kiem that la
+         * /tim-kiem?keyword=. Bao cao kiem toan 04/11/2026 neu thieu
+         * LocalBusiness: GeneralContractor la loai LocalBusiness dung nhat cho
+         * don vi thiet ke - thi cong. Moi gia tri lay tu bang systems (trang
+         * Cau hinh chung), khong ghi cung; truong nao trong thi bo qua.
+         */
         public function schema(array $seo = []): string
         {
-            $schema = "<script type='application/ld+json'>
-                {
-                    \"@context\": \"https://schema.org\",
-                    \"@type\": \"WebSite\",
-                    \"name\": \"" . ($seo['meta_title'] ?? '') . "\",
-                    \"url\": \"" . ($seo['canonical'] ?? '') . "\",
-                    \"description\": \"" . ($seo['meta_description'] ?? '') . "\",
-                    \"publisher\": {
-                        \"@type\": \"Organization\",
-                        \"name\": \"" . ($seo['meta_title'] ?? '') . "\"
-                    },
-                    \"potentialAction\": {
-                        \"@type\": \"SearchAction\",
-                        \"target\": {
-                            \"@type\": \"EntryPoint\",
-                            \"urlTemplate\": \"" . ($seo['canonical'] ?? '') . "search?q={search_term_string}\"
-                        },
-                        \"query-input\": \"required name=search_term_string\"
+            $sys  = $this->system ?? [];
+            $home = rtrim((string) config('app.url'), '/') . '/';
+            $name = $this->schemaText($sys['homepage_company'] ?? '') ?: $this->schemaText($seo['meta_title'] ?? '');
+
+            $website = [
+                '@type' => 'WebSite',
+                '@id' => $home . '#website',
+                'name' => $this->schemaText($sys['homepage_brandname'] ?? '') ?: $name,
+                'url' => $home,
+                'description' => $this->schemaText($seo['meta_description'] ?? ''),
+                'inLanguage' => 'vi-VN',
+                'publisher' => ['@id' => $home . '#business'],
+                'potentialAction' => [
+                    '@type' => 'SearchAction',
+                    'target' => [
+                        '@type' => 'EntryPoint',
+                        'urlTemplate' => $home . 'tim-kiem?keyword={search_term_string}',
+                    ],
+                    'query-input' => 'required name=search_term_string',
+                ],
+            ];
+
+            $phone = preg_replace('/\D/', '', (string) ($sys['contact_hotline'] ?? $sys['contact_phone'] ?? ''));
+            $business = [
+                '@type' => 'GeneralContractor',
+                '@id' => $home . '#business',
+                'name' => $name,
+                'alternateName' => 'AZKTV',
+                'url' => $home,
+                'logo' => $this->schemaUrl($sys['homepage_logo'] ?? ''),
+                'image' => $this->schemaUrl($sys['seo_meta_images'] ?? $sys['homepage_logo'] ?? ''),
+                'slogan' => $this->schemaText($sys['homepage_slogan'] ?? ''),
+                'telephone' => $phone !== '' ? '+84' . ltrim($phone, '0') : '',
+                'email' => (string) ($sys['contact_email'] ?? ''),
+                'address' => $this->schemaAddress($sys['contact_address'] ?? ''),
+                'areaServed' => ['@type' => 'Country', 'name' => 'Việt Nam'],
+                'sameAs' => array_values(array_filter(array_map(
+                    fn ($k) => preg_match('#^https://#', (string) ($sys[$k] ?? '')) ? $sys[$k] : null,
+                    ['seo_facebook', 'seo_youtube', 'seo_twitter', 'seo_pinterest', 'seo_linkedin']
+                ))),
+            ];
+
+            // Toa do lay tu iframe Google Maps trong Cau hinh (…!2d{lng}!3d{lat}…).
+            if (preg_match('/!2d(-?[\d.]+)!3d(-?[\d.]+)/', (string) ($sys['contact_map'] ?? ''), $g)) {
+                $business['geo'] = ['@type' => 'GeoCoordinates', 'latitude' => (float) $g[2], 'longitude' => (float) $g[1]];
+            }
+
+            // Chi nhanh: dia chi 2, 3 trong Cau hinh.
+            $branches = [];
+            // Mot o co the ghi hai co so: "Tru so VP: ... - Xuong san xuat va chi nhanh VP: ...".
+            foreach (['contact_address_2', 'contact_address_3'] as $k) {
+                foreach (preg_split('/\s+-\s+(?=[^,]{0,40}:)/u', $this->schemaText($sys[$k] ?? '')) as $part) {
+                    $part = preg_replace('/^[^,:]{1,40}:\s*/u', '', $part);
+                    if ($addr = $this->schemaAddress($part)) {
+                        $branches[] = ['@type' => 'GeneralContractor', 'name' => $name, 'address' => $addr, 'telephone' => $business['telephone']];
                     }
                 }
-            </script>";
+            }
+            if ($branches) {
+                $business['department'] = $branches;
+            }
 
-            return $schema;
+            $business = array_filter($business, fn ($v) => $v !== '' && $v !== null && $v !== []);
+
+            return $this->renderSchema([$website, $business]);
+        }
+
+        /** Dia chi dang chu tu Cau hinh -> PostalAddress (Viet Nam). */
+        private function schemaAddress($text): ?array
+        {
+            $text = trim(preg_replace('/\s+/u', ' ', $this->schemaText($text)), " .");
+            if ($text === '') {
+                return null;
+            }
+            $region = null;
+            foreach (['Hà Nội', 'Đà Nẵng', 'Hồ Chí Minh', 'HCM'] as $city) {
+                if (mb_stripos($text, $city) !== false) {
+                    $region = in_array($city, ['Hồ Chí Minh', 'HCM'], true) ? 'TP Hồ Chí Minh' : $city;
+                    break;
+                }
+            }
+            return array_filter([
+                '@type' => 'PostalAddress',
+                'streetAddress' => $text,
+                'addressRegion' => $region,
+                'addressCountry' => 'VN',
+            ]);
         }
 
     private function config()
