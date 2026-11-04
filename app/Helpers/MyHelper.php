@@ -506,8 +506,13 @@ if(!function_exists('seo')){
         $page = max(1, (int) $page);
         $canonical = ($page > 1) ? write_url($model->canonical, true, false).'/trang-'.$page.config('apps.general.suffix'): write_url($model->canonical, true, true);
 
-        $title       = ($model->meta_title) ?? $model->name;
-        $description = ($model->meta_description) ?? cut_string_and_decode($model->descipriont, 168);
+        // `?:` chu khong phai `??`: CSDL luu meta_title/meta_description la
+        // chuoi rong '' chu khong phai NULL, nen `??` khong bao gio roi xuong
+        // gia tri du phong -> 7 trang co <title></title> rong. Ten cot cu
+        // `descipriont` (go sai) luon tra NULL, nen mo ta du phong cung rong.
+        $title       = trim((string) $model->meta_title) ?: trim(strip_tags((string) $model->name));
+        $description = trim((string) $model->meta_description)
+            ?: cut_string_and_decode($model->description ?: $model->content, 168);
 
         if ($page > 1) {
             $title       = $title . ' - Trang ' . $page;
@@ -521,6 +526,24 @@ if(!function_exists('seo')){
             'meta_image' => $model->image,
             'canonical' => $canonical,
         ];
+    }
+}
+
+if(!function_exists('absolute_url')){
+    /**
+     * Duong dan tuong doi (/uploads/...) -> URL tuyet doi https://...
+     * og:image / twitter:image bat buoc URL tuyet doi, neu khong Facebook,
+     * Zalo... khong lay duoc anh khi chia se link.
+     */
+    function absolute_url($value){
+        $v = trim((string) $value);
+        if ($v === '' || preg_match('#^https?://#i', $v)) {
+            return $v;
+        }
+        if (str_starts_with($v, '//')) {
+            return 'https:' . $v;
+        }
+        return rtrim((string) config('app.url'), '/') . '/' . ltrim($v, '/');
     }
 }
 

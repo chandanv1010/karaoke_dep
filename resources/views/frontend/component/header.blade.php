@@ -26,10 +26,10 @@
                     </ul>
                 @endif
                 <div class="social-links">
-                    <a href="{{ $system['seo_facebook'] ?? '#' }}" title="Facebook"><i class="fa fa-facebook"></i></a>
-                    <a href="{{ $system['seo_twitter'] ?? '#' }}" title="Twitter"><i class="fa fa-twitter"></i></a>
-                    <a href="{{ $system['seo_google'] ?? '#' }}" title="Google"><i class="fa fa-google"></i></a>
-                    <a href="{{ $system['seo_youtube'] ?? '#' }}" title="YouTube"><i class="fa fa-youtube"></i></a>
+                    {{-- Da bo icon Google+ (dich vu dong cua tu 2019, link chi 301 ve blog Google). --}}
+                    <a href="{{ $system['seo_facebook'] ?? '#' }}" title="Facebook" aria-label="Facebook" rel="noopener"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+                    <a href="{{ $system['seo_twitter'] ?? '#' }}" title="Twitter" aria-label="Twitter" rel="noopener"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+                    <a href="{{ $system['seo_youtube'] ?? '#' }}" title="YouTube" aria-label="YouTube" rel="noopener"><i class="fa fa-youtube" aria-hidden="true"></i></a>
                 </div>
             </div>
         </div>
@@ -45,12 +45,12 @@
                 </div>
                 
                 @if(isset($menu['main']))
-                    <div class="uk-flex uk-flex-middle navigation">
+                    <nav class="uk-flex uk-flex-middle navigation" aria-label="Menu chính">
                         <ul class="main-nav">
                             {!! $menu['main'] !!}
                         </ul>
-                        <a href="#search-modal" data-uk-modal class="search-btn"><i class="fa fa-search"></i></a>
-                    </div>
+                        <a href="#search-modal" data-uk-modal class="search-btn" aria-label="Tìm kiếm"><i class="fa fa-search"></i></a>
+                    </nav>
                 @endif
             </div>
         </div>

@@ -15,7 +15,7 @@
     @if(!empty($seo['canonical']))<link rel="canonical" href="{{ $seo['canonical'] }}">@endif
     <meta property="og:title" content="{{ $seo['meta_title'] ?? '' }}">
     <meta property="og:type" content="article">
-    <meta property="og:image" content="{{ $seo['meta_image'] ?? $system['seo_meta_image'] ?? $system['homepage_logo'] ?? '' }}">
+    <meta property="og:image" content="{{ absolute_url($seo['meta_image'] ?? $system['seo_meta_image'] ?? $system['homepage_logo'] ?? '') }}">
     <meta property="og:description" content="{{ $seo['meta_description'] ?? '' }}">
     <meta property="og:site_name" content="{{ $system['homepage_brandname'] ?? $system['homepage_company'] ?? '' }}">
     <link rel="shortcut icon" href="{{ $system['homepage_favicon'] ?? '' }}" type="image/x-icon">

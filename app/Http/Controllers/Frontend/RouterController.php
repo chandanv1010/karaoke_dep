@@ -80,8 +80,23 @@ class RouterController extends FrontendController
      *
      * Chay o nhanh 404 nen khong them chi phi cho request binh thuong.
      */
+    /**
+     * Duong dan cu da doi ten, khong suy ra duoc tu quy tac -a{id}/-p{id}.
+     * kien-thuc-phong-thuy.html nam tren topbar cua MOI trang (menu id 33)
+     * nhung danh muc that la phong-thuy.html -> 404 tren ~1.400 trang va 3
+     * bai phong thuy bi mo coi. Menu da sua; dong nay giu link cu Google
+     * da biet khong bi 404.
+     */
+    private const RENAMED = [
+        'kien-thuc-phong-thuy' => 'phong-thuy',
+    ];
+
     private function legacyRedirect(string $canonical): ?string
     {
+        if (isset(self::RENAMED[$canonical])) {
+            return url(self::RENAMED[$canonical] . config('apps.general.suffix'));
+        }
+
         if (!preg_match('#^(.+)-[ap]\d+$#', $canonical, $m)) {
             return null;
         }

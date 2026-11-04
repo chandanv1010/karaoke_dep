@@ -73,7 +73,7 @@
 
     <meta property="og:title" content="{{ $seo['meta_title'] ?? '' }}">
     <meta property="og:type" content="article">
-    <meta property="og:image" content="{{ $seo['meta_image'] ?? $system['seo_meta_images'] ?? $system['seo_meta_image'] ?? '' }}">
+    <meta property="og:image" content="{{ absolute_url($seo['meta_image'] ?? $system['seo_meta_images'] ?? $system['seo_meta_image'] ?? '') }}">
     <meta property="og:url" content="{{ $seo['canonical'] ?? url('/') }}">
     <meta property="og:description" content="{{ $seo['meta_description'] ?? '' }}">
     <meta property="og:site_name" content="{{ $system['homepage_brandname'] ?? $system['homepage_brand'] ?? '' }}">
@@ -81,7 +81,7 @@
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="{{ $seo['meta_title'] ?? '' }}">
     <meta name="twitter:description" content="{{ $seo['meta_description'] ?? '' }}">
-    <meta name="twitter:image" content="{{ $seo['meta_image'] ?? $system['seo_meta_images'] ?? $system['seo_meta_image'] ?? '' }}">
+    <meta name="twitter:image" content="{{ absolute_url($seo['meta_image'] ?? $system['seo_meta_images'] ?? $system['seo_meta_image'] ?? '') }}">
 
     <link rel="icon" href="{{ $system['homepage_favicon'] ?? '' }}" type="image/png" sizes="30x30">
     @include('frontend.component.head')
