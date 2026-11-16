@@ -11,6 +11,7 @@ use App\Http\Controllers\Backend\V1\ReportController;
 use App\Http\Controllers\Backend\V1\ContactController;
 use App\Http\Controllers\Backend\V1\LecturerController;
 use App\Http\Controllers\Backend\V1\RedirectController;
+use App\Http\Controllers\Backend\V1\CodeSnippetController;
 
 
 
@@ -46,6 +47,16 @@ Route::group(['middleware' => ['admin','locale','backend_default_locale']], func
         Route::post('{id}/update', [RedirectController::class, 'update'])->where(['id' => '[0-9]+'])->name('redirect.update');
         Route::get('{id}/delete', [RedirectController::class, 'delete'])->where(['id' => '[0-9]+'])->name('redirect.delete');
         Route::delete('{id}/destroy', [RedirectController::class, 'destroy'])->where(['id' => '[0-9]+'])->name('redirect.destroy');
+    });
+
+    Route::group(['prefix' => 'snippet'], function () {
+        Route::get('index', [CodeSnippetController::class, 'index'])->name('snippet.index');
+        Route::get('create', [CodeSnippetController::class, 'create'])->name('snippet.create');
+        Route::post('store', [CodeSnippetController::class, 'store'])->name('snippet.store');
+        Route::get('{id}/edit', [CodeSnippetController::class, 'edit'])->where(['id' => '[0-9]+'])->name('snippet.edit');
+        Route::post('{id}/update', [CodeSnippetController::class, 'update'])->where(['id' => '[0-9]+'])->name('snippet.update');
+        Route::get('{id}/delete', [CodeSnippetController::class, 'delete'])->where(['id' => '[0-9]+'])->name('snippet.delete');
+        Route::delete('{id}/destroy', [CodeSnippetController::class, 'destroy'])->where(['id' => '[0-9]+'])->name('snippet.destroy');
     });
 
     Route::group(['prefix' => 'review'], function () {

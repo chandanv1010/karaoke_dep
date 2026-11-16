@@ -89,10 +89,13 @@
         {!! $schema !!}
     @endif
     {!! $system['script_header'] ?? '' !!}
+    @snippet('head_end')
 </head>
 <body>
     {!! $system['script_body'] ?? '' !!}
+    @snippet('body_start')
     @include('frontend.component.header')
+    @snippet('header_after')
 
     @if(session('success') || session('error'))
         <div class="uk-container uk-container-center uk-margin-top">
@@ -105,6 +108,7 @@
 
     @yield('content')
 
+    @snippet('footer_before')
     @include('frontend.component.footer')
     @include('frontend.component.offcanvas')
     @include('frontend.component.script')
@@ -297,5 +301,6 @@
             }
         }
     </style>
+    @snippet('body_end')
 </body>
 </html>

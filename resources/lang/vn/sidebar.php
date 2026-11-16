@@ -138,6 +138,21 @@ return [
             ]
         ],
         [
+            'title' => 'Vị Trí Chèn Mã',
+            'icon' => 'fa fa-code',
+            'name' => ['snippet'],
+            'subModule' => [
+                [
+                    'title' => 'Danh sách mã nhúng',
+                    'route' => 'snippet/index'
+                ],
+                [
+                    'title' => 'Thêm mã nhúng',
+                    'route' => 'snippet/create'
+                ]
+            ]
+        ],
+        [
             'title' => 'QL Liên Hệ',
             'icon' => 'fa fa-github',
             'name' => ['contacts'],

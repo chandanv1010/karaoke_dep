@@ -56,6 +56,25 @@ class AppServiceProvider extends ServiceProvider
             error_reporting(E_ALL & ~E_DEPRECATED & ~E_USER_DEPRECATED);
         }
 
+        // Vi tri chen ma (admin > Vi Tri Chen Ma): @snippet('body_end')
+        \Illuminate\Support\Facades\Blade::directive('snippet', function ($expr) {
+            return "<?php echo \\App\\Support\\Snippets::render({$expr}); ?>";
+        });
+        // Gan loai trang tu view chinh de doan ma loc duoc theo loai trang.
+        foreach ([
+            'frontend.homepage.home.index'       => 'home',
+            'frontend.post.post.index'           => 'post',
+            'frontend.post.catalogue.*'          => 'post_catalogue',
+            'frontend.product.product.index'     => 'product',
+            'frontend.product.catalogue.index'   => 'product_catalogue',
+            'frontend.product.catalogue.search'  => 'search',
+            'frontend.contact.index'             => 'contact',
+        ] as $viewName => $pageType) {
+            view()->composer($viewName, function () use ($pageType) {
+                \App\Support\Snippets::setPage($pageType);
+            });
+        }
+
         
         Validator::extend('custom_date_format', function($attribute, $value, $parameters, $validator){
             return Datetime::createFromFormat('d/m/Y H:i', $value) !== false;

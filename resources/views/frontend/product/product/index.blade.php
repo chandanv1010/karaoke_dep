@@ -156,6 +156,7 @@
                                 </div>
                             </form>
                         </div>
+                        @snippet('product_buy_after')
                         
                         <div class="share-section uk-flex uk-flex-middle">
                             <span class="share-label">Chia sẻ:</span>
@@ -181,6 +182,7 @@
                         <li class="tab-pane-content">
                             <div id="tocDiv"><ol id="tocListAncarat"></ol></div>
                             <article class="article content-detail-new">{!! optimize_cms_content($DetailProducts['content'] ?? '') !!}</article>
+                            @snippet('product_content_after')
                         </li>
                         <li class="tab-pane-content">
                             <div class="comments"><div class="fb-comments" data-href="{{ $canonicalUrl }}" data-width="100%" data-numposts="3"></div></div>

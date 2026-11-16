@@ -209,9 +209,11 @@
                                 <div class="viewed"><i class="fa fa-eye" style="color:#00cbd6;"></i> Lượt xem: {{ $DetailArticles['viewed'] ?? 0 }}</div>
                             </div>
                             
+                            @snippet('post_content_before')
                             <article class="article">
                                 <div class="content-detail-new">{!! optimize_cms_content($contentWithToc ?? $DetailArticles['content'] ?? '') !!}</div>
                             </article>
+                            @snippet('post_content_after')
                             
                             <div class="share-box uk-flex uk-flex-middle mb10" style="margin-top: 30px; border-top: 1px solid #222; padding-top: 20px;">
                                 <div class="facebook"><div class="fb-like" data-href="{{ $canonicalUrl }}" data-layout="button_count" data-action="like" data-show-faces="true" data-share="true"></div></div>

@@ -180,6 +180,20 @@ php artisan route:cache
 
 Script tạo bảng, thêm quyền `redirect.*` cho các nhóm đang có quyền `contact.index`, và chép đường dẫn cũ `kien-thuc-phong-thuy.html` vào bảng. Middleware `ManagedRedirects` chạy trước khi định tuyến và đọc bản đồ từ cache (`redirects.map.v1`, bị xoá mỗi khi lưu/xoá trong admin). Nếu bảng chưa có thì middleware bỏ qua, site không lỗi.
 
+## Vị trí chèn mã (mã nhúng theo vị trí, trong admin)
+
+Mục **Vị Trí Chèn Mã** (`/snippet/index`): admin dán mã nhúng (widget chat, pixel, khung đánh giá...), chọn vị trí, loại trang và URL áp dụng (hỗ trợ `*` ở cuối). Mã nằm trong bảng `code_snippets`, nên pull code không làm mất.
+
+Chạy một lần sau lần pull đầu tiên có tính năng này:
+
+```bash
+php deploy/setup-snippets.php
+```
+
+Mỗi vị trí là một dòng `@snippet('ma')` trong view: layout có `head_end`, `body_start`, `header_after`, `footer_before`, `body_end`; trang bài viết có `post_content_before`/`after`; trang sản phẩm có `product_buy_after`, `product_content_after`; trang liên hệ có `contact_after`. Thêm vị trí mới gồm 1 dòng trong `CodeSnippet::POSITIONS` và 1 dòng `@snippet` trong view. Loại trang được gán từ view chính trong `AppServiceProvider`.
+
+Hai ô "Script Head/Body" ở Cấu hình chung trước đây lưu vào khoá `script_1`/`script_2`, trong khi layout đọc `script_header`/`script_body`, nên sửa trong admin không có tác dụng. Nay hai ô đã trỏ đúng khoá.
+
 ## Những thứ cố ý KHÔNG làm
 
 **`opcache.validate_timestamps=0`** — tiết kiệm 531 lệnh `stat()` mỗi request,

@@ -114,8 +114,8 @@ class System{
             'label' => 'Cấu hình script',
             'description' => '',
             'value' => [
-                '1' => ['type' => 'textarea', 'label' => 'Script Head'],
-                '2' => ['type' => 'textarea', 'label' => 'Script Body'],
+                'header' => ['type' => 'textarea', 'label' => 'Script Head (cuối thẻ <head>, mọi trang)'],
+                'body' => ['type' => 'textarea', 'label' => 'Script Body (ngay sau <body>, mọi trang)'],
             ]
         ];
 
