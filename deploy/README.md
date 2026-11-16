@@ -167,6 +167,19 @@ là file tĩnh 500 URL từ 30/6; bản mới sinh từ CSDL, hiện 1.164 URL.
 
 ---
 
+## Chuyển hướng 301 (QL Chuyển Hướng trong admin)
+
+Máy chủ chạy nginx nên `public/.htaccess` **không có tác dụng**, và nó nằm trong git nên mỗi lần pull lại bị ghi đè. Chuyển hướng được khai báo trong admin ở mục **QL Chuyển Hướng 301** (`/redirect/index`). Dữ liệu nằm trong bảng `redirects`, nên pull code không làm mất.
+
+Chạy **một lần** sau lần pull đầu tiên có tính năng này (chạy lại cũng an toàn):
+
+```bash
+php deploy/setup-redirects.php
+php artisan route:cache
+```
+
+Script tạo bảng, thêm quyền `redirect.*` cho các nhóm đang có quyền `contact.index`, và chép đường dẫn cũ `kien-thuc-phong-thuy.html` vào bảng. Middleware `ManagedRedirects` chạy trước khi định tuyến và đọc bản đồ từ cache (`redirects.map.v1`, bị xoá mỗi khi lưu/xoá trong admin). Nếu bảng chưa có thì middleware bỏ qua, site không lỗi.
+
 ## Những thứ cố ý KHÔNG làm
 
 **`opcache.validate_timestamps=0`** — tiết kiệm 531 lệnh `stat()` mỗi request,

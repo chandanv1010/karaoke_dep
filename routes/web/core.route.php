@@ -10,6 +10,7 @@ use App\Http\Controllers\Backend\V1\WidgetController;
 use App\Http\Controllers\Backend\V1\ReportController;
 use App\Http\Controllers\Backend\V1\ContactController;
 use App\Http\Controllers\Backend\V1\LecturerController;
+use App\Http\Controllers\Backend\V1\RedirectController;
 
 
 
@@ -36,6 +37,16 @@ Route::group(['middleware' => ['admin','locale','backend_default_locale']], func
     });
 
 
+
+    Route::group(['prefix' => 'redirect'], function () {
+        Route::get('index', [RedirectController::class, 'index'])->name('redirect.index');
+        Route::get('create', [RedirectController::class, 'create'])->name('redirect.create');
+        Route::post('store', [RedirectController::class, 'store'])->name('redirect.store');
+        Route::get('{id}/edit', [RedirectController::class, 'edit'])->where(['id' => '[0-9]+'])->name('redirect.edit');
+        Route::post('{id}/update', [RedirectController::class, 'update'])->where(['id' => '[0-9]+'])->name('redirect.update');
+        Route::get('{id}/delete', [RedirectController::class, 'delete'])->where(['id' => '[0-9]+'])->name('redirect.delete');
+        Route::delete('{id}/destroy', [RedirectController::class, 'destroy'])->where(['id' => '[0-9]+'])->name('redirect.destroy');
+    });
 
     Route::group(['prefix' => 'review'], function () {
         Route::get('index', [ReviewController::class, 'index'])->name('review.index');

@@ -123,6 +123,21 @@ return [
             ]
         ],
         [
+            'title' => 'QL Chuyển Hướng 301',
+            'icon' => 'fa fa-random',
+            'name' => ['redirect'],
+            'subModule' => [
+                [
+                    'title' => 'Danh sách chuyển hướng',
+                    'route' => 'redirect/index'
+                ],
+                [
+                    'title' => 'Thêm chuyển hướng',
+                    'route' => 'redirect/create'
+                ]
+            ]
+        ],
+        [
             'title' => 'QL Liên Hệ',
             'icon' => 'fa fa-github',
             'name' => ['contacts'],
