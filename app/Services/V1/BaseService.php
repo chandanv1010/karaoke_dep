@@ -90,7 +90,10 @@ class BaseService
         DB::beginTransaction();
         try{
             $model = lcfirst($post['model']).'Repository';
-            $payload[$post['field']] = (($post['value'] == 1)?2:1);
+            // posts/post_catalogues dung cot `pubish` (thieu chu l): doi ten
+            // truoc khi ghi, neu khong se loi "Unknown column 'publish'".
+            $field = method_exists($this->{$model}, 'normalizeColumn') ? $this->{$model}->normalizeColumn($post['field']) : $post['field'];
+            $payload[$field] = (($post['value'] == 1)?2:1);
             $post = $this->{$model}->update($post['modelId'], $payload);
 
             DB::commit();
@@ -107,7 +110,8 @@ class BaseService
         DB::beginTransaction();
         try{
             $model = lcfirst($post['model']).'Repository';
-            $payload[$post['field']] = $post['value'];
+            $field = method_exists($this->{$model}, 'normalizeColumn') ? $this->{$model}->normalizeColumn($post['field']) : $post['field'];
+            $payload[$field] = $post['value'];
             $flag = $this->{$model}->updateByWhereIn('id', $post['id'], $payload);
             // $this->changeUserStatus($post, $post['value']);
 

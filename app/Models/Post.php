@@ -17,6 +17,7 @@ class Post extends Model
         'image',
         'album',
         'publish',
+        'pubish',
         'follow',
         'order',
         'user_id',

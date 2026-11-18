@@ -62,7 +62,9 @@ class PostService extends BaseService
         $perPage = (!is_null($postCatalogue))  ? 15 : 20;
         $condition = [
             'keyword' => addslashes($request->input('keyword')),
-            'publish' => $request->integer('publish'),
+            // Frontend (co $postCatalogue) chi lay bai dang hien (2). Admin
+            // (khong co $postCatalogue) van loc theo tham so tren request.
+            'publish' => !is_null($postCatalogue) ? 2 : $request->integer('publish'),
             'where' => [
                 ['tb2.language_id', '=', $languageId],
             ],

@@ -46,12 +46,13 @@ class postController extends FrontendController
 
     public function index($id, $request){
         $language = $this->language;
-        $post = $this->postRepository->getPostById($id, $this->language, config('apps.general.defaultPublish'));
-        $viewed = $post->viewed;
-        $updateViewed = Post::where('id', $id)->update(['viewed' => $viewed + 1]); 
-        if(is_null($post)){
+        $post = $this->postRepository->getPostById($id, $this->language);
+        // Bai dang an (pubish != 2) khong duoc hien ngoai trang public.
+        if(is_null($post) || (int) $post->publish !== 2){
             abort(404);
         }
+        $viewed = $post->viewed;
+        $updateViewed = Post::where('id', $id)->update(['viewed' => $viewed + 1]); 
         $postCatalogue = $this->postCatalogueRepository->getPostCatalogueById($post->post_catalogue_id, $this->language);
         if($postCatalogue->id == 22 || $postCatalogue->id == 24 || $postCatalogue->id === 44){
             $postCatalogue->children = $this->postCatalogueRepository->findByCondition(

@@ -280,7 +280,7 @@ class BaseRepository
         return $this->model->getRelationable() ?? [];
     }
 
-    private function normalizeColumn(string $column): string
+    public function normalizeColumn(string $column): string
     {
         $table = $this->model->getTable();
         if ($column === 'publish' && !SchemaCache::hasColumn($table, 'publish') && SchemaCache::hasColumn($table, 'pubish')) {
